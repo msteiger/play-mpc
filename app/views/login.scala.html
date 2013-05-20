@@ -1,0 +1,51 @@
+@(form: Form[Credential.Login])
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Computers database</title>
+        <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")"> 
+        <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/main.css")"> 
+    </head>
+    <body>
+        
+        <header class="topbar">
+            <h1 class="fill">
+                   Login to access the database
+            </h1>
+        </header>
+        
+        <section id="main">
+        
+    <div class="container">
+
+        @helper.form(routes.Credential.authenticate) {
+            <h1>Sign in</h1>
+
+            @if(form.hasGlobalErrors) {
+                <p class="error">
+                    @form.globalError.message
+                </p>
+            }
+
+            @if(flash.contains("success")) {
+                <p class="success">
+                    @flash.get("success")
+                </p>
+            }
+
+            <p>
+                <input type="email" name="email" placeholder="Email" value="@form("email").value">
+            </p>
+            <p>
+                <input type="password" name="password" placeholder="Password">
+            </p>
+            <p>
+            	<input type="submit" value="Login" class="btn primary">
+            </p>
+        }
+    </div>
+  </section>
+
+</body>
+</html>

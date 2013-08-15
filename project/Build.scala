@@ -11,6 +11,7 @@ object ApplicationBuild extends Build {
       javaCore,
       javaJdbc,
       javaEbean
+//      "log4j" % "log4j" % "1.2.16"
     )
 
     val main = play.Project(appName, appVersion, appDependencies).settings(

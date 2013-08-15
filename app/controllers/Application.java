@@ -1,12 +1,25 @@
 package controllers;
 
-import play.mvc.*;
-import play.data.*;
-import static play.data.Form.*;
+import static play.data.Form.form;
 
-import views.html.*;
+import java.net.UnknownHostException;
 
-import models.*;
+import models.Computer;
+
+import org.bff.javampd.MPD;
+import org.bff.javampd.exception.MPDConnectionException;
+import org.bff.javampd.exception.MPDException;
+import org.bff.javampd.exception.MPDResponseException;
+
+import play.Logger;
+import play.data.Form;
+import play.mvc.Controller;
+import play.mvc.Result;
+import play.mvc.Security;
+import views.html.createForm;
+import views.html.editForm;
+import views.html.list;
+
 
 /**
  * Manage a database of computers
@@ -83,6 +96,32 @@ public class Application extends Controller {
             createForm.render(computerForm)
         );
     }
+
+	public static Result connect()
+	{
+		String hostname = "cubieboard";
+		int port = 6600;
+		
+//		try
+//		{
+//			MPD mpd = new MPD(hostname, port);
+//			Logger.info("Version:" + mpd.getVersion());
+//			Logger.info("Uptime:" + mpd.getUptime());
+//
+//			flash("success", "Connection to " + hostname + " established!");
+//
+//			mpd.close();
+//		}
+//		catch (MPDException | UnknownHostException e)
+//		{
+//			Logger.warn("Error Connecting:" + e.getMessage());
+//			flash("error", "Connection to " + hostname + " failed! " + e.getLocalizedMessage());
+//		}
+
+		flash("warning", "Warning");
+
+		return GO_HOME;
+	}
     
     /**
      * Handle the 'new computer form' submission 

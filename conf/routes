@@ -13,6 +13,9 @@ GET     /logout                     controllers.Credential.logout
 # Computers list (look at the default values for pagination parameters)
 GET     /computers                  controllers.Application.list(p:Int ?= 0, s ?= "name", o ?= "asc", f ?= "")
 
+# Connection
+GET     /connect                    controllers.Application.connect()
+
 # Add computer
 GET     /computers/new              controllers.Application.create()
 POST    /computers                  controllers.Application.save()

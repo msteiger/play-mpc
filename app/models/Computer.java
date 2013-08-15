@@ -13,8 +13,8 @@ import com.avaje.ebean.*;
  * Computer entity managed by Ebean
  */
 @Entity 
-public class Computer extends Model {
-
+public class Computer extends Model 
+{
 	private static final long serialVersionUID = 1288011138574047294L;
 
 	@Id
@@ -46,7 +46,8 @@ public class Computer extends Model {
      * @param order Sort order (either or asc or desc)
      * @param filter Filter applied on the name column
      */
-    public static Page<Computer> page(int page, int pageSize, String sortBy, String order, String filter) {
+    public static Page<Computer> page(int page, int pageSize, String sortBy, String order, String filter) 
+    {
         return 
             find.where()
                 .ilike("name", "%" + filter + "%")

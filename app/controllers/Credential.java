@@ -1,5 +1,5 @@
-package controllers;
 
+package controllers;
 
 import models.User;
 
@@ -8,49 +8,71 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.login;
 
-public class Credential extends Controller {
+/**
+ * Deals with user authorization
+ * @author Martin Steiger
+ */
+public class Credential extends Controller
+{
+	/**
+	 * Login credentials
+	 */
+	public static class Login
+	{
+		public String email;
+		public String password;
 
-    public static class Login {
+		/**
+		 * @return null if successful or an error string
+		 */
+		public String validate()
+		{
+			if (User.authenticate(email, password) == null)
+			{
+				return "Invalid user or password";
+			}
 
-        public String email;
-        public String password;
+			return null;
+		}
+	}
 
-        public String validate() {
-            if (User.authenticate(email, password) == null) {
-                return "Invalid user or password";
-            }
+	/**
+	 * Performs GET /login
+	 * @return an action result
+	 */
+	public static Result login()
+	{
+		return ok(login.render(Form.form(Login.class)));
+	}
 
-            return null;
-        }
-    }
+	/**
+	 * Performs POST /login
+	 * @return an action result
+	 */
+	public static Result authenticate()
+	{
+		Form<Login> loginForm = Form.form(Login.class).bindFromRequest();
+		if (loginForm.hasErrors())
+		{
+			return unauthorized(login.render(loginForm));
+		}
+		else
+		{
+			session().clear();
+			session("email", loginForm.get().email);
+			return redirect(routes.Application.index());
+		}
+	}
 
-
-    public static Result login() {
-        return ok(
-            login.render(Form.form(Login.class))
-        );
-    }
-
-    public static Result authenticate() {
-        Form<Login> loginForm = Form.form(Login.class).bindFromRequest();
-        if (loginForm.hasErrors()) {
-            return unauthorized(login.render(loginForm));
-        } else {
-            session().clear();
-            session("email", loginForm.get().email);
-            return redirect(
-                routes.Application.index()
-            );
-        }
-    }
-
-    public static Result logout() {
-        session().clear();
-        flash("success", "You've been logged out");
-        return redirect(
-                routes.Credential.login()
-        );
-    }
-
+	/**
+	 * Performs GET /logout
+	 * @return an action result
+	 */
+	public static Result logout()
+	{
+		session().clear();
+		flash("success", "You've been logged out");
+		return redirect(routes.Credential.login());
+	}
 
 }

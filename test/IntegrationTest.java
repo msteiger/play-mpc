@@ -8,13 +8,22 @@ import static org.fest.assertions.Assertions.*;
 
 import static org.fluentlenium.core.filter.FilterConstructor.*;
 
-public class IntegrationTest {
-    
+/**
+ * Performs integration tests
+ * @author Martin Steiger
+ */
+public class IntegrationTest 
+{
+    /**
+     * An example integration test
+     */
     @Test
-    public void test() {
+    public void test() 
+    {
         running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
             @Override
-			public void invoke(TestBrowser browser) {
+			public void invoke(TestBrowser browser) 
+            {
                 browser.goTo("http://localhost:3333");
                 
                 assertThat(browser.$("header h1").first().getText()).isEqualTo("Play 2.0 sample application — Computer database");

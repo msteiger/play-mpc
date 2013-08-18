@@ -1,0 +1,17 @@
+# Lines that start with '#' are comments.
+
+# generic part (can be overridden locally using !pattern)
+bin/
+doc/
+doc-files/
+
+# eclipse-related content
+.project
+.classpath
+.metadata/
+.settings/
+
+# Generated output
+logs/
+target/
+.target/

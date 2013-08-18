@@ -8,9 +8,13 @@ import java.net.UnknownHostException;
 import models.Computer;
 
 import org.bff.javampd.MPD;
+import org.bff.javampd.MPDDatabase;
 import org.bff.javampd.exception.MPDException;
+import org.bff.javampd.objects.MPDSong;
 
+import play.Configuration;
 import play.Logger;
+import play.Play;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -97,10 +101,13 @@ public class Application extends Controller
 	 * Performs GET /connect
 	 * @return an action result
 	 */
-	public static Result connect()
+	public static Result updateDB()
 	{
-		String hostname = "cubieboard";
-		int port = 6600;
+		Configuration config = Play.application().configuration();
+		String hostname = config.getString("mpd.hostname");
+		int port = config.getInt("mpd.port");
+
+		flash("info", "Connecting to " + hostname + ":" + port + " ...");
 
 		try
 		{
@@ -110,8 +117,10 @@ public class Application extends Controller
 			Logger.info("Version:" + mpd.getVersion());
 			Logger.info("Uptime:" + mpd.getUptime());
 
-			flash("success", "Connection to " + hostname + " established!");
-
+			mpd.getMPDAdmin().updateDatabase();
+			
+			flash("success", "Updating database!");
+		
 			mpd.close();
 		}
 		catch (MPDException | UnknownHostException e)

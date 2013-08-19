@@ -1,15 +1,28 @@
 package models;
 
-import java.util.*;
+import helper.DefaultPagingList;
+import helper.MpdUtils;
 
-import javax.persistence.*;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-import play.db.ebean.*;
-import play.data.format.*;
-import play.data.validation.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
-import com.avaje.ebean.*;
-import com.google.common.collect.ImmutableList;
+import org.bff.javampd.MPD;
+import org.bff.javampd.MPDPlaylist;
+import org.bff.javampd.exception.MPDException;
+import org.bff.javampd.objects.MPDSong;
+
+import play.Logger;
+import play.data.format.Formats;
+import play.data.validation.Constraints;
+import play.db.ebean.Model;
+
+import com.avaje.ebean.Page;
 
 /**
  * Computer entity managed by Ebean
@@ -50,69 +63,39 @@ public class Computer extends Model
      */
     public static Page<Computer> page(int page, final int pageSize, String sortBy, String order, String filter) 
     {
-    	System.out.println("PAGE");
-    
-    	return new Page<Computer>()
+    	MPD mpd;
+		try
 		{
-			@Override
-			public Page<Computer> prev()
-			{
-				return null;
-			}
+			mpd = MpdUtils.createInstance();
+
+			MPDPlaylist playlist = mpd.getMPDPlaylist();
 			
-			@Override
-			public Page<Computer> next()
-			{
-				return null;
-			}
+			List<MPDSong> songs = playlist.getSongList();
 			
-			@Override
-			public boolean hasPrev()
-			{
-				return false;
-			}
+			List<Computer> compList = new ArrayList<>();
 			
-			@Override
-			public boolean hasNext()
-			{
-				return false;
-			}
-			
-			@Override
-			public int getTotalRowCount()
-			{
-				return pageSize;
-			}
-			
-			@Override
-			public int getTotalPageCount()
-			{
-				return 1;
-			}
-			
-			@Override
-			public int getPageIndex()
-			{
-				return 0;
-			}
-			
-			@Override
-			public List<Computer> getList()
+			long id = 0;
+			for (MPDSong song : songs)
 			{
 				Computer c = new Computer();
-				c.id = 12l;
-				c.name = "Computer";
 				
-				return ImmutableList.of(c);
+				c.id = id++;
+				c.name = song.getTitle();
+				
+				compList.add(c);
 			}
 			
-			@Override
-			public String getDisplayXtoYofZ(String to, String of)
-			{
-				return "0 to 10 of 10";
-			}
-		};
-//    	return ImmutableList.of()
+			DefaultPagingList<Computer> pagingList = new DefaultPagingList<>(compList, pageSize);
+			
+			return pagingList.getPage(page);
+		}
+		catch (UnknownHostException | MPDException e)
+		{			
+			Logger.warn("Error", e);
+			
+			return null;	// TODO: fix
+		}
+
 //        return 
 //            find.where()
 //                .ilike("name", "%" + filter + "%")

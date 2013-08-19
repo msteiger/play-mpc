@@ -8,9 +8,7 @@ import java.net.UnknownHostException;
 import models.Computer;
 
 import org.bff.javampd.MPD;
-import org.bff.javampd.MPDDatabase;
 import org.bff.javampd.exception.MPDException;
-import org.bff.javampd.objects.MPDSong;
 
 import play.Configuration;
 import play.Logger;

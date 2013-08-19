@@ -3,13 +3,21 @@ package controllers;
 
 import static play.data.Form.form;
 
+import helper.MpdUtils;
+
 import java.net.UnknownHostException;
 
 import models.Computer;
 import models.Playlist;
 
 import org.bff.javampd.MPD;
+import org.bff.javampd.MPDPlayer;
+import org.bff.javampd.MPDPlayer.PlayerStatus;
+
+import static org.bff.javampd.MPDPlayer.PlayerStatus.*;
+import org.bff.javampd.exception.MPDConnectionException;
 import org.bff.javampd.exception.MPDException;
+import org.bff.javampd.exception.MPDPlayerException;
 
 import play.Configuration;
 import play.Logger;
@@ -97,7 +105,120 @@ public class Application extends Controller
 	}
 
 	/**
-	 * Performs GET /connect
+	 * Performs GET /playSong
+	 * @return an action result
+	 */
+	public static Result playSong()
+	{
+		try
+		{
+			MPD mpd = MpdUtils.createInstance();
+			MPDPlayer player = mpd.getMPDPlayer();
+			PlayerStatus status = player.getStatus();
+			
+			if (status == STATUS_PLAYING)
+			{
+				player.pause();
+			}
+			else
+			{
+				player.play();
+			}
+			
+			mpd.close();
+		}
+		catch (UnknownHostException | MPDException e)
+		{
+			flash("error", "Command failed! " + e.getMessage());
+		}
+		finally
+		{
+		}
+		
+		return GO_HOME;
+	}
+
+	/**
+	 * Performs GET /nextSong
+	 * @return an action result
+	 */
+	public static Result nextSong()
+	{
+		try
+		{
+			MPD mpd = MpdUtils.createInstance();
+			MPDPlayer player = mpd.getMPDPlayer();
+			PlayerStatus status = player.getStatus();
+			
+			if (status == STATUS_PLAYING)
+			{
+				player.pause();
+			}
+			else
+			{
+				player.playNext();
+			}
+			
+			mpd.close();
+		}
+		catch (UnknownHostException | MPDException e)
+		{
+			flash("error", "Command failed! " + e.getMessage());
+		}
+		finally
+		{
+		}
+		
+		return GO_HOME;
+	}
+
+	/**
+	 * Performs GET /prevSong
+	 * @return an action result
+	 */
+	public static Result prevSong()
+	{
+		try
+		{
+			MPD mpd = MpdUtils.createInstance();
+			MPDPlayer player = mpd.getMPDPlayer();
+			PlayerStatus status = player.getStatus();
+			
+			if (status == STATUS_PLAYING)
+			{
+				player.pause();
+			}
+			else
+			{
+				player.playPrev();
+			}
+			
+			mpd.close();
+		}
+		catch (UnknownHostException | MPDException e)
+		{
+			flash("error", "Command failed! " + e.getMessage());
+		}
+		finally
+		{
+		}
+		
+		return GO_HOME;
+	}
+	
+
+	/**
+	 * Performs GET /stopSong
+	 * @return an action result
+	 */
+	public static Result stopSong()
+	{
+		return GO_HOME;
+	}
+
+
+	/**
+	 * Performs GET /update
 	 * @return an action result
 	 */
 	public static Result updateDB()

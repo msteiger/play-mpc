@@ -70,7 +70,6 @@
             <input type="submit" id="searchsubmit" value="Filter by name" class="btn primary">
         </form>
         
-        <a class="btn" id="updateDB" href="@routes.Application.updateDB()">Update DB</a>
         <a class="btn success" id="add" href="@routes.Application.create()">Add a new computer</a>
         
     </div>
@@ -138,6 +137,14 @@
             </ul>
         </div>
         
+        <div>
+			<a class="btn" id="updateDB" href="@routes.Application.updateDB()">Update DB</a>
+			
+			<a class="btn" id="prevsong" href="@routes.Application.prevSong()">Prev.</a>
+			<a class="btn" id="playsong" href="@routes.Application.playSong()">Play</a>
+			<a class="btn" id="nextsong" href="@routes.Application.nextSong()">Next</a>
+			<a class="btn" id="stopsong" href="@routes.Application.stopSong()">Stop</a>
+        </div>
     }
         
 }

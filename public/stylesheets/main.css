@@ -46,12 +46,6 @@ table.playlist .header a {
     position: relative;
 }
 
-#actions #connect {
-    position: absolute;
-    right: 200px;
-    top: 0;
-}
-
 #actions #add {
     position: absolute;
     right: 0;

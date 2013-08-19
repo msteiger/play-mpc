@@ -14,7 +14,11 @@ GET     /logout                     controllers.Credential.logout
 GET     /computers                  controllers.Application.list(p:Int ?= 0, s ?= "name", o ?= "asc", f ?= "")
 
 # Connection
-GET     /connect                    controllers.Application.updateDB()
+GET     /update                     controllers.Application.updateDB()
+GET     /prevsong                   controllers.Application.prevSong()
+GET     /playsong                   controllers.Application.playSong()
+GET     /nextsong                   controllers.Application.nextSong()
+GET     /stopsong                   controllers.Application.stopSong()
 
 # Add computer
 GET     /computers/new              controllers.Application.create()

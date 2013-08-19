@@ -22,7 +22,7 @@ import com.avaje.ebean.Page;
 public class Playlist 
 {  
     /**
-     * Return a page of computer
+     * Returns a page of the current playlist
      *
      * @param page Page to display
      * @param pageSize Number of computers per page
@@ -32,7 +32,7 @@ public class Playlist
      */
     public static Page<MPDSong> getSongs(int page, final int pageSize, String sortBy, String order, String filter) 
     {
-    	MPD mpd;
+    	MPD mpd = null;
 		try
 		{
 			mpd = MpdUtils.createInstance();
@@ -52,6 +52,20 @@ public class Playlist
 			Logger.warn("Error", e);
 			
 			return new EmptyPage<MPDSong>();
+		}
+		finally
+		{
+			if (mpd != null)
+			{
+				try
+				{
+					mpd.close();
+				}
+				catch (MPDException e)
+				{
+					Logger.warn("Could not close connection", e);
+				}
+			}
 		}
     }
 }

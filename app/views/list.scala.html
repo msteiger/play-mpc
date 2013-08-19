@@ -138,12 +138,17 @@
         </div>
         
         <div>
-			<a class="btn" id="updateDB" href="@routes.Application.updateDB()">Update DB</a>
+        	<span style="float:left">
+			<a class="btn primary" id="updateDB" href="@routes.Application.updateDB()">Update DB</a>
 			
 			<a class="btn" id="prevsong" href="@routes.Application.prevSong()">Prev.</a>
 			<a class="btn" id="playsong" href="@routes.Application.playSong()">Play</a>
 			<a class="btn" id="nextsong" href="@routes.Application.nextSong()">Next</a>
 			<a class="btn" id="stopsong" href="@routes.Application.stopSong()">Stop</a>
+			</span>
+			<span style="float:left" id="slider-range-min"></span>
+			<label for="amount">Volume: </label>
+			<input readonly type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" />
         </div>
     }
         

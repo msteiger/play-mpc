@@ -10,7 +10,8 @@ object ApplicationBuild extends Build {
     val appDependencies = Seq(
       javaCore,
       javaJdbc,
-      javaEbean
+      javaEbean,
+      "com.google.guava" % "guava" % "14.0.1"
     )
 
     val main = play.Project(appName, appVersion, appDependencies).settings(

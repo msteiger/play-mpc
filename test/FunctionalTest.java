@@ -7,13 +7,21 @@ import play.mvc.*;
 import static play.test.Helpers.*;
 import static org.fest.assertions.Assertions.*;
 
-public class FunctionalTest {
-
+/**
+ * Performs different functional tests
+ * @author Martin Steiger
+ */
+@SuppressWarnings("javadoc")
+public class FunctionalTest 
+{
     @Test
-    public void redirectHomePage() {
-        running(fakeApplication(), new Runnable() {
+    public void redirectHomePage() 
+    {
+        running(fakeApplication(), new Runnable() 
+        {
            @Override
-		public void run() {
+           public void run() 
+           {
                Result result = callAction(controllers.routes.ref.Application.index());
 
                assertThat(status(result)).isEqualTo(SEE_OTHER);
@@ -23,10 +31,13 @@ public class FunctionalTest {
     }
     
     @Test
-    public void listComputersOnTheFirstPage() {
-        running(fakeApplication(), new Runnable() {
+    public void listComputersOnTheFirstPage() 
+    {
+        running(fakeApplication(), new Runnable() 
+        {
            @Override
-		public void run() {
+           public void run() 
+           {
                Result result = callAction(controllers.routes.ref.Application.list(0, "name", "asc", ""));
 
                assertThat(status(result)).isEqualTo(OK);
@@ -36,10 +47,13 @@ public class FunctionalTest {
     }
     
     @Test
-    public void filterComputerByName() {
-        running(fakeApplication(), new Runnable() {
-           @Override
-		public void run() {
+    public void filterComputerByName() 
+    {
+        running(fakeApplication(), new Runnable() 
+        {
+          	@Override
+          	public void run() 
+          	{
                Result result = callAction(controllers.routes.ref.Application.list(0, "name", "asc", "Apple"));
 
                assertThat(status(result)).isEqualTo(OK);
@@ -49,10 +63,13 @@ public class FunctionalTest {
     }
     
     @Test
-    public void createANewComputer() {
-        running(fakeApplication(), new Runnable() {
+    public void createANewComputer() 
+    {
+        running(fakeApplication(), new Runnable() 
+        {
             @Override
-			public void run() {
+			public void run() 
+            {
                 Result result = callAction(controllers.routes.ref.Application.save());
 
                 assertThat(status(result)).isEqualTo(BAD_REQUEST);

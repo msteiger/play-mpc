@@ -40,8 +40,26 @@
     <h1 id="homeTitle">@Messages("computers.list.title", currentPage.getTotalRowCount)</h1>
 
     @if(flash.containsKey("success")) {
-        <div class="alert-message warning">
+        <div class="alert-message success">
             <strong>Done!</strong> @flash.get("success")
+        </div>
+    } 
+
+    @if(flash.containsKey("error")) {
+        <div class="alert-message error">
+            <strong>Error!</strong> @flash.get("error")
+        </div>
+    } 
+
+    @if(flash.containsKey("info")) {
+        <div class="alert-message info">
+            <strong>Info:</strong> @flash.get("info")
+        </div>
+    } 
+
+    @if(flash.containsKey("warning")) {
+        <div class="alert-message warning">
+            <strong>Warning:</strong> @flash.get("warning")
         </div>
     } 
 
@@ -52,6 +70,7 @@
             <input type="submit" id="searchsubmit" value="Filter by name" class="btn primary">
         </form>
         
+        <a class="btn" id="updateDB" href="@routes.Application.updateDB()">Update DB</a>
         <a class="btn success" id="add" href="@routes.Application.create()">Add a new computer</a>
         
     </div>

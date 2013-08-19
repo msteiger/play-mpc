@@ -6,6 +6,7 @@ import static play.data.Form.form;
 import java.net.UnknownHostException;
 
 import models.Computer;
+import models.Playlist;
 
 import org.bff.javampd.MPD;
 import org.bff.javampd.exception.MPDException;
@@ -52,7 +53,7 @@ public class Application extends Controller
 	 */
 	public static Result list(int page, String sortBy, String order, String filter)
 	{
-		return ok(list.render(Computer.page(page, 10, sortBy, order, filter), sortBy, order, filter));
+		return ok(list.render(Playlist.getSongs(page, 10, sortBy, order, filter), sortBy, order, filter));
 	}
 
 	/**

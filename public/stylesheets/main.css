@@ -22,21 +22,24 @@ section#main .topRight {
     top: 70px;
 }
 
-table.computers em {
+table.playlist em {
     color: #aaa;
 }
 
-table.computers .introduced, table.computers .discontinued {
-    width: 10%;
+table.playlist .pos {
+	width: 50px;
+}
+
+table.playlist .title, table.playlist .artist {
+    width: 30%;
     min-width: 100px;
 }
 
-table.computers .company_name {
-    width: 30%;
-    min-width: 300px;
+table.playlist .options {
+    width: 50px;
 }
 
-table.computers .header a {
+table.playlist .header a {
 }
 
 #actions {

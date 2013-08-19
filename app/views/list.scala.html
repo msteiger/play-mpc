@@ -1,4 +1,4 @@
-@(currentPage: com.avaje.ebean.Page[Computer], currentSortBy: String, currentOrder: String, currentFilter: String)
+@(currentPage: com.avaje.ebean.Page[org.bff.javampd.objects.MPDSong], currentSortBy: String, currentOrder: String, currentFilter: String)
 
 @****************************************
 * Helper generating navigation links    *
@@ -83,41 +83,29 @@
         
     } else {
         
-        <table class="computers zebra-striped">
+        <table class="playlist zebra-striped">
             <thead>
                 <tr>
-                    @header("name", "Computer name")
-                    @header("introduced", "Introduced")
-                    @header("discontinued", "Discontinued")
-                    @header("company.name", "Company")
+                    @header("pos", "Pos")
+                    @header("title", "Title")
+                    @header("artist", "Artist")
+                    @header("album", "Album")
+                    @header("genre", "Genre")
+                    @header("year", "Year")
+                    @header("options", "Rem?")
                 </tr>
             </thead>
             <tbody>
 
-                @for(computer <- currentPage.getList) {
+                @for(song <- currentPage.getList) {
                     <tr>
-                        <td><a href="@routes.Application.edit(computer.id)">@computer.name</a></td>
-                        <td>
-                            @if(computer.introduced == null) {
-                                <em>-</em>
-                            } else {
-                                @computer.introduced.format("dd MMM yyyy")
-                            }
-                        </td>
-                        <td>
-                            @if(computer.discontinued == null) {
-                                <em>-</em>
-                            } else {
-                                @computer.discontinued.format("dd MMM yyyy")
-                            }
-                        </td>
-                        <td>
-                            @if(computer.company == null) {
-                                <em>-</em>
-                            } else {
-                                @computer.company.name
-                            }
-                        </td>
+                        <td>@song.getPosition()</td>
+                        <td>@song.getTitle()</td>
+                        <td>@song.getArtist()</td>
+                        <td>@song.getAlbum()</td>
+                        <td>@song.getGenre()</td>
+                        <td>@song.getYear()</td>
+                        <td><a href="@routes.Application.edit(song.getPosition())">Remove</a></td>
                     </tr>
                 }
 

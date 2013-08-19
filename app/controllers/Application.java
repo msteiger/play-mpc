@@ -148,16 +148,8 @@ public class Application extends Controller
 		{
 			MPD mpd = MpdUtils.createInstance();
 			MPDPlayer player = mpd.getMPDPlayer();
-			PlayerStatus status = player.getStatus();
-			
-			if (status == STATUS_PLAYING)
-			{
-				player.pause();
-			}
-			else
-			{
-				player.playNext();
-			}
+
+			player.playNext();
 			
 			mpd.close();
 		}
@@ -182,16 +174,8 @@ public class Application extends Controller
 		{
 			MPD mpd = MpdUtils.createInstance();
 			MPDPlayer player = mpd.getMPDPlayer();
-			PlayerStatus status = player.getStatus();
 			
-			if (status == STATUS_PLAYING)
-			{
-				player.pause();
-			}
-			else
-			{
-				player.playPrev();
-			}
+			player.playPrev();
 			
 			mpd.close();
 		}

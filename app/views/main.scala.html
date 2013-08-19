@@ -5,7 +5,24 @@
     <head>
         <title>Computers database</title>
         <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")"> 
-        <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/main.css")"> 
+        <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+		<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+		<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+		 <script>
+$(function() {
+$( "#slider-range-min" ).slider({
+range: "min",
+value: 37,
+min: 1,
+max: 100,
+slide: function( event, ui ) {
+$( "#amount" ).val( "$" + ui.value );
+}
+});
+$( "#amount" ).val( "$" + $( "#slider-range-min" ).slider( "value" ) );
+});
+</script> 
     </head>
     <body>
         

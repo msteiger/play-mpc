@@ -65,4 +65,8 @@ table.playlist .header a {
     color: #666;
 }
 
-
+#slider-range-min {
+	width:400px;
+	margin-top:10px;
+	margin-left:20px
+}

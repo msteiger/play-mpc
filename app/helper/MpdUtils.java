@@ -33,14 +33,14 @@ public class MpdUtils
 {
 	public static MPD createInstance() throws UnknownHostException, MPDConnectionException
 	{
-		MPD mpd = null;
 		Configuration config = Play.application().configuration();
+
 		String hostname = config.getString("mpd.hostname");
 		int port = config.getInt("mpd.port");
-
-		String password = null;
+		String password = config.getString("mpd.password");
+		int timeout = config.getInt("mpd.timeout", 10) * 1000;
 		
-		mpd = new MPD(hostname, port, password, 0);
+		MPD mpd = new MPD(hostname, port, password, timeout);
 		
 		return mpd;
 	}

@@ -1,8 +1,8 @@
 
 package controllers;
 
+import static org.bff.javampd.MPDPlayer.PlayerStatus.STATUS_PLAYING;
 import static play.data.Form.form;
-
 import helper.MpdUtils;
 
 import java.net.UnknownHostException;
@@ -13,11 +13,7 @@ import models.Playlist;
 import org.bff.javampd.MPD;
 import org.bff.javampd.MPDPlayer;
 import org.bff.javampd.MPDPlayer.PlayerStatus;
-
-import static org.bff.javampd.MPDPlayer.PlayerStatus.*;
-import org.bff.javampd.exception.MPDConnectionException;
 import org.bff.javampd.exception.MPDException;
-import org.bff.javampd.exception.MPDPlayerException;
 
 import play.Configuration;
 import play.Logger;
@@ -200,6 +196,15 @@ public class Application extends Controller
 		return GO_HOME;
 	}
 
+	/**
+	 * Performs POST /volume
+	 * @return an action result
+	 */
+	public static Result volume(int amount)
+	{
+		Logger.info("VOLUME " + amount);
+		return GO_HOME;
+	}
 
 	/**
 	 * Performs GET /update

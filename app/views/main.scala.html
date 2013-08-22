@@ -4,34 +4,13 @@
 <html>
     <head>
         <title>Computers database</title>
-        <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")"> 
-        <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
-        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-		<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-		<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+        <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")" /> 
+        <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/main.css")" />
+        <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/jquery-ui-1.10.3/redmond/jquery-ui.min.css")" />
+		<script src="@routes.Assets.at("javascripts/jquery-1.10.2.min.js")"></script>
+		<script src="@routes.Assets.at("javascripts/jquery-ui-1.10.3.min.js")"></script>
         <script type="text/javascript" src="@routes.Application.javascriptRoutes()"></script>
-<script>
-$(function() {
-$( "#slider-range-min" ).slider({
-range: "min",
-value: 40,
-min: 0,
-step: 5,
-max: 100,
-slide: function( event, ui ) {
-$( "#amount" ).val( "$" + ui.value );
-
-jsRoutes.controllers.Application.volume(ui.value).ajax(
-{	
-	error : function(data) { alert("AJAX call to volume(int amount) failed "); }
-}
-);
-
-}
-});
-$( "#amount" ).val( "$" + $( "#slider-range-min" ).slider( "value" ) );
-});
-</script> 
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/main.js")"></script>
     </head>
     <body>
         

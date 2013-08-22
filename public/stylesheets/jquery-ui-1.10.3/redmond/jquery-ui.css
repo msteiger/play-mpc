@@ -629,6 +629,7 @@ button.ui-button::-moz-focus-inner {
 	display: block;
 	border: 0;
 	background-position: 0 0;
+	background: #5c9ccc url(images/ui-bg_gloss-wave_55_5c9ccc_60x12.png) repeat-x;
 }
 
 /* For IE8 - See #6727 */

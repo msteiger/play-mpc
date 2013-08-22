@@ -36,3 +36,9 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 # Volume control
 POST    /volume/:amount             controllers.Application.volume(amount:Int)
+
+# JavaScript Routes
+# for some reason the path can be arbitrary but must not contain slashes
+# However, the code in the samples does and it works there
+GET     /jsRoutes.js				controllers.Application.javascriptRoutes()
+

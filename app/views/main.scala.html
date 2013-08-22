@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 		<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 		<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+        <script type="text/javascript" src="@routes.Application.javascriptRoutes()"></script>
 <script>
 $(function() {
 $( "#slider-range-min" ).slider({
@@ -19,10 +20,13 @@ step: 5,
 max: 100,
 slide: function( event, ui ) {
 $( "#amount" ).val( "$" + ui.value );
-$.ajax({
-    type: "POST",
-    url: "/volume/" + ui.value 
-   });
+
+jsRoutes.controllers.Application.volume(ui.value).ajax(
+{	
+	error : function(data) { alert("AJAX call to volume(int amount) failed "); }
+}
+);
+
 }
 });
 $( "#amount" ).val( "$" + $( "#slider-range-min" ).slider( "value" ) );

@@ -1,8 +1,8 @@
 
 package controllers;
 
-import static org.bff.javampd.MPDPlayer.PlayerStatus.STATUS_PLAYING;
 import static play.data.Form.form;
+
 import helper.MpdUtils;
 
 import java.net.UnknownHostException;
@@ -13,11 +13,16 @@ import models.Playlist;
 import org.bff.javampd.MPD;
 import org.bff.javampd.MPDPlayer;
 import org.bff.javampd.MPDPlayer.PlayerStatus;
+
+import static org.bff.javampd.MPDPlayer.PlayerStatus.*;
+import org.bff.javampd.exception.MPDConnectionException;
 import org.bff.javampd.exception.MPDException;
+import org.bff.javampd.exception.MPDPlayerException;
 
 import play.Configuration;
 import play.Logger;
 import play.Play;
+import play.Routes;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -45,6 +50,15 @@ public class Application extends Controller
 	public static Result index()
 	{
 		return GO_HOME;
+	}
+	
+	public static Result javascriptRoutes() 
+	{
+	    response().setContentType("text/javascript");
+	    return ok(Routes.javascriptRouter("jsRoutes",
+	            controllers.routes.javascript.Application.volume()
+	        )
+	    );
 	}
 
 	/**

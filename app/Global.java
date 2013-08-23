@@ -5,6 +5,8 @@ import play.GlobalSettings;
 import play.Logger;
 import play.libs.Yaml;
 
+import helper.MpdMonitor;
+
 import java.util.List;
 
 /**
@@ -23,5 +25,12 @@ public class Global extends GlobalSettings
 			Logger.debug("Bootstrapping with default data");
 			Ebean.save((List<?>) Yaml.load("initial-data.yml"));
 		}
+	}
+	
+	@Override
+	public void onStop(Application app)
+	{
+		MpdMonitor.getInstance().stop();
+		super.onStop(app);
 	}
 }

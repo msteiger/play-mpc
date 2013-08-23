@@ -70,3 +70,7 @@ table.playlist .header a {
 	margin-top:10px;
 	margin-left:20px
 }
+
+#comet {
+    display: none;
+}

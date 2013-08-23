@@ -3,9 +3,12 @@ package controllers;
 
 import static play.data.Form.form;
 
+import helper.MpdMonitor;
 import helper.MpdUtils;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 import models.Computer;
 import models.Playlist;
@@ -15,15 +18,21 @@ import org.bff.javampd.MPDPlayer;
 import org.bff.javampd.MPDPlayer.PlayerStatus;
 
 import static org.bff.javampd.MPDPlayer.PlayerStatus.*;
+
+import org.bff.javampd.events.VolumeChangeEvent;
+import org.bff.javampd.events.VolumeChangeListener;
 import org.bff.javampd.exception.MPDConnectionException;
 import org.bff.javampd.exception.MPDException;
 import org.bff.javampd.exception.MPDPlayerException;
+import org.bff.javampd.monitor.MPDStandAloneMonitor;
 
 import play.Configuration;
 import play.Logger;
 import play.Play;
 import play.Routes;
 import play.data.Form;
+import play.libs.Comet;
+import play.libs.F.Callback0;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -43,6 +52,26 @@ public class Application extends Controller
 	 */
 	public static Result GO_HOME = redirect(routes.Application.list(0, "name", "asc", ""));
 
+	public static final List<Comet> sockets = new ArrayList<Comet>();
+	
+	static
+	{
+		MPDStandAloneMonitor monitor = MpdMonitor.getInstance().getMonitor();
+		monitor.addVolumeChangeListener(new VolumeChangeListener()
+		{
+			@Override
+			public void volumeChanged(VolumeChangeEvent event)
+			{
+				Logger.info("Volume changed :" + event.getVolume() + " - " + event.getMsg());
+				
+				for (Comet comet : sockets)
+				{
+					comet.sendMessage(String.valueOf(event.getVolume()));
+				}
+			}
+		});
+	}
+
 	/**
 	 * Handle default path requests, redirect to computers list
 	 * @return an action result
@@ -50,6 +79,40 @@ public class Application extends Controller
 	public static Result index()
 	{
 		return GO_HOME;
+	}
+	
+	/**
+	 * Handles calls from the IFRAME and returns 
+	 * @return a Comet connection Result
+	 */
+	public static Result liveUpdate()
+	{
+		final Comet comet = new Comet("parent.volumeChanged")
+		{
+			@Override
+			public void onConnected()
+			{
+				sockets.add(this);
+				Logger.info("New browser connected (" + sockets.size() + " browsers currently connected)");
+				
+				final Comet myComet = this;
+				
+				Callback0 callback = new Callback0()
+				{
+					@Override
+					public void invoke() throws Throwable
+					{
+						sockets.remove(myComet);
+						Logger.info("Browser disconnected (" + sockets.size() + " browsers currently connected)");
+					}
+				};
+				
+				this.onDisconnected(callback);
+
+			}
+		};
+		
+		return ok(comet);
 	}
 	
 	public static Result javascriptRoutes() 

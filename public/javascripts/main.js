@@ -9,7 +9,7 @@ $(function()
 		max : 100,
 		slide : function(event, ui) 
 		{
-			$("#amount").val("$" + ui.value);
+			$('#volume').html(ui.value);
 
 			jsRoutes.controllers.Application.volume(ui.value).ajax(
 			{
@@ -20,6 +20,6 @@ $(function()
 			});
 		}
 	});
-	
-	$("#amount").val("$" + $("#slider-range-min").slider("value"));
+
+	$("#volume").html($("#slider-range-min").slider("value"));
 });

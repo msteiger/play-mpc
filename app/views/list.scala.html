@@ -147,11 +147,21 @@
 			<a class="btn" id="stopsong" href="@routes.Application.stopSong()">Stop</a>
 			</span>
 			<span style="float:left" id="slider-range-min"></span>
-			<label for="amount">Volume: </label>
-			<input readonly type="text" id="amount" style="border: 0; color: #f6931f; width:50px; font-weight: bold;" />
+			<span>Volume: </span>
+			<span id="volume"></span>
         </div>
     }
-        
+    
+    <script type="text/javascript" charset="utf-8">
+        // Called for each Comet message
+        var volumeChanged = function(time) 
+        {
+            $('#volume').html(time)
+        }
+    </script>
+    
+    <iframe id="comet" src="@routes.Application.liveUpdate.unique"></iframe>
+
 }
 
             

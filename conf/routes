@@ -19,6 +19,7 @@ GET     /prevsong                   controllers.Application.prevSong()
 GET     /playsong                   controllers.Application.playSong()
 GET     /nextsong                   controllers.Application.nextSong()
 GET     /stopsong                   controllers.Application.stopSong()
+POST    /selectsong/:pos            controllers.Application.selectSong(pos:Int)
 
 # Add computer
 GET     /computers/new              controllers.Application.create()

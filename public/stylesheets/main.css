@@ -71,6 +71,8 @@ table.playlist .header a {
 	margin-left:10px
 }
 
+.zebra-striped tbody tr.highlight td {background-color:#c8c8ff;}
+
 #comet {
     display: none;
 }

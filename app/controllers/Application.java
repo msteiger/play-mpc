@@ -1,8 +1,8 @@
 
 package controllers;
 
+import static org.bff.javampd.MPDPlayer.PlayerStatus.STATUS_PLAYING;
 import static play.data.Form.form;
-
 import helper.MpdMonitor;
 import helper.MpdUtils;
 
@@ -16,15 +16,13 @@ import models.Playlist;
 import org.bff.javampd.MPD;
 import org.bff.javampd.MPDPlayer;
 import org.bff.javampd.MPDPlayer.PlayerStatus;
-
-import static org.bff.javampd.MPDPlayer.PlayerStatus.*;
-
 import org.bff.javampd.events.VolumeChangeEvent;
 import org.bff.javampd.events.VolumeChangeListener;
 import org.bff.javampd.exception.MPDConnectionException;
 import org.bff.javampd.exception.MPDException;
 import org.bff.javampd.exception.MPDPlayerException;
 import org.bff.javampd.monitor.MPDStandAloneMonitor;
+import org.bff.javampd.objects.MPDSong;
 
 import play.Configuration;
 import play.Logger;
@@ -119,7 +117,8 @@ public class Application extends Controller
 	{
 	    response().setContentType("text/javascript");
 	    return ok(Routes.javascriptRouter("jsRoutes",
-	            controllers.routes.javascript.Application.volume()
+	            controllers.routes.javascript.Application.volume(),
+	            controllers.routes.javascript.Application.selectSong()
 	        )
 	    );
 	}
@@ -294,6 +293,27 @@ public class Application extends Controller
 		return GO_HOME;
 	}
 
+	/**
+	 * Performs POST /selectsong/:pos
+	 * @return an action result
+	 */
+	public static Result selectSong(int pos)
+	{
+		Logger.info("Play Song " + pos);
+		
+		MPD mpd = MpdMonitor.getInstance().getMPD();
+		try
+		{
+			MPDSong song = mpd.getMPDPlaylist().getSongList().get(pos);
+			mpd.getMPDPlayer().playId(song);
+		}
+		catch (MPDException e)
+		{
+			flash("error", "Changing volume failed! " + e.getMessage());
+		}
+		
+		return GO_HOME;
+	}
 	/**
 	 * Performs GET /update
 	 * @return an action result

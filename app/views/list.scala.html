@@ -82,7 +82,7 @@
         
     } else {
         
-        <table class="playlist zebra-striped">
+        <table class="playlist zebra-striped" id="playlist-table">
             <thead>
                 <tr>
                     @header("pos", "Pos")
@@ -97,7 +97,7 @@
             <tbody>
 
                 @for(song <- currentPage.getList) {
-                    <tr>
+                    <tr data-pos="@song.getPosition()" >
                         <td>@song.getPosition()</td>
                         <td>@song.getTitle()</td>
                         <td>@song.getArtist()</td>
@@ -151,7 +151,7 @@
 			<span style="float:left" id="slider-range-min"></span>
         </div>
     }
-    
+	
     <script type="text/javascript" charset="utf-8">
         // Called for each Comet message
         var volumeChanged = function(volume) 

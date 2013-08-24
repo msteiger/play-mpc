@@ -154,9 +154,10 @@
     
     <script type="text/javascript" charset="utf-8">
         // Called for each Comet message
-        var volumeChanged = function(time) 
+        var volumeChanged = function(volume) 
         {
-            $('#volume').html(time)
+            $('#volume').html(volume)
+            $('#slider-range-min').slider( "value", volume );
         }
     </script>
     

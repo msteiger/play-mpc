@@ -277,9 +277,20 @@ public class Application extends Controller
 	 * Performs POST /volume
 	 * @return an action result
 	 */
-	public static Result volume(int amount)
+	public static Result volume(int volume)
 	{
-		Logger.info("VOLUME " + amount);
+		Logger.info("VOLUME " + volume);
+		
+		MPD mpd = MpdMonitor.getInstance().getMPD();
+		try
+		{
+			mpd.getMPDPlayer().setVolume(volume);
+		}
+		catch (MPDPlayerException | MPDConnectionException e)
+		{
+			flash("error", "Changing volume failed! " + e.getMessage());
+		}
+		
 		return GO_HOME;
 	}
 

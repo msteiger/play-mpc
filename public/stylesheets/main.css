@@ -71,6 +71,16 @@ table.playlist .header a {
 	margin-left:10px
 }
 
+.unselectable {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: -moz-none;
+	-ms-user-select: none;
+/*	user-select: none;		not recognized by FF */
+	cursor:default; 
+}
+
 .zebra-striped tbody tr.highlight td {background-color:#c8c8ff;}
 
 #comet {

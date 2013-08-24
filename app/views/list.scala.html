@@ -97,7 +97,7 @@
             <tbody>
 
                 @for(song <- currentPage.getList) {
-                    <tr data-pos="@song.getPosition()" >
+                    <tr class="unselectable" data-pos="@song.getPosition()" >
                         <td>@song.getPosition()</td>
                         <td>@song.getTitle()</td>
                         <td>@song.getArtist()</td>

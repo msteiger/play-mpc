@@ -1,0 +1,105 @@
+@(currentPage: com.avaje.ebean.Page[org.bff.javampd.objects.MPDSong])
+
+
+@**********************************
+* Helper generating table headers *
+***********************************@
+@header(key:String, title:String) = {
+    <th class="@key.replace(".","_") header">@title</th>
+}
+
+@main {
+    
+    <h1 id="homeTitle">@Messages("playlist.list.title", currentPage.getTotalRowCount)</h1>
+
+    <div id="actions">        
+        <a class="btn success" id="browseDb" href="@routes.Application.browseDb()">Add song from DB</a>
+    </div>
+    
+    @if(currentPage.getTotalRowCount() == 0) {    
+        <div class="well">
+            <em>Nothing to display</em>
+        </div>   
+    } else {
+        <table class="playlist zebra-striped" id="playlist-table">
+            <thead>
+                <tr>
+                    @header("pos", "Pos")
+                    @header("title", "Title")
+                    @header("artist", "Artist")
+                    @header("album", "Album")
+                    @header("genre", "Genre")
+                    @header("year", "Year")
+                    @header("options", "Rem?")
+                </tr>
+            </thead>
+            <tbody>
+
+                @for(song <- currentPage.getList) {
+                    <tr class="unselectable" data-pos="@song.getPosition()" >
+                        <td>@song.getPosition()</td>
+                        <td>@song.getTitle()</td>
+                        <td>@song.getArtist()</td>
+                        <td>@song.getAlbum()</td>
+                        <td>@song.getGenre()</td>
+                        <td>@song.getYear()</td>
+                        <td><a href="@routes.Application.remove(song.getPosition())">Remove</a></td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+        <div id="pagination" class="pagination">
+            <ul>
+                @if(currentPage.hasPrev) {
+                    <li class="prev">
+                        <a href="@routes.Application.playlist(currentPage.getPageIndex - 1)">&larr; Previous</a>
+                    </li>
+                } else {
+                    <li class="prev disabled">
+                        <a>&larr; Previous</a>
+                    </li>
+                }
+                <li class="current">
+                    <a>Displaying @currentPage.getDisplayXtoYofZ(" to "," of ")</a>
+                </li>
+                @if(currentPage.hasNext) {
+                    <li class="next">
+                        <a href="@routes.Application.playlist(currentPage.getPageIndex + 1)">Next &rarr;</a>
+                    </li>
+                } else {
+                    <li class="next disabled">
+                        <a>Next &rarr;</a>
+                    </li>
+                }
+            </ul>
+        </div>
+        
+        <div>
+        	<span style="float:left">		
+				<a class="btn" id="prevsong" href="@routes.Application.prevSong()">Prev.</a>
+				<a class="btn" id="playsong" href="@routes.Application.playSong()">Play</a>
+				<a class="btn" id="nextsong" href="@routes.Application.nextSong()">Next</a>
+				<a class="btn" id="stopsong" href="@routes.Application.stopSong()">Stop</a>
+			</span>
+			<span style="float:left; margin-top:6px; margin-left: 20px;" >Volume: </span>
+			<span style="float:left; margin-top:6px; width:20px;" id="volume"></span>
+			<span style="float:left" id="slider-range-min"></span>
+        </div>
+    }
+	
+    <script type="text/javascript" charset="utf-8">
+        // Called for each Comet message
+        var volumeChanged = function(volume) 
+        {
+            $('#volume').html(volume)
+            $('#slider-range-min').slider( "value", volume );
+        }
+    </script>
+    
+    <!--iframe id="comet" src="@routes.Application.liveUpdate.unique"></iframe-->
+
+}
+
+            

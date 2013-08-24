@@ -6,19 +6,24 @@ import static play.data.Form.form;
 import helper.MpdMonitor;
 import helper.MpdUtils;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import models.Computer;
+import models.Database;
 import models.Playlist;
 
 import org.bff.javampd.MPD;
 import org.bff.javampd.MPDPlayer;
 import org.bff.javampd.MPDPlayer.PlayerStatus;
+import org.bff.javampd.MPDPlaylist;
 import org.bff.javampd.events.VolumeChangeEvent;
 import org.bff.javampd.events.VolumeChangeListener;
 import org.bff.javampd.exception.MPDConnectionException;
+import org.bff.javampd.exception.MPDDatabaseException;
 import org.bff.javampd.exception.MPDException;
 import org.bff.javampd.exception.MPDPlayerException;
 import org.bff.javampd.monitor.MPDStandAloneMonitor;
@@ -33,10 +38,10 @@ import play.libs.Comet;
 import play.libs.F.Callback0;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Results;
 import play.mvc.Security;
-import views.html.createForm;
-import views.html.editForm;
-import views.html.list;
+import views.html.database;
+import views.html.playlist;
 
 /**
  * Manage a database of computers
@@ -48,7 +53,7 @@ public class Application extends Controller
 	/**
 	 * This result directly redirect to application home.
 	 */
-	public static Result GO_HOME = redirect(routes.Application.list(0, "name", "asc", ""));
+	public static Result GO_HOME = redirect(routes.Application.playlist(0));
 
 	public static final List<Comet> sockets = new ArrayList<Comet>();
 	
@@ -117,10 +122,20 @@ public class Application extends Controller
 	{
 	    response().setContentType("text/javascript");
 	    return ok(Routes.javascriptRouter("jsRoutes",
-	            controllers.routes.javascript.Application.volume(),
+	            controllers.routes.javascript.Application.setVolume(),
 	            controllers.routes.javascript.Application.selectSong()
 	        )
 	    );
+	}
+
+	/**
+	 * Display the paginated list of playlist entries.
+	 * @param page Current page number (starts from 0)
+	 * @return an action result
+	 */
+	public static Result playlist(int page)
+	{
+		return ok(playlist.render(Playlist.getSongs(page, 10)));
 	}
 
 	/**
@@ -131,49 +146,62 @@ public class Application extends Controller
 	 * @param filter Filter applied on computer names
 	 * @return an action result
 	 */
-	public static Result list(int page, String sortBy, String order, String filter)
+	public static Result browseDb(int page, String sortBy, String order, String filter)
 	{
-		return ok(list.render(Playlist.getSongs(page, 10, sortBy, order, filter), sortBy, order, filter));
+		return ok(database.render(Database.getSongs(page, 10, sortBy, order, filter), sortBy, order, filter));
 	}
 
 	/**
-	 * Display the 'edit form' of a existing Computer.
-	 * @param id Id of the computer to edit
+	 * Performs POST /addUrl
+	 * Display the 'Add from URL form'.
 	 * @return an action result
 	 */
-	public static Result edit(Long id)
+	public static Result addUrl(String url)
 	{
-		Form<Computer> computerForm = form(Computer.class).fill(Computer.find.byId(id));
-		return ok(editForm.render(id, computerForm));
-	}
-
-	/**
-	 * Performs GET /computers/:id <br/>
-	 * Handle the 'edit form' submission
-	 * @param id Id of the computer to edit
-	 * @return an action result
-	 */
-	public static Result update(Long id)
-	{
-		Form<Computer> computerForm = form(Computer.class).bindFromRequest();
-		if (computerForm.hasErrors())
-		{
-			return badRequest(editForm.render(id, computerForm));
-		}
-		computerForm.get().update(id);
-		flash("success", "Computer " + computerForm.get().name + " has been updated");
+		// TODO: parse ending
+		// extract URL from playlist URL if necessary
+		
+		Logger.info("Adding to playlist: " + url);
+		
 		return GO_HOME;
 	}
-
 	/**
-	 * Performs GET computers/new
-	 * Display the 'new computer form'.
+	 * Performs POST /addUrl
+	 * Display the 'Add from URL form'.
 	 * @return an action result
 	 */
-	public static Result create()
+	public static Result addDbEntry(String url)
 	{
-		Form<Computer> computerForm = form(Computer.class);
-		return ok(createForm.render(computerForm));
+		// TODO: parse ending
+		// extract URL from playlist URL if necessary
+		
+		Logger.info("Adding to playlist: " + url);
+		
+		MPD mpd = MpdMonitor.getInstance().getMPD();
+		
+		try
+		{
+			// TODO: this is silly - first search song by filename then use the filename of the song
+			// However, it prevents adding files that are not in the DB (maybe MPD checks this already?)
+			Collection<MPDSong> songs = mpd.getMPDDatabase().searchFileName(url);
+	
+			if (songs.size() == 1)
+			{
+				MPDSong song = songs.iterator().next();
+				mpd.getMPDPlaylist().addSong(song);
+			}
+			else
+			{
+				Logger.warn("Songs expected: 1 - found " + songs.size());
+			}
+		}
+		catch (MPDException e)
+		{
+			flash("error", "Command failed! " + e.getMessage());
+		}
+		
+		// TODO: either use something like GO_HOME or return "false" and avoid reloading
+		return redirect(routes.Application.browseDb(0, "name", "asc", ""));
 	}
 
 	/**
@@ -276,9 +304,9 @@ public class Application extends Controller
 	 * Performs POST /volume
 	 * @return an action result
 	 */
-	public static Result volume(int volume)
+	public static Result setVolume(int volume)
 	{
-		Logger.info("VOLUME " + volume);
+		Logger.info("Set volume " + volume);
 		
 		MPD mpd = MpdMonitor.getInstance().getMPD();
 		try
@@ -309,16 +337,17 @@ public class Application extends Controller
 		}
 		catch (MPDException e)
 		{
-			flash("error", "Changing volume failed! " + e.getMessage());
+			flash("error", "Changing song failed! " + e.getMessage());
 		}
 		
 		return GO_HOME;
 	}
+	
 	/**
 	 * Performs GET /update
 	 * @return an action result
 	 */
-	public static Result updateDB()
+	public static Result updateDb()
 	{
 		Configuration config = Play.application().configuration();
 		String hostname = config.getString("mpd.hostname");
@@ -350,30 +379,27 @@ public class Application extends Controller
 	}
 
 	/**
-	 * Handle the 'new computer form' submission
+	 * Remove entry from playlist
+	 * @param id the playlist entry pos
 	 * @return an action result
 	 */
-	public static Result save()
+	public static Result remove(int id)
 	{
-		Form<Computer> computerForm = form(Computer.class).bindFromRequest();
-		if (computerForm.hasErrors())
+		Logger.info("Removing entry from playlist: " + id);
+		
+		MPD mpd = MpdMonitor.getInstance().getMPD();
+		try
 		{
-			return badRequest(createForm.render(computerForm));
-		}
-		computerForm.get().save();
-		flash("success", "Computer " + computerForm.get().name + " has been created");
-		return GO_HOME;
-	}
+			MPDPlaylist mpdPlaylist = mpd.getMPDPlaylist();
+			MPDSong song = mpdPlaylist.getSongList().get(id);
 
-	/**
-	 * Handle computer deletion
-	 * @param id the computer id
-	 * @return an action result
-	 */
-	public static Result delete(Long id)
-	{
-		Computer.find.ref(id).delete();
-		flash("success", "Computer has been deleted");
+			mpdPlaylist.removeSong(song);
+		}
+		catch (MPDException e)
+		{
+			flash("error", "Removing entry from playlist failed! " + e.getMessage());
+		}
+		
 		return GO_HOME;
 	}
 

@@ -10,33 +10,30 @@ GET     /login                      controllers.Credential.login
 POST    /login                      controllers.Credential.authenticate
 GET     /logout                     controllers.Credential.logout
 
-# Computers list (look at the default values for pagination parameters)
-GET     /computers                  controllers.Application.list(p:Int ?= 0, s ?= "name", o ?= "asc", f ?= "")
+# Playlist (look at the default values for pagination parameters)
+GET     /playlist                   controllers.Application.playlist(p:Int ?= 0)
 
-# Connection
-GET     /update                     controllers.Application.updateDB()
+# MPD Connection
+GET     /update                     controllers.Application.updateDb()
 GET     /prevsong                   controllers.Application.prevSong()
 GET     /playsong                   controllers.Application.playSong()
 GET     /nextsong                   controllers.Application.nextSong()
 GET     /stopsong                   controllers.Application.stopSong()
 POST    /selectsong/:pos            controllers.Application.selectSong(pos:Int)
 
+# Volume control
+POST    /volume/:amount             controllers.Application.setVolume(amount:Int)
+
 # Add computer
-GET     /computers/new              controllers.Application.create()
-POST    /computers                  controllers.Application.save()
+GET     /addUrl           			controllers.Application.addUrl(url:String)
+GET     /addDbEntry        			controllers.Application.addDbEntry(url:String)
+GET     /browseDb         			controllers.Application.browseDb(pageIdx:Int ?= 0, sortKey ?= "name", order ?= "asc", filter ?= "")
 
-# Edit existing computer
-GET     /computers/:id              controllers.Application.edit(id:Long)
-POST    /computers/:id              controllers.Application.update(id:Long)
-
-# Delete a computer
-POST    /computers/:id/delete       controllers.Application.delete(id:Long)
+# Remove from playlist
+GET     /remove/:id			        controllers.Application.remove(id:Int)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
-
-# Volume control
-POST    /volume/:amount             controllers.Application.volume(amount:Int)
 
 # JavaScript Routes
 # for some reason the path can be arbitrary but must not contain slashes

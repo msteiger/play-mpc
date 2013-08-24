@@ -22,7 +22,7 @@
     }
     
     // Generate the link
-    routes.Application.list(newPage, sortBy, order, currentFilter)
+    routes.Application.browseDb(newPage, sortBy, order, currentFilter)
     
 }
 
@@ -37,41 +37,17 @@
 
 @main {
     
-    <h1 id="homeTitle">@Messages("computers.list.title", currentPage.getTotalRowCount)</h1>
-
-    @if(flash.containsKey("success")) {
-        <div class="alert-message success">
-            <strong>Done!</strong> @flash.get("success")
-        </div>
-    } 
-
-    @if(flash.containsKey("error")) {
-        <div class="alert-message error">
-            <strong>Error!</strong> @flash.get("error")
-        </div>
-    } 
-
-    @if(flash.containsKey("info")) {
-        <div class="alert-message info">
-            <strong>Info:</strong> @flash.get("info")
-        </div>
-    } 
-
-    @if(flash.containsKey("warning")) {
-        <div class="alert-message warning">
-            <strong>Warning:</strong> @flash.get("warning")
-        </div>
-    } 
+    <h1 id="homeTitle">@Messages("database.list.title", currentPage.getTotalRowCount)</h1>
 
     <div id="actions">
         
         <form action="@link(0, "name")" method="GET">
-            <input type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Filter by computer name...">
+            <input type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Filter by title...">
             <input type="submit" id="searchsubmit" value="Filter by name" class="btn primary">
         </form>
-        
-        <a class="btn success" id="add" href="@routes.Application.create()">Add a new computer</a>
-        
+
+        <a class="btn success" id="toPlaylist" href="@routes.Application.index()">Back</a>
+                
     </div>
     
     @if(currentPage.getTotalRowCount == 0) {
@@ -82,35 +58,31 @@
         
     } else {
         
-        <table class="playlist zebra-striped" id="playlist-table">
+        <table class="zebra-striped">
             <thead>
                 <tr>
-                    @header("pos", "Pos")
                     @header("title", "Title")
                     @header("artist", "Artist")
                     @header("album", "Album")
-                    @header("genre", "Genre")
-                    @header("year", "Year")
-                    @header("options", "Rem?")
+                    @header("file", "File")
+                    <th>Add?</th>
                 </tr>
             </thead>
             <tbody>
 
                 @for(song <- currentPage.getList) {
-                    <tr class="unselectable" data-pos="@song.getPosition()" >
-                        <td>@song.getPosition()</td>
+                    <tr>
                         <td>@song.getTitle()</td>
                         <td>@song.getArtist()</td>
                         <td>@song.getAlbum()</td>
-                        <td>@song.getGenre()</td>
-                        <td>@song.getYear()</td>
-                        <td><a href="@routes.Application.edit(song.getPosition())">Remove</a></td>
+                        <td>@song.getFile()</td>
+                        <td><a href="@routes.Application.addDbEntry(song.getFile())">Add</a></td>
                     </tr>
                 }
 
             </tbody>
         </table>
-
+        
         <div id="pagination" class="pagination">
             <ul>
                 @if(currentPage.hasPrev) {
@@ -137,32 +109,10 @@
             </ul>
         </div>
         
-        <div>
-        	<span style="float:left">
-			<a class="btn primary" id="updateDB" href="@routes.Application.updateDB()">Update DB</a>
-			
-			<a class="btn" id="prevsong" href="@routes.Application.prevSong()">Prev.</a>
-			<a class="btn" id="playsong" href="@routes.Application.playSong()">Play</a>
-			<a class="btn" id="nextsong" href="@routes.Application.nextSong()">Next</a>
-			<a class="btn" id="stopsong" href="@routes.Application.stopSong()">Stop</a>
-			</span>
-			<span style="float:left; margin-top:6px; margin-left: 20px;" >Volume: </span>
-			<span style="float:left; margin-top:6px; width:20px;" id="volume"></span>
-			<span style="float:left" id="slider-range-min"></span>
-        </div>
+        <a class="btn danger" id="updateDb" href="@routes.Application.updateDb()">Update Database</a>
+        
     }
 	
-    <script type="text/javascript" charset="utf-8">
-        // Called for each Comet message
-        var volumeChanged = function(volume) 
-        {
-            $('#volume').html(volume)
-            $('#slider-range-min').slider( "value", volume );
-        }
-    </script>
-    
-    <!--iframe id="comet" src="@routes.Application.liveUpdate.unique"></iframe-->
-
 }
 
             

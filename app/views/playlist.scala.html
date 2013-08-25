@@ -1,4 +1,5 @@
 @(player: org.bff.javampd.MPDPlayer, currentPage: com.avaje.ebean.Page[org.bff.javampd.objects.MPDSong])
+@import org.bff.javampd.MPDPlayer.PlayerStatus._;
 
 
 @**********************************
@@ -79,23 +80,43 @@
         <div>
         	<span style="float:left">		
 				<a class="btn" id="prevsong" href="@routes.Application.prevSong()">Prev.</a>
-				<a class="btn" id="playsong" href="@routes.Application.playSong()">Play</a>
+				<a class="btn" id="playsong" href="@routes.Application.playSong()">
+				@{if (player.getStatus() == STATUS_PLAYING) "Pause" else "Play"}</a>
 				<a class="btn" id="nextsong" href="@routes.Application.nextSong()">Next</a>
 				<a class="btn" id="stopsong" href="@routes.Application.stopSong()">Stop</a>
 			</span>
 			<span style="float:left; margin-top:6px; margin-left: 20px;" >Volume: </span>
 			<span style="float:left; margin-top:6px; width:20px;" id="volume"></span>
-			<span style="float:left" id="slider-range-min"></span>
+			<span style="float:left" id="volume-slider"></span>
         </div>
     }
 	
     <script type="text/javascript" charset="utf-8">
-        // Called for each Comet message
-        var volumeChanged = function(volume) 
-        {
-            $('#volume').html(volume)
-            $('#slider-range-min').slider( "value", volume );
-        }
+    $(function() 
+	{
+		$("#volume-slider").slider(
+		{
+			range : "min",
+			value : @player.getVolume(),
+			min : 0,
+			step : 5,
+			max : 100,
+			slide : function(event, ui) 
+			{
+				$("#volume").html(ui.value);
+				jsRoutes.controllers.Application.setVolume(ui.value).ajax({});
+			}
+		});
+		
+		$("#volume").html(@player.getVolume());
+    });
+        
+    // Called for each Comet message
+    var volumeChanged = function(volume) 
+    {
+        $('#volume').html(volume)
+        $('#volume-slider').slider( "value", volume );
+    }
     </script>
     
     <!--iframe id="comet" src="@routes.Application.liveUpdate.unique"></iframe-->

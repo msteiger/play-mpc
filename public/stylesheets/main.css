@@ -64,19 +64,6 @@ table.playlist .header a {
 	width: 60px;
 }
 
-#pagination {
-    position: relative;
-}
-
-#pagination ul {
-    position: absolute;
-    right: 0;
-}
-
-#pagination ul .current a {
-    color: #666;
-}
-
 #volume-slider {
 	width:400px;
 	margin-top:10px;
@@ -89,11 +76,15 @@ table.playlist .header a {
 	-khtml-user-select: none;
 	-moz-user-select: -moz-none;
 	-ms-user-select: none;
-/*	user-select: none;		not recognized by FF */
+
 	cursor:default; 
 }
 
-.zebra-striped tbody tr.highlight td {background-color:#c8c8ff;}
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover {
+  background-color: #e8e8ff;
+}
+
+#playlist tbody tr.highlight td {background-color:#c8c8ff;}*/
 
 #comet {
     display: none;

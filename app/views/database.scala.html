@@ -40,13 +40,15 @@
     <h1 id="homeTitle">@Messages("database.list.title", currentPage.getTotalRowCount)</h1>
 
     <div id="actions">
-        
-        <form action="@link(0, "name")" method="GET">
-            <input type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Filter by title...">
-            <input type="submit" id="searchsubmit" value="Filter by name" class="btn primary">
+                
+        <form class="form-inline" role="form" action="@link(0, "name")" method="GET">
+		  <div class="form-group">
+            <input type="text" class="form-control" id="searchbox" name="filter" value="@currentFilter" placeholder="Filter by title...">
+          </div>
+          <input type="submit" id="searchsubmit" value="Filter by name" class="btn btn-primary">
         </form>
 
-        <a class="btn success" id="toPlaylist" href="@routes.Application.index()">Back</a>
+        <a class="btn btn-success" id="toPlaylist" href="@routes.Application.index()">Back</a>
                 
     </div>
     
@@ -58,7 +60,7 @@
         
     } else {
         
-        <table class="zebra-striped">
+        <table class="table table-striped table-hover">
             <thead>
                 <tr>
                     @header("title", "Title")
@@ -83,33 +85,36 @@
             </tbody>
         </table>
         
-        <div id="pagination" class="pagination">
-            <ul>
-                @if(currentPage.hasPrev) {
-                    <li class="prev">
-                        <a href="@link(currentPage.getPageIndex - 1, null)">&larr; Previous</a>
-                    </li>
-                } else {
-                    <li class="prev disabled">
-                        <a>&larr; Previous</a>
-                    </li>
-                }
-                <li class="current">
-                    <a>Displaying @currentPage.getDisplayXtoYofZ(" to "," of ")</a>
+        <ul class="pagination pull-right">
+            @if(currentPage.hasPrev) {
+                <li>
+                    <a href="@link(currentPage.getPageIndex - 1, null)">&laquo;</a>
                 </li>
-                @if(currentPage.hasNext) {
-                    <li class="next">
-                        <a href="@link(currentPage.getPageIndex + 1, null)">Next &rarr;</a>
-                    </li>
-                } else {
-                    <li class="next disabled">
-                        <a>Next &rarr;</a>
-                    </li>
-                }
-            </ul>
-        </div>
+            } else {
+                <li class="disabled">
+                    <a>&laquo;</a>
+                </li>
+            }
+
+            @for(idx <- Math.max(0, currentPage.getPageIndex - 2) to Math.min(currentPage.getTotalPageCount - 1, currentPage.getPageIndex + 2)) {
+
+                <li @if(idx == currentPage.getPageIndex) {class="active"}>
+                    <a href="@link(idx, null)">@idx</a>
+                </li>
+            }
+
+            @if(currentPage.hasNext) {
+                <li>
+                    <a href="@link(currentPage.getPageIndex + 1, null)">&raquo;</a>
+                </li>
+            } else {
+                <li class="disabled">
+                    <a>&raquo;</a>
+                </li>
+            }
+        </ul>
         
-        <a class="btn danger" id="updateDb" href="@routes.Application.updateDb()">Update Database</a>
+        <a class="btn btn-danger" id="updateDb" href="@routes.Application.updateDb()">Update Database</a>
         
     }
 	

@@ -14,7 +14,7 @@
     <h1 id="homeTitle">@Messages("playlist.list.title", currentPage.getTotalRowCount)</h1>
 
     <div id="actions">        
-        <a class="btn success" id="browseDb" href="@routes.Application.browseDb()">Add song from DB</a>
+        <a class="btn btn-success" id="browseDb" href="@routes.Application.browseDb()">Add song from DB</a>
     </div>
     
     @if(currentPage.getTotalRowCount() == 0) {    
@@ -22,7 +22,8 @@
             <em>Nothing to display</em>
         </div>   
     } else {
-        <table class="playlist zebra-striped" id="playlist-table">
+		<table class="table table-striped table-hover unselectable" id="playlist">
+        
             <thead>
                 <tr>
                     @header("pos", "Pos")
@@ -37,7 +38,7 @@
             <tbody>
 
                 @for(song <- currentPage.getList) {
-                    <tr class="unselectable @{if(player.getCurrentSong() == song) "highlight"}" data-pos="@song.getPosition()" >
+                    <tr class="@{if(player.getCurrentSong() == song) "highlight"}" data-pos="@song.getPosition()" >
                         <td>@song.getPosition()</td>
                         <td>@song.getTitle()</td>
                         <td>@song.getArtist()</td>
@@ -51,39 +52,39 @@
             </tbody>
         </table>
         
-        <div id="pagination" class="pagination">
-            <ul>
+        <div>
+            <ul class="pager">
                 @if(currentPage.hasPrev) {
-                    <li class="prev">
+                    <li class="previous">
                         <a href="@routes.Application.playlist(currentPage.getPageIndex - 1)">&larr; Previous</a>
                     </li>
                 } else {
-                    <li class="prev disabled">
+                    <!--li class="previous disabled">
                         <a>&larr; Previous</a>
-                    </li>
+                    </li-->
                 }
-                <li class="current">
-                    <a>Displaying @currentPage.getDisplayXtoYofZ(" to "," of ")</a>
+                <li>
+                    Displaying @currentPage.getDisplayXtoYofZ(" to "," of ")
                 </li>
                 @if(currentPage.hasNext) {
                     <li class="next">
                         <a href="@routes.Application.playlist(currentPage.getPageIndex + 1)">Next &rarr;</a>
                     </li>
                 } else {
-                    <li class="next disabled">
+                    <!--li class="next disabled">
                         <a>Next &rarr;</a>
-                    </li>
+                    </li-->
                 }
             </ul>
         </div>
         
         <div>
-        	<span style="float:left">		
-				<a class="btn" id="prevsong" href="@routes.Application.prevSong()">Prev.</a>
-				<a class="btn" id="playsong" href="@routes.Application.playSong()">
+        	<span style="float:left">        			
+				<a class="btn btn-default" id="prevsong" href="@routes.Application.prevSong()">Prev.</a>
+				<a class="btn btn-default" id="playsong" href="@routes.Application.playSong()">
 				@{if (player.getStatus() == STATUS_PLAYING) "Pause" else "Play"}</a>
-				<a class="btn" id="nextsong" href="@routes.Application.nextSong()">Next</a>
-				<a class="btn" id="stopsong" href="@routes.Application.stopSong()">Stop</a>
+				<a class="btn btn-default" id="nextsong" href="@routes.Application.nextSong()">Next</a>
+				<a class="btn btn-default" id="stopsong" href="@routes.Application.stopSong()">Stop</a>
 			</span>
 			<span style="float:left; margin-top:6px; margin-left: 20px;" >Volume: </span>
 			<span style="float:left; margin-top:6px; width:20px;" id="volume"></span>

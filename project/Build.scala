@@ -4,8 +4,8 @@ import play.Project._
 
 object ApplicationBuild extends Build {
 
-    val appName         = "computer-database"
-    val appVersion      = "1.0"
+    val appName         = "play-mpc"
+    val appVersion      = "1.0-SNAPSHOT"
 
     val appDependencies = Seq(
       javaCore,

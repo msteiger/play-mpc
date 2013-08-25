@@ -1,4 +1,4 @@
-@(currentPage: com.avaje.ebean.Page[org.bff.javampd.objects.MPDSong])
+@(player: org.bff.javampd.MPDPlayer, currentPage: com.avaje.ebean.Page[org.bff.javampd.objects.MPDSong])
 
 
 @**********************************
@@ -36,7 +36,7 @@
             <tbody>
 
                 @for(song <- currentPage.getList) {
-                    <tr class="unselectable" data-pos="@song.getPosition()" >
+                    <tr class="unselectable @{if(player.getCurrentSong() == song) "highlight"}" data-pos="@song.getPosition()" >
                         <td>@song.getPosition()</td>
                         <td>@song.getTitle()</td>
                         <td>@song.getArtist()</td>
@@ -49,7 +49,7 @@
 
             </tbody>
         </table>
-
+        
         <div id="pagination" class="pagination">
             <ul>
                 @if(currentPage.hasPrev) {

@@ -135,7 +135,10 @@ public class Application extends Controller
 	 */
 	public static Result playlist(int page)
 	{
-		return ok(playlist.render(Playlist.getSongs(page, 10)));
+		MPD mpd = MpdMonitor.getInstance().getMPD();
+		MPDPlayer player = mpd.getMPDPlayer();
+		
+		return ok(playlist.render(player, Playlist.getSongs(page, 10)));
 	}
 
 	/**

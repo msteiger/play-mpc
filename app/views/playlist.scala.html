@@ -87,30 +87,15 @@
 				<a class="btn btn-default" id="stopsong" href="@routes.Application.stopSong()">Stop</a>
 			</span>
 			<span style="float:left; margin-top:6px; margin-left: 20px;" >Volume: </span>
-			<span style="float:left; margin-top:6px; width:20px;" id="volume"></span>
+
+			<!-- this data value that written by Play! and read by JavaScript code-->
+			<span style="float:left; margin-top:6px; width:20px;" id="volume">@player.getVolume()</span>
+			
 			<span style="float:left" id="volume-slider"></span>
         </div>
     }
-	
-    <script type="text/javascript" charset="utf-8">
-    $(function() 
-	{
-		$("#volume-slider").slider(
-		{
-			range : "min",
-			value : @player.getVolume(),
-			min : 0,
-			step : 5,
-			max : 100,
-			slide : function(event, ui) 
-			{
-				$("#volume").html(ui.value);
-				jsRoutes.controllers.Application.setVolume(ui.value).ajax({});
-			}
-		});
 		
-		$("#volume").html(@player.getVolume());
-    });
+    <script type="text/javascript" charset="utf-8">
         
     // Called for each Comet message
     var volumeChanged = function(volume) 

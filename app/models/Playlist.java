@@ -31,7 +31,7 @@ public class Playlist
 		MPDPlaylist playlist = mpd.getMPDPlaylist();
 
 		List<MPDSong> songs = playlist.getSongList();
-
+		
 		DefaultPagingList<MPDSong> pagingList = new DefaultPagingList<>(songs, pageSize);
 
 		return pagingList.getPage(page);

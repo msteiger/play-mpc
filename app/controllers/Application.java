@@ -5,7 +5,6 @@ import static org.bff.javampd.MPDPlayer.PlayerStatus.STATUS_PLAYING;
 import helper.EmptyPage;
 import helper.MpdMonitor;
 
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -25,9 +24,7 @@ import org.bff.javampd.exception.MPDPlayerException;
 import org.bff.javampd.monitor.MPDStandAloneMonitor;
 import org.bff.javampd.objects.MPDSong;
 
-import play.Configuration;
 import play.Logger;
-import play.Play;
 import play.Routes;
 import play.libs.Comet;
 import play.libs.F.Callback0;

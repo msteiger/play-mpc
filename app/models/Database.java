@@ -12,7 +12,6 @@ import java.util.List;
 import org.bff.javampd.MPD;
 import org.bff.javampd.MPDDatabase;
 import org.bff.javampd.exception.MPDException;
-import org.bff.javampd.objects.MPDArtist;
 import org.bff.javampd.objects.MPDItem;
 import org.bff.javampd.objects.MPDSong;
 

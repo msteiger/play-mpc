@@ -37,6 +37,7 @@ import play.mvc.Security;
 
 import views.html.database;
 import views.html.playlist;
+import views.html.info;
 
 import com.avaje.ebean.Page;
 
@@ -405,4 +406,13 @@ public class Application extends Controller
 		return GO_HOME;
 	}
 
+	/**
+	 * Render info page GET /info
+	 * @return the info page
+	 */
+	public static Result info()
+	{
+		MPD mpd = MpdMonitor.getInstance().getMPD();
+		return ok(info.render(mpd));
+	}
 }

@@ -1,6 +1,10 @@
 # Messages
 
+project.name=Play! MPC
+
 playlist.list.title={0,choice,0#No songs|1#One song|1<{0,number,integer} songs} in current playlist
 
 database.list.title={0,choice,0#No songs|1#One song|1<{0,number,integer} songs} in database
 
+info.uptime=Uptime
+info.status=Status

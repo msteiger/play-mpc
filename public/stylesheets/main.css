@@ -2,7 +2,7 @@ html {
     background: #eee;
 }
 
-header h1 {
+/*header h1 {
     padding: 0.4em 1.1em;
     color: white;
     font-weight: normal;
@@ -22,8 +22,20 @@ section#main .topRight {
     top: 70px;
 }
 
+
 table.playlist em {
     color: #aaa;
+}
+*/
+
+footer {
+	padding-top:30px;
+	padding-bottom:1px;
+}
+
+footer p {
+	text-align:center;
+	font-size:x-small;
 }
 
 table.playlist .pos {

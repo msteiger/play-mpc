@@ -29,6 +29,9 @@ GET     /addUrl           			controllers.Application.addUrl(url:String)
 GET     /addDbEntry        			controllers.Application.addDbEntry(url:String)
 GET     /browseDb         			controllers.Application.browseDb(pageIdx:Int ?= 0, sortKey ?= "name", order ?= "asc", filter ?= "")
 
+# Info
+GET		/info						controllers.Application.info()
+
 # Remove from playlist
 GET     /remove/:id			        controllers.Application.remove(id:Int)
 

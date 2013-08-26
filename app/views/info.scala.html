@@ -1,0 +1,32 @@
+@(mpd: org.bff.javampd.MPD)
+
+@********************@
+
+@main {
+    
+    <h1>@Messages("project.name")</h1>
+
+    <dl class="dl-horizontal">
+      
+      <dt>@Messages("info.uptime")</dt>
+      <dd>@{ 
+		val secs = mpd.getUptime; 
+		val hr = secs / 3600; 
+		val min = (secs / 60) % 60; 
+		val sec = secs % 60;
+		 
+		"%d:%02d:%02d".format(hr, min, sec);}</dd>
+      
+      <dt>@Messages("info.status")</dt>
+      @for(status <- mpd.getStatus) { <dd>@status</dd> } 
+      
+      <dt>Play!</dt>
+      <dd>@play.core.PlayVersion.current</dd>
+      
+      <dt>Scala</dt>
+      <dd>@play.core.PlayVersion.scalaVersion</dd>
+    </dl>
+    
+}
+
+            

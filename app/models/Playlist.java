@@ -1,10 +1,9 @@
+
 package models;
 
 import helper.DefaultPagingList;
-import helper.EmptyPage;
-import helper.MpdUtils;
+import helper.MpdMonitor;
 
-import java.net.UnknownHostException;
 import java.util.List;
 
 import org.bff.javampd.MPD;
@@ -12,58 +11,30 @@ import org.bff.javampd.MPDPlaylist;
 import org.bff.javampd.exception.MPDException;
 import org.bff.javampd.objects.MPDSong;
 
-import play.Logger;
-
 import com.avaje.ebean.Page;
 
 /**
  * MPD Playlist
  */
-public class Playlist 
-{  
-    /**
-     * Returns a page of the current playlist
-     *
-     * @param page Page to display
-     * @param pageSize Number of computers per page
-     */
-    public static Page<MPDSong> getSongs(int page, final int pageSize) 
-    {
-    	MPD mpd = null;
-		try
-		{
-			mpd = MpdUtils.createInstance();
+public class Playlist
+{
+	/**
+	 * Returns a page of the current playlist
+	 * @param page Page to display
+	 * @param pageSize Number of computers per page
+	 * @return a page with all relevant entries
+	 * @throws MPDException if MPD reports an error
+	 */
+	public static Page<MPDSong> getSongs(int page, final int pageSize) throws MPDException
+	{
+		MPD mpd = MpdMonitor.getInstance().getMPD();
+		MPDPlaylist playlist = mpd.getMPDPlaylist();
 
-			MPDPlaylist playlist = mpd.getMPDPlaylist();
-			
-			List<MPDSong> songs = playlist.getSongList();
-			
-			DefaultPagingList<MPDSong> pagingList = new DefaultPagingList<>(songs, pageSize);
-			
-			// TODO: include order, sorting and filter
-			
-			return pagingList.getPage(page);
-		}
-		catch (UnknownHostException | MPDException e)
-		{			
-			Logger.warn("Error", e);
-			
-			return new EmptyPage<MPDSong>();
-		}
-		finally
-		{
-			if (mpd != null)
-			{
-				try
-				{
-					mpd.close();
-				}
-				catch (MPDException e)
-				{
-					Logger.warn("Could not close connection", e);
-				}
-			}
-		}
-    }
+		List<MPDSong> songs = playlist.getSongList();
+
+		DefaultPagingList<MPDSong> pagingList = new DefaultPagingList<>(songs, pageSize);
+
+		return pagingList.getPage(page);
+
+	}
 }
-

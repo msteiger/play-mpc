@@ -2,17 +2,14 @@
 package controllers;
 
 import static org.bff.javampd.MPDPlayer.PlayerStatus.STATUS_PLAYING;
-import static play.data.Form.form;
+import helper.EmptyPage;
 import helper.MpdMonitor;
-import helper.MpdUtils;
 
-import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import models.Computer;
 import models.Database;
 import models.Playlist;
 
@@ -23,7 +20,6 @@ import org.bff.javampd.MPDPlaylist;
 import org.bff.javampd.events.VolumeChangeEvent;
 import org.bff.javampd.events.VolumeChangeListener;
 import org.bff.javampd.exception.MPDConnectionException;
-import org.bff.javampd.exception.MPDDatabaseException;
 import org.bff.javampd.exception.MPDException;
 import org.bff.javampd.exception.MPDPlayerException;
 import org.bff.javampd.monitor.MPDStandAloneMonitor;
@@ -33,15 +29,16 @@ import play.Configuration;
 import play.Logger;
 import play.Play;
 import play.Routes;
-import play.data.Form;
 import play.libs.Comet;
 import play.libs.F.Callback0;
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.mvc.Results;
 import play.mvc.Security;
+
 import views.html.database;
 import views.html.playlist;
+
+import com.avaje.ebean.Page;
 
 /**
  * Manage a database of computers
@@ -49,7 +46,6 @@ import views.html.playlist;
 @Security.Authenticated(Secured.class)
 public class Application extends Controller
 {
-
 	/**
 	 * This result directly redirect to application home.
 	 */
@@ -137,8 +133,19 @@ public class Application extends Controller
 	{
 		MPD mpd = MpdMonitor.getInstance().getMPD();
 		MPDPlayer player = mpd.getMPDPlayer();
+		Page<MPDSong> songs = null;
 		
-		return ok(playlist.render(player, Playlist.getSongs(page, 10)));
+		try
+		{
+			songs = Playlist.getSongs(page, 10);
+		}
+		catch (MPDException e)
+		{
+			flash("error", "Command failed! " + e.getMessage());
+			songs = new EmptyPage<>();
+		}
+		
+		return ok(playlist.render(player, songs));
 	}
 
 	/**
@@ -151,7 +158,19 @@ public class Application extends Controller
 	 */
 	public static Result browseDb(int page, String sortBy, String order, String filter)
 	{
-		return ok(database.render(Database.getSongs(page, 10, sortBy, order, filter), sortBy, order, filter));
+		Page<MPDSong> songs = null;
+		
+		try
+		{
+			songs = Database.getSongs(page, 10, sortBy, order, filter);
+		}
+		catch (MPDException e)
+		{
+			flash("error", "Command failed! " + e.getMessage());
+			songs = new EmptyPage<>();
+		}
+		
+		return ok(database.render(songs, sortBy, order, filter));
 	}
 
 	/**
@@ -215,27 +234,17 @@ public class Application extends Controller
 	{
 		try
 		{
-			MPD mpd = MpdUtils.createInstance();
+			MPD mpd = MpdMonitor.getInstance().getMPD();
 			MPDPlayer player = mpd.getMPDPlayer();
 			PlayerStatus status = player.getStatus();
 			
 			if (status == STATUS_PLAYING)
-			{
-				player.pause();
-			}
-			else
-			{
+				player.pause(); else
 				player.play();
-			}
-			
-			mpd.close();
 		}
-		catch (UnknownHostException | MPDException e)
+		catch (MPDException e)
 		{
 			flash("error", "Command failed! " + e.getMessage());
-		}
-		finally
-		{
 		}
 		
 		return GO_HOME;
@@ -249,19 +258,14 @@ public class Application extends Controller
 	{
 		try
 		{
-			MPD mpd = MpdUtils.createInstance();
+			MPD mpd = MpdMonitor.getInstance().getMPD();
 			MPDPlayer player = mpd.getMPDPlayer();
 
 			player.playNext();
-			
-			mpd.close();
 		}
-		catch (UnknownHostException | MPDException e)
+		catch (MPDException e)
 		{
 			flash("error", "Command failed! " + e.getMessage());
-		}
-		finally
-		{
 		}
 		
 		return GO_HOME;
@@ -275,19 +279,14 @@ public class Application extends Controller
 	{
 		try
 		{
-			MPD mpd = MpdUtils.createInstance();
+			MPD mpd = MpdMonitor.getInstance().getMPD();
 			MPDPlayer player = mpd.getMPDPlayer();
 			
 			player.playPrev();
-			
-			mpd.close();
 		}
-		catch (UnknownHostException | MPDException e)
+		catch (MPDException e)
 		{
 			flash("error", "Command failed! " + e.getMessage());
-		}
-		finally
-		{
 		}
 		
 		return GO_HOME;
@@ -300,11 +299,24 @@ public class Application extends Controller
 	 */
 	public static Result stopSong()
 	{
+		try
+		{
+			MPD mpd = MpdMonitor.getInstance().getMPD();
+			MPDPlayer player = mpd.getMPDPlayer();
+			
+			player.stop();
+		}
+		catch (MPDException e)
+		{
+			flash("error", "Command failed! " + e.getMessage());
+		}
+
 		return GO_HOME;
 	}
 
 	/**
 	 * Performs POST /volume
+	 * @param volume the new volume level
 	 * @return an action result
 	 */
 	public static Result setVolume(int volume)
@@ -352,30 +364,17 @@ public class Application extends Controller
 	 */
 	public static Result updateDb()
 	{
-		Configuration config = Play.application().configuration();
-		String hostname = config.getString("mpd.hostname");
-		int port = config.getInt("mpd.port");
-
-		flash("info", "Connecting to " + hostname + ":" + port + " ...");
-
 		try
 		{
-			MPD mpd = new MPD(hostname, port);
-
-			Logger.info("Connected to: " + hostname + ":" + port);
-			Logger.info("Version:" + mpd.getVersion());
-			Logger.info("Uptime:" + mpd.getUptime());
+			MPD mpd = MpdMonitor.getInstance().getMPD();
 
 			mpd.getMPDAdmin().updateDatabase();
 			
 			flash("success", "Updating database!");
-		
-			mpd.close();
 		}
-		catch (MPDException | UnknownHostException e)
+		catch (MPDException e)
 		{
-			Logger.warn("Error Connecting:" + e.getMessage());
-			flash("error", "Connection to " + hostname + " failed! " + e.getLocalizedMessage());
+			flash("error", "Updating database failed!" + e.getMessage());
 		}
 
 		return GO_HOME;

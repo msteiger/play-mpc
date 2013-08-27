@@ -2,53 +2,27 @@ html {
     background: #eee;
 }
 
-/*header h1 {
-    padding: 0.4em 1.1em;
-    color: white;
-    font-weight: normal;
-    font-size: 24px;
-}
-
 section#main {
     position: relative;
-    padding: 5em 2em;
     border-bottom: 1px solid #ccc;
     min-height: 600px;
 } 
 
-section#main .topRight {
-    position: absolute;
-    right: 20px;
-    top: 70px;
+#playlist th.pos {
+	width: 30px;
 }
 
-
-table.playlist em {
-    color: #aaa;
-}
-*/
-
-footer {
-	padding-top:30px;
-	padding-bottom:1px;
-}
-
-footer p {
+#playlist .pos {
 	text-align:center;
-	font-size:x-small;
 }
 
-table.playlist .pos {
-	width: 50px;
+#playlist th.title {
+    width: 25%;
+    min-width: 80px;
 }
 
-table.playlist .title, table.playlist .artist {
-    width: 30%;
-    min-width: 100px;
-}
-
-table.playlist .options {
-    width: 50px;
+#playlist th.remove {
+	width: 40px;
 }
 
 table.playlist .header a {

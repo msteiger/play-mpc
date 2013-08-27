@@ -2,9 +2,12 @@
 
 project.name=Play! MPC
 
-playlist.list.title={0,choice,0#No songs|1#One song|1<{0,number,integer} songs} in current playlist
+playlist.title=Playlist
+playlist.remove=Remove from playlist
 
 database.list.title={0,choice,0#No songs|1#One song|1<{0,number,integer} songs} in database
 
+database.add=Add item to playlist
+ 
 info.uptime=Uptime
 info.status=Status

@@ -30,14 +30,17 @@
 * Helper generating table headers *
 ***********************************@
 @header(key:String, title:String) = {
-    <th class="@key.replace(".","_") header @if(currentSortBy == key) @{if(currentOrder == "asc") "headerSortDown" else "headerSortUp"}">
+    <th class="@key.replace(".","_")"> 
         <a href="@link(0, key)">@title</a>
+    	@if(currentSortBy == key) @{if(currentOrder == "asc") {
+    		<span class="glyphicon glyphicon-chevron-up"></span> } else { 
+    		<span class="glyphicon glyphicon-chevron-down"></span> } }
     </th>
 }
 
 @main {
     
-    <h1 id="homeTitle">@Messages("database.list.title", currentPage.getTotalRowCount)</h1>
+    <h3 class="pull-right" id="homeTitle">@Messages("database.list.title", currentPage.getTotalRowCount)</h3>
 
     <div id="actions">
                 
@@ -49,8 +52,6 @@
           <input type="submit" id="searchsubmit" value="Filter by name" class="btn btn-primary">
         </form>
 
-        <a class="btn btn-success" id="toPlaylist" href="@routes.Application.index()">Back</a>
-                
     </div>
     
     @if(currentPage.getTotalRowCount == 0) {
@@ -68,7 +69,7 @@
                     @header("artist", "Artist")
                     @header("album", "Album")
                     @header("file", "File")
-                    <th>Add?</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -79,7 +80,11 @@
                         <td>@song.getArtist()</td>
                         <td>@song.getAlbum()</td>
                         <td>@song.getFile()</td>
-                        <td><a href="@routes.Application.addDbEntry(song.getFile())">Add</a></td>
+                        <td title="@Messages("database.add")">
+                          <a href="@routes.Application.addDbEntry(song.getFile())">
+                        	<font color="green"><span class="glyphicon glyphicon-plus"></span></font>
+                          </a>
+                        </td>
                     </tr>
                 }
 

@@ -11,7 +11,7 @@
 
 @main {
     
-    <h1 id="homeTitle">@Messages("playlist.list.title", currentPage.getTotalRowCount)</h1>
+    <h3 id="homeTitle">@Messages("playlist.title")</h3>
 
     <div id="actions">               
         <a id="browseDb" class="btn btn-success" href="@routes.Application.browseDb()">
@@ -34,20 +34,22 @@
                     @header("album", "Album")
                     @header("genre", "Genre")
                     @header("year", "Year")
-                    @header("options", "Rem?")
+                    @header("remove", "")
                 </tr>
             </thead>
             <tbody>
 
                 @for(song <- currentPage.getList) {
                     <tr class="@{if(player.getCurrentSong() == song) "highlight"}" data-pos="@song.getPosition()" >
-                        <td>@song.getPosition()</td>
+                        <td class="pos">@song.getPosition()</td>
                         <td>@song.getTitle()</td>
                         <td>@song.getArtist()</td>
                         <td>@song.getAlbum()</td>
                         <td>@song.getGenre()</td>
                         <td>@song.getYear()</td>
-                        <td><a href="@routes.Application.remove(song.getPosition())">Remove</a></td>
+                        <td><a title="@Messages("playlist.remove")" href="@routes.Application.remove(song.getPosition())">
+                        	<span class="glyphicon glyphicon-trash"></span>
+                        </a></td>
                     </tr>
                 }
 

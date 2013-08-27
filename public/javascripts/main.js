@@ -1,3 +1,4 @@
+
 $(function() 
 {	
 	$("#volume-slider").slider(
@@ -10,6 +11,8 @@ $(function()
 		slide : function(event, ui) 
 		{
 			$("#volume").html(ui.value);
+			updateVolumeIcon(ui.value);
+			
 			jsRoutes.controllers.Application.setVolume(ui.value).ajax({});
 		}
 	});
@@ -25,5 +28,19 @@ $(function()
 		jsRoutes.controllers.Application.selectSong(pos).ajax({});
 	});
 
+	updateVolumeIcon($("#volume").text());
 });
 
+
+var updateVolumeIcon = function(volume)
+{
+	$("#volume-icon").removeClass("glyphicon-volume-off");
+	$("#volume-icon").removeClass("glyphicon-volume-up");
+	$("#volume-icon").removeClass("glyphicon-volume-down");
+	
+	if (volume == 0)
+		$("#volume-icon").addClass("glyphicon-volume-off"); else
+	if (volume < 50)
+		$("#volume-icon").addClass("glyphicon-volume-down"); else
+		$("#volume-icon").addClass("glyphicon-volume-up");			
+}

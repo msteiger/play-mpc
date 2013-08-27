@@ -13,8 +13,10 @@
     
     <h1 id="homeTitle">@Messages("playlist.list.title", currentPage.getTotalRowCount)</h1>
 
-    <div id="actions">        
-        <a class="btn btn-success" id="browseDb" href="@routes.Application.browseDb()">Add song from DB</a>
+    <div id="actions">               
+        <a id="browseDb" class="btn btn-success" href="@routes.Application.browseDb()">
+		  <span class="glyphicon glyphicon-plus"></span> Add song from DB
+		</a>
     </div>
     
     @if(currentPage.getTotalRowCount() == 0) {    
@@ -80,15 +82,25 @@
         
         <div>
         	<span style="float:left">        			
-				<a class="btn btn-default" id="prevsong" href="@routes.Application.prevSong()">Prev.</a>
+				<a class="btn btn-default" id="prevsong" href="@routes.Application.prevSong()">
+					<span class="glyphicon glyphicon-step-backward"></span>
+				</a>
+				
 				<a class="btn btn-default" id="playsong" href="@routes.Application.playSong()">
-				@{if (player.getStatus() == STATUS_PLAYING) "Pause" else "Play"}</a>
-				<a class="btn btn-default" id="nextsong" href="@routes.Application.nextSong()">Next</a>
-				<a class="btn btn-default" id="stopsong" href="@routes.Application.stopSong()">Stop</a>
+					<span class="glyphicon @{if(player.getStatus() == STATUS_PLAYING) "glyphicon-pause" else "glyphicon-play"}"</span>
+				</a>
+					
+				<a class="btn btn-default" id="nextsong" href="@routes.Application.nextSong()">
+					<span class="glyphicon glyphicon-step-forward"></span>
+				</a>
+				<a class="btn btn-default" id="stopsong" href="@routes.Application.stopSong()">
+					<span class="glyphicon glyphicon-stop"></span>
+				</a>
 			</span>
-			<span style="float:left; margin-top:6px; margin-left: 20px;" >Volume: </span>
+			<!--span style="float:left; margin-top:6px; margin-left: 20px;" >Volume: </span-->
 
 			<!-- this data value that written by Play! and read by JavaScript code-->
+			<span style="float:left; margin:4px; margin-left:10px; font-size:1.2em;" id="volume-icon" class="glyphicon"></span>
 			<span style="float:left; margin-top:6px; width:20px;" id="volume">@player.getVolume()</span>
 			
 			<span style="float:left" id="volume-slider"></span>

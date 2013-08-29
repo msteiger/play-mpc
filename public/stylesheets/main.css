@@ -45,16 +45,31 @@ table.playlist .header a {
     top: 0;
 }
 
+.button-down {
+	background-color:#beb;
+}
+
 #playsong {
 	text-align: center;
 	width: 60px;
 }
 
-#volume-slider {
-	width:400px;
-	margin-top:10px;
-	margin-left:10px
+table#controls {
+	width: 100%;
 }
+
+#control-buttons {
+	width:190px;
+}
+
+#volume-icon {
+	font-size:1.5em;
+}
+
+#volume {
+	width:25px;
+}
+
 
 .unselectable {
 	-webkit-touch-callout: none;

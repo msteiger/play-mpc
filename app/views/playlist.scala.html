@@ -82,8 +82,11 @@
             </ul>
         </div>
         
-        <div>
-        	<span style="float:left">        			
+        <table id="controls">
+        <tr>
+        <td>
+        <div id="control-buttons" class="btn-toolbar">
+        	<div class="btn-group">        			
 				<a class="btn btn-default" id="prevsong" href="@routes.Application.prevSong()">
 					<span class="glyphicon glyphicon-step-backward"></span>
 				</a>
@@ -95,18 +98,24 @@
 				<a class="btn btn-default" id="nextsong" href="@routes.Application.nextSong()">
 					<span class="glyphicon glyphicon-step-forward"></span>
 				</a>
-				<a class="btn btn-default" id="stopsong" href="@routes.Application.stopSong()">
+			</div>
+			<div class="btn-group">
+				<a class="btn btn-default button-down" id="stopsong" href="@routes.Application.stopSong()">
 					<span class="glyphicon glyphicon-stop"></span>
 				</a>
-			</span>
-			<!--span style="float:left; margin-top:6px; margin-left: 20px;" >Volume: </span-->
-
-			<!-- this data value that written by Play! and read by JavaScript code-->
-			<span style="float:left; margin:4px; margin-left:10px; font-size:1.2em;" id="volume-icon" class="glyphicon"></span>
-			<span style="float:left; margin-top:6px; width:20px;" id="volume">@player.getVolume()</span>
-			
-			<span style="float:left" id="volume-slider"></span>
+			</div>
         </div>
+		</td>
+		<td>
+			<span id="volume-icon" class="glyphicon"></span>
+		</td><td>
+			<!-- this text value that written by Play! and read by JavaScript code-->
+			<div id="volume">@player.getVolume()</div>
+		</td><td style="width:100%">		
+			<div id="volume-slider"></div>
+		</td>
+		</tr>
+		</table>
     }
 		
     <script type="text/javascript" charset="utf-8">

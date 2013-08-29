@@ -46,20 +46,5 @@ public class FunctionalTest
         });
     }
     
-    @Test
-    public void filterComputerByName() 
-    {
-        running(fakeApplication(), new Runnable() 
-        {
-          	@Override
-          	public void run() 
-          	{
-               Result result = callAction(controllers.routes.ref.Application.database(0, "title", "asc", ""));
-
-               assertThat(status(result)).isEqualTo(OK);
-//               assertThat(contentAsString(result)).contains("13 computers found");
-           }
-        });
-    }
-    
+ 
 }

@@ -39,7 +39,7 @@ public class MpdMonitor
 	private Thread thread;
 	private MPD mpd;
 	
-	public static MpdMonitor getInstance()
+	public static MpdMonitor getInstance() throws MPDConnectionException
 	{
 		// TODO: implement circuit breaker pattern
 		
@@ -49,9 +49,9 @@ public class MpdMonitor
 			{
 				instance = new MpdMonitor();
 			}
-			catch (UnknownHostException | MPDConnectionException e)
+			catch (UnknownHostException e)
 			{
-				Logger.warn("Could not connect", e);
+				throw new MPDConnectionException(e);
 			}
 		}
 		

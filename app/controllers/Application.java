@@ -26,6 +26,7 @@ import org.bff.javampd.objects.MPDSong;
 
 import play.Logger;
 import play.Routes;
+import play.api.templates.Html;
 import play.libs.Comet;
 import play.libs.F.Callback0;
 import play.mvc.Controller;
@@ -33,6 +34,7 @@ import play.mvc.Result;
 import play.mvc.Security;
 
 import views.html.database;
+import views.html.main;
 import views.html.playlist;
 import views.html.info;
 
@@ -53,20 +55,20 @@ public class Application extends Controller
 	
 	static
 	{
-		MPDStandAloneMonitor monitor = MpdMonitor.getInstance().getMonitor();
-		monitor.addVolumeChangeListener(new VolumeChangeListener()
-		{
-			@Override
-			public void volumeChanged(VolumeChangeEvent event)
-			{
-				Logger.info("Volume changed :" + event.getVolume() + " - " + event.getMsg());
-				
-				for (Comet comet : sockets)
-				{
-					comet.sendMessage(String.valueOf(event.getVolume()));
-				}
-			}
-		});
+//		MPDStandAloneMonitor monitor = MpdMonitor.getInstance().getMonitor();
+//		monitor.addVolumeChangeListener(new VolumeChangeListener()
+//		{
+//			@Override
+//			public void volumeChanged(VolumeChangeEvent event)
+//			{
+//				Logger.info("Volume changed :" + event.getVolume() + " - " + event.getMsg());
+//				
+//				for (Comet comet : sockets)
+//				{
+//					comet.sendMessage(String.valueOf(event.getVolume()));
+//				}
+//			}
+//		});
 	}
 
 	/**
@@ -129,21 +131,20 @@ public class Application extends Controller
 	 */
 	public static Result playlist(int page)
 	{
-		MPD mpd = MpdMonitor.getInstance().getMPD();
-		MPDPlayer player = mpd.getMPDPlayer();
-		Page<MPDSong> songs = null;
-		
 		try
 		{
-			songs = Playlist.getSongs(page, 10);
+			MPD mpd = MpdMonitor.getInstance().getMPD();
+			MPDPlayer player = mpd.getMPDPlayer();
+			Page<MPDSong> songs = Playlist.getSongs(page, 10);
+
+			return ok(playlist.render(player, songs));
 		}
 		catch (MPDException e)
 		{
 			flash("error", "Command failed! " + e.getMessage());
-			songs = new EmptyPage<>();
+			return ok(playlist.render(null, new EmptyPage<MPDSong>()));
 		}
 		
-		return ok(playlist.render(player, songs));
 	}
 
 	/**
@@ -192,15 +193,15 @@ public class Application extends Controller
 	 */
 	public static Result addDbEntry(String url)
 	{
-		// TODO: parse ending
-		// extract URL from playlist URL if necessary
-		
-		Logger.info("Adding to playlist: " + url);
-		
-		MPD mpd = MpdMonitor.getInstance().getMPD();
-		
 		try
 		{
+			// TODO: parse ending
+			// extract URL from playlist URL if necessary
+			
+			Logger.info("Adding to playlist: " + url);
+			
+			MPD mpd = MpdMonitor.getInstance().getMPD();
+
 			// TODO: this is silly - first search song by filename then use the filename of the song
 			// However, it prevents adding files that are not in the DB (maybe MPD checks this already?)
 			Collection<MPDSong> songs = mpd.getMPDDatabase().searchFileName(url);
@@ -321,9 +322,9 @@ public class Application extends Controller
 	{
 		Logger.info("Set volume " + volume);
 		
-		MPD mpd = MpdMonitor.getInstance().getMPD();
 		try
 		{
+			MPD mpd = MpdMonitor.getInstance().getMPD();
 			mpd.getMPDPlayer().setVolume(volume);
 		}
 		catch (MPDPlayerException | MPDConnectionException e)
@@ -342,9 +343,9 @@ public class Application extends Controller
 	{
 		Logger.info("Play Song " + pos);
 		
-		MPD mpd = MpdMonitor.getInstance().getMPD();
 		try
 		{
+			MPD mpd = MpdMonitor.getInstance().getMPD();
 			MPDSong song = mpd.getMPDPlaylist().getSongList().get(pos);
 			mpd.getMPDPlayer().playId(song);
 		}
@@ -387,9 +388,9 @@ public class Application extends Controller
 	{
 		Logger.info("Removing entry from playlist: " + id);
 		
-		MPD mpd = MpdMonitor.getInstance().getMPD();
 		try
 		{
+			MPD mpd = MpdMonitor.getInstance().getMPD();
 			MPDPlaylist mpdPlaylist = mpd.getMPDPlaylist();
 			MPDSong song = mpdPlaylist.getSongList().get(id);
 
@@ -409,7 +410,15 @@ public class Application extends Controller
 	 */
 	public static Result info()
 	{
-		MPD mpd = MpdMonitor.getInstance().getMPD();
-		return ok(info.render(mpd));
+		try
+		{
+			MPD mpd = MpdMonitor.getInstance().getMPD();
+			return ok(info.render(mpd));
+		}
+		catch (MPDException e)
+		{
+			flash("error", e.getMessage());
+			return ok(main.render(null, null)); 
+		}
 	}
 }

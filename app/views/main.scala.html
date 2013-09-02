@@ -62,9 +62,11 @@
             @entry(routes.Application.browseDb(), "Browse DB")
             @entry(routes.Application.info(), "Info")
           </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="@routes.Credential.logout()">Logout</a></li>
-          </ul>
+          @if(curlink != routes.Credential.login()) {
+       	     <ul class="nav navbar-nav navbar-right">
+               <li><a href="@routes.Credential.logout()">Logout</a></li>
+             </ul>
+          }
         </div><!--/.nav-collapse -->
       </div>
     </nav>

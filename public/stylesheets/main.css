@@ -4,8 +4,11 @@ html {
 
 section#main {
     position: relative;
+}
+
+footer {
     border-bottom: 1px solid #ccc;
-    min-height: 600px;
+	min-height: 25px;
 } 
 
 #playlist th.pos {

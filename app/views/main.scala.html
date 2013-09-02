@@ -1,4 +1,13 @@
-@(content: Html)
+@(curlink: play.api.mvc.Call)(content: Html)
+
+@**********************************
+* Helper generating table headers *
+***********************************@
+@entry(link : Call, title:String) = {
+	<li @if(link == curlink) { class="active" }><a href="@link">@title</a></li>
+   
+}
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -49,9 +58,9 @@
           <span class="navbar-brand">@Messages("project.name")</span>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="@routes.Application.playlist()">Playlist</a></li>
-            <li><a href="@routes.Application.browseDb()">Browse DB</a></li>
-            <li><a href="@routes.Application.info()">Info</a></li>
+          	@entry(routes.Application.playlist(), "Playlist")
+            @entry(routes.Application.browseDb(), "Browse DB")
+            @entry(routes.Application.info(), "Info")
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a href="@routes.Credential.logout()">Logout</a></li>

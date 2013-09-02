@@ -38,7 +38,7 @@
     </th>
 }
 
-@main {
+@main(routes.Application.browseDb()) {
     
     <h3 class="pull-right" id="homeTitle">@Messages("database.list.title", currentPage.getTotalRowCount)</h3>
 

@@ -1,6 +1,6 @@
 @(form: Form[Credential.Login])
 
-@main {
+@main(routes.Credential.login()) {
     
     @if(form.hasGlobalErrors) {
     	<div class="alert alert-danger">@form.globalError.message</div>

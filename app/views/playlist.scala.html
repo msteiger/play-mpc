@@ -9,7 +9,7 @@
     <th class="@key.replace(".","_") header">@title</th>
 }
 
-@main {
+@main(routes.Application.playlist()) {
     
     <h3 id="homeTitle">@Messages("playlist.title")</h3>
 

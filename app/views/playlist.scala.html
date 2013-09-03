@@ -9,7 +9,10 @@
     <th class="@key.replace(".","_") header">@title</th>
 }
 
+
 @main(routes.Application.playlist()) {
+
+@addweb { bla }
     
     <h3 id="homeTitle">@Messages("playlist.title")</h3>
 
@@ -17,6 +20,10 @@
         <a id="browseDb" class="btn btn-success" href="@routes.Application.browseDb()">
 		  <span class="glyphicon glyphicon-plus"></span> Add song from DB
 		</a>
+
+  <!-- Button trigger modal -->
+  <a data-toggle="modal" data-backdrop="static" href="#myModal" class="btn btn-primary">Launch demo modal</a>
+		
     </div>
     
     @if(currentPage.getTotalRowCount() == 0) {    

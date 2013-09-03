@@ -5,6 +5,12 @@ import static org.bff.javampd.MPDPlayer.PlayerStatus.STATUS_PLAYING;
 import helper.EmptyPage;
 import helper.MpdMonitor;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -13,30 +19,26 @@ import models.Database;
 import models.Playlist;
 
 import org.bff.javampd.MPD;
+import org.bff.javampd.MPDFile;
 import org.bff.javampd.MPDPlayer;
 import org.bff.javampd.MPDPlayer.PlayerStatus;
 import org.bff.javampd.MPDPlaylist;
-import org.bff.javampd.events.VolumeChangeEvent;
-import org.bff.javampd.events.VolumeChangeListener;
 import org.bff.javampd.exception.MPDConnectionException;
 import org.bff.javampd.exception.MPDException;
 import org.bff.javampd.exception.MPDPlayerException;
-import org.bff.javampd.monitor.MPDStandAloneMonitor;
 import org.bff.javampd.objects.MPDSong;
 
 import play.Logger;
 import play.Routes;
-import play.api.templates.Html;
 import play.libs.Comet;
 import play.libs.F.Callback0;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-
 import views.html.database;
+import views.html.info;
 import views.html.main;
 import views.html.playlist;
-import views.html.info;
 
 import com.avaje.ebean.Page;
 
@@ -179,10 +181,72 @@ public class Application extends Controller
 	 */
 	public static Result addUrl(String url)
 	{
+		Logger.info("Adding to playlist: " + url);
+		
+		try
+		{
+			// TODO: parse ending
+			// extract URL from playlist URL if necessary
+			
+			Logger.info("Adding to playlist: " + url);
+			
+			MPD mpd = MpdMonitor.getInstance().getMPD();
+
+			if (url.endsWith(".m3u"))
+			{
+				URL website = new URL(url);
+				URLConnection conn = website.openConnection();
+				
+				int size = conn.getContentLength();
+				
+				if (size > 256 * 1024)
+					throw new IllegalArgumentException("File suspiciously big");
+
+				try (InputStream is = conn.getInputStream())
+				{
+					InputStreamReader read = new InputStreamReader(is, Charset.defaultCharset());
+					BufferedReader reader = new BufferedReader(read);
+					
+					String line;
+					while ((line = reader.readLine()) != null)
+					{
+						int comIdx = line.indexOf('#');
+						if (comIdx > 0)
+							line = line.substring(0, comIdx);
+						line = line.trim();
+						
+						if (!line.isEmpty())
+							addUrl(line);
+					}
+				}
+			}
+			
+			if (url.endsWith(".mp3"))
+			{
+				String name = "";
+				int from = url.lastIndexOf('/');
+				int to = url.length();
+				
+				if (from != -1 && from < to)
+					name = url.substring(from, to);
+				
+				MPDFile file = new MPDFile();
+				file.setDirectory(false);
+				file.setPath(url);
+				file.setName(name);
+				
+				mpd.getMPDPlaylist().addFileOrDirectory(file);
+			}
+		}
+		catch (Exception e)
+		{
+			flash("error", "Command failed! " + e.getMessage());
+		}
+			
+		
 		// TODO: parse ending
 		// extract URL from playlist URL if necessary
 		
-		Logger.info("Adding to playlist: " + url);
 		
 		return GO_HOME;
 	}

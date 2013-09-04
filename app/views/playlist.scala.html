@@ -12,17 +12,15 @@
 
 @main(routes.Application.playlist()) {
 
-@addweb { bla }
+@addweb()
     
     <h3 id="homeTitle">@Messages("playlist.title")</h3>
 
     <div id="actions">               
-        <a id="browseDb" class="btn btn-success" href="@routes.Application.browseDb()">
-		  <span class="glyphicon glyphicon-plus"></span> Add song from DB
+	  <!-- Button trigger modal -->
+        <a data-toggle="modal" data-backdrop="static" href="#myModal" id="browseDb" class="btn btn-success">
+		  <span class="glyphicon glyphicon-plus"></span> Add URL
 		</a>
-
-  <!-- Button trigger modal -->
-  <a data-toggle="modal" data-backdrop="static" href="#myModal" class="btn btn-primary">Launch demo modal</a>
 		
     </div>
     

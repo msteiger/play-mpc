@@ -2,6 +2,8 @@
 
 @********************@
 
+@dts = @{mpd.getMPDPlayer().getAudioDetails}
+
 @main(routes.Application.info()) {
     
     <h1>@Messages("project.name") <span class="glyphicon glyphicon-info-sign"></span></h1>
@@ -16,10 +18,19 @@
 		val sec = secs % 60;
 		 
 		"%d:%02d:%02d".format(hr, min, sec);}</dd>
-      
-      <dt>@Messages("info.status")</dt>
-      @for(status <- mpd.getStatus) { <dd>@status</dd> } 
-      
+
+	<dt>Sample Rate</dt>
+	<dd>@if(dts != null) {@dts.getSampleRate Hz} else {-}</dd>
+
+	<dt>Precision</dt>
+	<dd>@if(dts != null) {@dts.getBits Bit} else {-}</dd>
+
+	<dt>Channels</dt>
+	<dd>@if(dts != null) {@dts.getChannels} else {-}</dd>
+
+	<dt>@Messages("info.status")</dt>
+      @for(status <- mpd.getStatus) { <dd>@status</dd> }
+ 
       <dt>Play!</dt>
       <dd>@play.core.PlayVersion.current</dd>
       

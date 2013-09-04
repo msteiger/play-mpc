@@ -9,6 +9,15 @@
     <th class="@key.replace(".","_") header">@title</th>
 }
 
+@*********************************@
+
+@playlist_index = @{
+	if(player.getCurrentSong() == null) -1; else
+	player.getCurrentSong().getPosition()
+}
+
+@*********************************@
+
 
 @main(routes.Application.playlist()) {
 
@@ -45,7 +54,7 @@
             <tbody>
 
                 @for(song <- currentPage.getList) {
-                    <tr class="@{if(player.getCurrentSong() == song) "highlight"}" data-pos="@song.getPosition()" >
+                    <tr class="@{if(song.getPosition == playlist_index) "highlight"}" data-pos="@song.getPosition()" >
                         <td class="pos">@song.getPosition()</td>
                         <td>@song.getTitle()</td>
                         <td>@song.getArtist()</td>

@@ -39,6 +39,10 @@ public class MpdMonitor
 	private Thread thread;
 	private MPD mpd;
 	
+	/**
+	 * @return returns the current instance or creates it if necessary
+	 * @throws MPDConnectionException if connection to MPD fails
+	 */
 	public static MpdMonitor getInstance() throws MPDConnectionException
 	{
 		// TODO: implement circuit breaker pattern
@@ -55,7 +59,6 @@ public class MpdMonitor
 			}
 		}
 		
-		// .. could still be null
 		return instance;
 	}
 	
@@ -77,11 +80,17 @@ public class MpdMonitor
 //		thread.start();
 	}
 
+	/**
+	 * @return the MPD instance
+	 */
 	public MPD getMPD()
 	{
 		return mpd;
 	}
 	
+	/**
+	 * @return the MPD monitor instance
+	 */
 	public MPDStandAloneMonitor getMonitor()
 	{
 		return monitor;

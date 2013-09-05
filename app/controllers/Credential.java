@@ -1,8 +1,14 @@
 
 package controllers;
 
-import models.User;
+import helper.Digester;
 
+import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
+
+import play.Configuration;
+import play.Logger;
+import play.Play;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -23,17 +29,34 @@ public class Credential extends Controller
 		public String password;
 
 		/**
+		 * This method seems to be called in authenticate()
+		 * when bindFromRequest() is invoked. The return value
+		 * seems to be some kind of error message
 		 * @return null if successful or an error string
 		 */
 		public String validate()
 		{
-			if (User.authenticate(email, password) == null)
+			try
 			{
+				String digest = Digester.digest(password);
+
+				Configuration config = Play.application().configuration();
+
+				String username = config.getString("login.user");
+				String userpass = config.getString("login.pass");
+				
+				if (Objects.equals(username, email) && 
+					Objects.equals(userpass, digest))
+					return null;
+				
 				return "Invalid user or password";
 			}
-
-			return null;
+			catch (NoSuchAlgorithmException e)
+			{
+				return "No valid encryption algorithm implemented";
+			}
 		}
+
 	}
 
 	/**

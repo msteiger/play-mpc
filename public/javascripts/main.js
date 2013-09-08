@@ -1,6 +1,21 @@
 
 $(function() 
 {	
+	$("#songpos-slider").slider(
+	{
+		range : "min",
+		min : 0,
+		max : $("#songpos-text").data("length"),
+		value : $("#songpos-text").data("elapsed"),
+		step : 1,
+		slide : function(event, ui) 
+		{
+//			$("#volume").html(ui.value);
+			
+//			jsRoutes.controllers.Application.setVolume(ui.value).ajax({});
+		}
+	});
+
 	$("#volume-slider").slider(
 	{
 		range : "min",

@@ -19,6 +19,10 @@
 
 @*********************************@
 
+@format_time(secs:Long) = @{
+	"%d:%02d".format(secs / 60, secs % 60)
+}
+
 
 @main(routes.Application.playlist()) {
 
@@ -100,11 +104,17 @@
         @if(cs != null) {
         <table>         
           <tr>
-            <td><p>Playing: 
+            <td><p style="width:250px">Playing: 
             	@if(cs.getArtist != null) { @cs.getArtist - } 
             	@if(cs.getTitle != null) { @cs.getTitle }
-            	@if(cs.getLength != 0) @{ "%d:%02d / %d:%02d".format(player.getElapsedTime / 60, player.getElapsedTime % 60, cs.getLength / 60, cs.getLength % 60) }
             </p></td>
+           	@if(cs.getLength != 0) { 
+				<td><p id="songpos-text" data-elapsed="@player.getElapsedTime" data-length="@cs.getLength" style="width:80px">
+					@format_time(player.getElapsedTime) / @format_time(cs.getLength)</p></td>
+				<td style="width:100%">		
+						<div id="songpos-slider"></div>
+	            </td>
+			}
           </tr>
         </table>
         }
@@ -138,8 +148,10 @@
 		</td><td>
 			<!-- this text value that written by Play! and read by JavaScript code-->
 			<div id="volume">@player.getVolume()</div>
-		</td><td style="width:100%">		
-			<div id="volume-slider"></div>
+		</td><td>		
+			<div style="width:160px" id="volume-slider"></div>
+		</td>
+		<td style="width:100%">
 		</td>
 		</tr>
 		</table>

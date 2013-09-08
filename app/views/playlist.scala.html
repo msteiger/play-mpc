@@ -28,9 +28,9 @@
 
 @addweb()
     
-    <h3 id="homeTitle">@Messages("playlist.title")</h3>
-
     <div id="actions">               
+	  <h3 id="homeTitle">@Messages("playlist.title")</h3>
+	
 	  <!-- Button trigger modal -->
         <a data-toggle="modal" data-backdrop="static" href="#myModal" id="browseDb" class="btn btn-success">
 		  <span class="glyphicon glyphicon-plus"></span> Add URL
@@ -128,8 +128,9 @@
 					<span class="glyphicon glyphicon-step-backward"></span>
 				</a>
 				
-				<a class="btn btn-default" id="playsong" href="@routes.Application.playSong()">
-					<span class="glyphicon @{if(player.getStatus() == STATUS_PLAYING) "glyphicon-pause" else "glyphicon-play"}"</span>
+				<a class="btn btn-default @{if(player.getStatus() != STATUS_STOPPED) "button-down"}" id="playsong" href="@routes.Application.playSong()">
+					<span class="glyphicon @{if(player.getStatus() == STATUS_PLAYING) "glyphicon-pause" else "glyphicon-play"}"
+					</span>
 				</a>
 					
 				<a class="btn btn-default" id="nextsong" href="@routes.Application.nextSong()">
@@ -137,7 +138,7 @@
 				</a>
 			</div>
 			<div class="btn-group">
-				<a class="btn btn-default button-down" id="stopsong" href="@routes.Application.stopSong()">
+				<a class="btn btn-default @{if(player.getStatus() == STATUS_STOPPED) "button-down"}" id="stopsong" href="@routes.Application.stopSong()">
 					<span class="glyphicon glyphicon-stop"></span>
 				</a>
 			</div>

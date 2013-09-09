@@ -2,42 +2,55 @@
 
 @********************@
 
+@format_time(secs: Long) = @{
+	val hr = secs / 3600; 
+	val min = (secs / 60) % 60; 
+	val sec = secs % 60;
+	 
+	"%d:%02d:%02d".format(hr, min, sec);
+}
+
 @dts = @{mpd.getMPDPlayer().getAudioDetails}
 
 @main(routes.Application.info()) {
     
-    <h1>@Messages("project.name") <span class="glyphicon glyphicon-info-sign"></span></h1>
+	<h1>@Messages("project.name") <span class="glyphicon glyphicon-info-sign"></span></h1>
 
-    <dl class="dl-horizontal">
+	<h3>Public info</h3>
+
+	<dl class="dl-horizontal">
       
-      <dt>@Messages("info.uptime")</dt>
-      <dd>@{ 
-		val secs = mpd.getUptime; 
-		val hr = secs / 3600; 
-		val min = (secs / 60) % 60; 
-		val sec = secs % 60;
-		 
-		"%d:%02d:%02d".format(hr, min, sec);}</dd>
+		<dt>@Messages("info.uptime")</dt>
+		<dd>@format_time(mpd.getUptime)</dd>
 
-	<dt>Sample Rate</dt>
-	<dd>@if(dts != null) {@dts.getSampleRate Hz} else {-}</dd>
+		<dt>Sample Rate</dt>
+		<dd>@if(dts != null) {@dts.getSampleRate Hz} else {-}</dd>
+		
+		<dt>Precision</dt>
+		<dd>@if(dts != null) {@dts.getBits Bit} else {-}</dd>
+		
+		<dt>Channels</dt>
+		<dd>@if(dts != null) {@dts.getChannels} else {-}</dd>
 
-	<dt>Precision</dt>
-	<dd>@if(dts != null) {@dts.getBits Bit} else {-}</dd>
-
-	<dt>Channels</dt>
-	<dd>@if(dts != null) {@dts.getChannels} else {-}</dd>
-
-	<dt>@Messages("info.status")</dt>
-      @for(status <- mpd.getStatus) { <dd>@status</dd> }
+		@for(output <- mpd.getMPDAdmin.getOutputs) {
+			<dt>Output @output.getId</dt>
+			<dd>@output.getName (@{if (output.isEnabled) "enabled" else "disabled"})</dd>
+		}
  
-      <dt>Play!</dt>
-      <dd>@play.core.PlayVersion.current</dd>
-      
-      <dt>Scala</dt>
-      <dd>@play.core.PlayVersion.scalaVersion</dd>
-    </dl>
+		<dt>Play!</dt>
+		<dd>@play.core.PlayVersion.current</dd>
+		  
+		<dt>Scala</dt>
+		<dd>@play.core.PlayVersion.scalaVersion</dd>
+		 
+		<dt>MPD</dt>
+		<dd>@mpd.getVersion</dd>
+	</dl>
     
+    <h3>Internal info</h3>
+    <dl class="dl-horizontal">
+      @for((key, value) <- mpd.getStatus) { <dt>@key</dt><dd>@value</dd> }
+    </dl>
 }
 
             

@@ -55,6 +55,20 @@ $(function()
 		
 		jsRoutes.controllers.Application.selectSong(pos).ajax({});
 	});
+	
+	$('#playlist').on('click', '.remove', function(event)
+	{
+		// don't fire the onClick() event for the parent
+		event.stopPropagation();
+
+		var pos = $(this).data("pos");
+		
+		jsRoutes.controllers.Application.remove(pos).ajax(
+		{
+			// don't update page content - just reload
+			complete: function(html) { window.location.reload(); }
+		});
+	});
 
 	updateVolumeIcon($("#volume").text());
 });

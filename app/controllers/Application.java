@@ -12,7 +12,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import models.Database;
@@ -41,7 +40,6 @@ import views.html.main;
 import views.html.playlist;
 
 import com.avaje.ebean.Page;
-import com.google.common.collect.ImmutableList;
 
 /**
  * Manage a database of computers
@@ -124,7 +122,8 @@ public class Application extends Controller
 	            controllers.routes.javascript.Application.setVolume(),
 	            controllers.routes.javascript.Application.selectSong(),
 	            controllers.routes.javascript.Application.setSongPos(),
-	            controllers.routes.javascript.Application.addDbEntry()
+	            controllers.routes.javascript.Application.addDbEntry(),
+	            controllers.routes.javascript.Application.remove()
 	        )
 	    );
 	}
@@ -486,7 +485,7 @@ public class Application extends Controller
 			flash("error", "Removing entry from playlist failed! " + e.getMessage());
 		}
 		
-		return GO_HOME;
+		return ok("");
 	}
 
 	/**

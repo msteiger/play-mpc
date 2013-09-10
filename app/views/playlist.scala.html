@@ -66,7 +66,8 @@
                         <td>@song.getAlbum()</td>
                         <td>@song.getGenre()</td>
                         <td>@song.getYear()</td>
-                        <td><a title="@Messages("playlist.remove")" href="@routes.Application.remove(song.getPosition())">
+                        <td><a class="remove" title="@Messages("playlist.remove")" 
+                        	href="#" data-pos="@song.getPosition()">
                         	<span class="glyphicon glyphicon-trash"></span>
                         </a></td>
                     </tr>
@@ -109,7 +110,7 @@
             	@if(cs.getTitle != null) { @cs.getTitle }
             </p></td>
            	@if(cs.getLength != 0) { 
-				<td><p style="width:90px">
+				<td><p style="width:100px">
 					<span id="songpos-elapsed" data-elapsed="@player.getElapsedTime">@format_time(player.getElapsedTime)</span>
 					/ 
 					<span id="songpos-length" data-length="@cs.getLength">@format_time(cs.getLength)</span>

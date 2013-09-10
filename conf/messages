@@ -5,6 +5,9 @@ project.name=Play! MPC
 playlist.title=Playlist
 playlist.remove=Remove from playlist
 
+playlist.repeat=Repeat
+playlist.shuffle=Shuffle
+
 database.list.title={0,choice,0#No songs|1#One song|1<{0,number,integer} songs} found
 
 database.add=Add item to playlist

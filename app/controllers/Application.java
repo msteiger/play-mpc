@@ -312,6 +312,50 @@ public class Application extends Controller
 	}
 
 	/**
+	 * Performs GET /toggleRepeat
+	 * @return an action result
+	 */
+	public static Result toggleRepeat()
+	{
+		try
+		{
+			MPD mpd = MpdMonitor.getInstance().getMPD();
+			MPDPlayer player = mpd.getMPDPlayer();
+			player.setRepeat(!player.isRepeat());
+			
+			Logger.info("Setting repeat: " + player.isRepeat());
+		}
+		catch (MPDException e)
+		{
+			flash("error", "Command failed! " + e.getMessage());
+		}
+		
+		return GO_HOME;
+	}
+
+	/**
+	 * Performs GET /toggleRandome
+	 * @return an action result
+	 */
+	public static Result toggleShuffle()
+	{
+		try
+		{
+			MPD mpd = MpdMonitor.getInstance().getMPD();
+			MPDPlayer player = mpd.getMPDPlayer();
+			player.setRandom(!player.isRandom());
+
+			Logger.info("Setting shuffle: " + player.isRandom());
+		}
+		catch (MPDException e)
+		{
+			flash("error", "Command failed! " + e.getMessage());
+		}
+		
+		return GO_HOME;
+	}
+	
+	/**
 	 * Performs GET /nextSong
 	 * @return an action result
 	 */

@@ -146,6 +146,14 @@
 					<span class="glyphicon glyphicon-stop"></span>
 				</a>
 			</div>
+			<div class="btn-group">
+				<a title="@Messages("playlist.shuffle")" class="btn @if(player.isRandom()) {btn-primary} else {btn-default}" id="shuffle" href="@routes.Application.toggleShuffle()">
+					<span class="glyphicon glyphicon-random"></span>
+				</a>
+				<a title="@Messages("playlist.repeat")" class="btn @if(player.isRepeat()) {btn-primary} else {btn-default}" id="repeat" href="@routes.Application.toggleRepeat()">
+					<span class="glyphicon glyphicon-repeat"></span>
+				</a>
+			</div>
         </div>
 		</td>
 		<td>

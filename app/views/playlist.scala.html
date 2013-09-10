@@ -103,18 +103,18 @@
         </div>
         
         @if(cs != null) {
-        <table>         
+        <table style="margin-bottom:5px">         
           <tr>
-            <td><p style="width:250px">Playing: 
+            <td style="white-space:nowrap;padding-right:10px">Playing: 
             	@if(cs.getArtist != null) { @cs.getArtist - } 
             	@if(cs.getTitle != null) { @cs.getTitle }
-            </p></td>
+            </td>
            	@if(cs.getLength != 0) { 
-				<td><p style="width:100px">
+				<td style="white-space:nowrap;padding-right:10px">
 					<span id="songpos-elapsed" data-elapsed="@player.getElapsedTime">@format_time(player.getElapsedTime)</span>
 					/ 
 					<span id="songpos-length" data-length="@cs.getLength">@format_time(cs.getLength)</span>
-				</p></td>
+				</td>
 				<td style="width:100%">		
 						<div id="songpos-slider"></div>
 	            </td>

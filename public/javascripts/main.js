@@ -53,7 +53,12 @@ $(function()
 		// read HTML5 data attributes from <tr data-pos="">
 		var pos = $(this).data("pos");
 		
-		jsRoutes.controllers.Application.selectSong(pos).ajax({});
+		jsRoutes.controllers.Application.selectSong(pos).ajax(
+		{
+			// don't update page content - just reload
+			complete: function(html) { window.location.reload(); }
+		});
+
 	});
 	
 	$('#playlist').on('click', '.remove', function(event)

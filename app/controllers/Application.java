@@ -41,6 +41,7 @@ import views.html.main;
 import views.html.playlist;
 
 import com.avaje.ebean.Page;
+import com.google.common.collect.ImmutableList;
 
 /**
  * Manage a database of computers
@@ -122,7 +123,8 @@ public class Application extends Controller
 	    return ok(Routes.javascriptRouter("jsRoutes",
 	            controllers.routes.javascript.Application.setVolume(),
 	            controllers.routes.javascript.Application.selectSong(),
-	            controllers.routes.javascript.Application.setSongPos()
+	            controllers.routes.javascript.Application.setSongPos(),
+	            controllers.routes.javascript.Application.addDbEntry()
 	        )
 	    );
 	}
@@ -161,9 +163,18 @@ public class Application extends Controller
 	public static Result browseDb(int page, String sortBy, String order, String filter)
 	{
 		Page<MPDSong> songs = null;
+		List<String> playlistfiles = new ArrayList<>();
 		
 		try
 		{
+			MPD mpd = MpdMonitor.getInstance().getMPD();
+			
+			List<MPDSong> playlist = mpd.getMPDPlaylist().getSongList();
+			for (MPDSong song : playlist)
+			{
+				playlistfiles.add(song.getFile());
+			}
+			
 			songs = Database.getSongs(page, 10, sortBy, order, filter);
 		}
 		catch (MPDException e)
@@ -172,7 +183,7 @@ public class Application extends Controller
 			songs = new EmptyPage<>();
 		}
 		
-		return ok(database.render(songs, sortBy, order, filter));
+		return ok(database.render(songs, playlistfiles, sortBy, order, filter));
 	}
 
 	/**
@@ -252,42 +263,29 @@ public class Application extends Controller
 		return GO_HOME;
 	}
 	/**
-	 * Performs POST /addUrl
-	 * Display the 'Add from URL form'.
+	 * Performs POST /addDbEntry
 	 * @return an action result
 	 */
-	public static Result addDbEntry(String url)
+	public static Result addDbEntry(String path)
 	{
 		try
 		{
-			// TODO: parse ending
-			// extract URL from playlist URL if necessary
-			
-			Logger.info("Adding to playlist: " + url);
+			Logger.info("Adding db entry to playlist: " + path);
 			
 			MPD mpd = MpdMonitor.getInstance().getMPD();
+			MPDSong song = new MPDSong();
+			song.setFile(path);
+			
+			mpd.getMPDPlaylist().addSong(song);
 
-			// TODO: this is silly - first search song by filename then use the filename of the song
-			// However, it prevents adding files that are not in the DB (maybe MPD checks this already?)
-			Collection<MPDSong> songs = mpd.getMPDDatabase().searchFileName(url);
-	
-			if (songs.size() == 1)
-			{
-				MPDSong song = songs.iterator().next();
-				mpd.getMPDPlaylist().addSong(song);
-			}
-			else
-			{
-				Logger.warn("Songs expected: 1 - found " + songs.size());
-			}
+			return ok(path);
 		}
 		catch (MPDException e)
 		{
 			flash("error", "Command failed! " + e.getMessage());
-		}
-		
-		// TODO: either use something like GO_HOME or return "false" and avoid reloading
-		return redirect(routes.Application.browseDb(0, "name", "asc", ""));
+			
+			return notFound(path);
+		}		
 	}
 
 	/**

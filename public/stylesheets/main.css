@@ -90,6 +90,16 @@ table#controls {
 
 #playlist tbody tr.highlight td {background-color:#c8c8ff;}
 
+#database .inplaylist
+{
+	color:lightgray;
+}
+
+#database .notinplaylist
+{
+	color:green;
+}
+
 #comet {
     display: none;
 }

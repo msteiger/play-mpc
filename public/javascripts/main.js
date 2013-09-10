@@ -31,6 +31,19 @@ $(function()
 			jsRoutes.controllers.Application.setVolume(ui.value).ajax({});
 		}
 	});
+	
+	$('#database').on('click', '.dbentry', function(event)
+	{
+		var href = $(this).data("ref");
+		var elem = $(this);
+		
+		jsRoutes.controllers.Application.addDbEntry(href).ajax(
+		{
+			// reload, so that the "flash" error message is displayed
+			error: function(html) { window.location.reload(); },
+			success: function(html) { elem.addClass('inplaylist'); elem.css("color", "lightgray"); }
+		});
+	});
 
     // Add onClick handler for all playlist table rows
 	$('#playlist').on('click', 'tbody tr', function(event) 

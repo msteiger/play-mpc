@@ -211,7 +211,7 @@ public class Application extends Controller
 					while ((line = reader.readLine()) != null)
 					{
 						int comIdx = line.indexOf('#');
-						if (comIdx > 0)
+						if (comIdx >= 0)
 							line = line.substring(0, comIdx);
 						line = line.trim();
 						

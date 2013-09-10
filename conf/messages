@@ -3,10 +3,16 @@
 project.name=Play! MPC
 
 playlist.title=Playlist
+playlist.addurl=Add URL to playlist
+
 playlist.remove=Remove from playlist
 
-playlist.repeat=Repeat
-playlist.shuffle=Shuffle
+playlist.prev=Go back one track
+playlist.next=Go to next track
+playlist.play=Play / Pause
+playlist.stop=Stop playback
+playlist.repeat=Toggle Repeat
+playlist.shuffle=Toggle Shuffle
 
 database.list.title={0,choice,0#No songs|1#One song|1<{0,number,integer} songs} found
 

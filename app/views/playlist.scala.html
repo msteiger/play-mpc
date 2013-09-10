@@ -32,7 +32,7 @@
 	  <h3 id="homeTitle">@Messages("playlist.title")</h3>
 	
 	  <!-- Button trigger modal -->
-        <a data-toggle="modal" data-backdrop="static" href="#myModal" id="browseDb" class="btn btn-success">
+        <a title="@Messages("playlist.addurl")" data-toggle="modal" data-backdrop="static" href="#myModal" id="browseDb" class="btn btn-success">
 		  <span class="glyphicon glyphicon-plus"></span> Add URL
 		</a>
 		
@@ -128,21 +128,21 @@
         <td>
         <div id="control-buttons" class="btn-toolbar">
         	<div class="btn-group">        			
-				<a class="btn btn-default" id="prevsong" href="@routes.Application.prevSong()">
+				<a title="@Messages("playlist.prev")" class="btn btn-default" id="prevsong" href="@routes.Application.prevSong()">
 					<span class="glyphicon glyphicon-step-backward"></span>
 				</a>
 				
-				<a class="btn btn-default @{if(player.getStatus() != STATUS_STOPPED) "button-down"}" id="playsong" href="@routes.Application.playSong()">
+				<a title="@Messages("playlist.play")" class="btn btn-default @{if(player.getStatus() != STATUS_STOPPED) "button-down"}" id="playsong" href="@routes.Application.playSong()">
 					<span class="glyphicon @{if(player.getStatus() == STATUS_PLAYING) "glyphicon-pause" else "glyphicon-play"}"
 					</span>
 				</a>
 					
-				<a class="btn btn-default" id="nextsong" href="@routes.Application.nextSong()">
+				<a title="@Messages("playlist.next")" class="btn btn-default" id="nextsong" href="@routes.Application.nextSong()">
 					<span class="glyphicon glyphicon-step-forward"></span>
 				</a>
 			</div>
 			<div class="btn-group">
-				<a class="btn btn-default @{if(player.getStatus() == STATUS_STOPPED) "button-down"}" id="stopsong" href="@routes.Application.stopSong()">
+				<a title="@Messages("playlist.stop")" class="btn btn-default @{if(player.getStatus() == STATUS_STOPPED) "button-down"}" id="stopsong" href="@routes.Application.stopSong()">
 					<span class="glyphicon glyphicon-stop"></span>
 				</a>
 			</div>

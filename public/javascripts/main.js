@@ -5,14 +5,14 @@ $(function()
 	{
 		range : "min",
 		min : 0,
-		max : $("#songpos-text").data("length"),
-		value : $("#songpos-text").data("elapsed"),
+		max : $("#songpos-length").data("length"),
+		value : $("#songpos-elapsed").data("elapsed"),
 		step : 1,
 		slide : function(event, ui) 
 		{
-//			$("#volume").html(ui.value);
+			$("#songpos-elapsed").html(format_time(ui.value));
 			
-//			jsRoutes.controllers.Application.setVolume(ui.value).ajax({});
+			jsRoutes.controllers.Application.setSongPos(ui.value).ajax({});
 		}
 	});
 
@@ -45,6 +45,19 @@ $(function()
 
 	updateVolumeIcon($("#volume").text());
 });
+
+
+// this function also exists as scala variant in playlist.scala.html
+function format_time(secs)
+{
+	var min = Math.floor(secs / 60);
+	var sec = secs % 60;
+	
+	if (sec < 10)
+		sec = "0" + sec;
+	
+	return min + ":" + sec;
+}
 
 
 var updateVolumeIcon = function(volume)

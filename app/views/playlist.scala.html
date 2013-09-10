@@ -109,8 +109,11 @@
             	@if(cs.getTitle != null) { @cs.getTitle }
             </p></td>
            	@if(cs.getLength != 0) { 
-				<td><p id="songpos-text" data-elapsed="@player.getElapsedTime" data-length="@cs.getLength" style="width:80px">
-					@format_time(player.getElapsedTime) / @format_time(cs.getLength)</p></td>
+				<td><p style="width:90px">
+					<span id="songpos-elapsed" data-elapsed="@player.getElapsedTime">@format_time(player.getElapsedTime)</span>
+					/ 
+					<span id="songpos-length" data-length="@cs.getLength">@format_time(cs.getLength)</span>
+				</p></td>
 				<td style="width:100%">		
 						<div id="songpos-slider"></div>
 	            </td>

@@ -121,7 +121,8 @@ public class Application extends Controller
 	    response().setContentType("text/javascript");
 	    return ok(Routes.javascriptRouter("jsRoutes",
 	            controllers.routes.javascript.Application.setVolume(),
-	            controllers.routes.javascript.Application.selectSong()
+	            controllers.routes.javascript.Application.selectSong(),
+	            controllers.routes.javascript.Application.setSongPos()
 	        )
 	    );
 	}
@@ -374,6 +375,28 @@ public class Application extends Controller
 			flash("error", "Command failed! " + e.getMessage());
 		}
 
+		return GO_HOME;
+	}
+
+	/**
+	 * Performs POST /setsongpos
+	 * @param pos the new song position in seconds
+	 * @return an action result
+	 */
+	public static Result setSongPos(int pos)
+	{
+		Logger.info("Set song pos " + pos);
+		
+		try
+		{
+			MPD mpd = MpdMonitor.getInstance().getMPD();
+			mpd.getMPDPlayer().seek(pos);
+		}
+		catch (MPDPlayerException | MPDConnectionException e)
+		{
+			flash("error", "Changing song position failed! " + e.getMessage());
+		}
+		
 		return GO_HOME;
 	}
 

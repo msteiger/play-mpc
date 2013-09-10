@@ -20,6 +20,7 @@ GET     /playsong                   controllers.Application.playSong()
 GET     /nextsong                   controllers.Application.nextSong()
 GET     /stopsong                   controllers.Application.stopSong()
 POST    /selectsong/:pos            controllers.Application.selectSong(pos:Int)
+POST    /setsongpos/:pos            controllers.Application.setSongPos(pos:Int)
 
 # Volume control
 POST    /volume/:amount             controllers.Application.setVolume(amount:Int)

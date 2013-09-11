@@ -99,6 +99,7 @@ table#controls {
 	color:green;
 }
 
-#comet {
-    display: none;
+#database th
+{
+	white-space:nowrap;
 }

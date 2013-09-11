@@ -153,6 +153,12 @@
 				<a title="@Messages("playlist.repeat")" class="btn @if(player.isRepeat()) {btn-primary} else {btn-default}" id="repeat" href="@routes.Application.toggleRepeat()">
 					<span class="glyphicon glyphicon-repeat"></span>
 				</a>
+				<a title="@Messages("playlist.single")" class="btn @if(player.isSingleMode) {btn-primary} else {btn-default}" id="shuffle" href="@routes.Application.toggleSingleMode()">
+					<span class="glyphicon glyphicon-record"></span>
+				</a>
+				<a title="@Messages("playlist.consume")" class="btn @if(player.isConsuming) {btn-primary} else {btn-default}" id="repeat" href="@routes.Application.toggleConsuming()">
+					<span class="glyphicon glyphicon-cutlery"></span>
+				</a>
 			</div>
         </div>
 		</td>

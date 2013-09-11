@@ -13,6 +13,8 @@ playlist.play=Play / Pause
 playlist.stop=Stop playback
 playlist.repeat=Toggle Repeat
 playlist.shuffle=Toggle Shuffle
+playlist.single=Toggle Single Mode\nPlay only one song
+playlist.consume=Toggle Consume\nRemove song after playback
 
 database.list.title={0,choice,0#No songs|1#One song|1<{0,number,integer} songs} found
 

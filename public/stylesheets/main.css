@@ -62,7 +62,7 @@ table#controls {
 }
 
 #control-buttons {
-	width:275px;
+	width:350px;
 }
 
 #volume-icon {
@@ -72,7 +72,6 @@ table#controls {
 #volume {
 	width:25px;
 }
-
 
 .unselectable {
 	-webkit-touch-callout: none;

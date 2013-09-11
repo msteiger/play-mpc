@@ -23,6 +23,8 @@ POST    /selectsong/:pos            controllers.Application.selectSong(pos:Int)
 POST    /setsongpos/:pos            controllers.Application.setSongPos(pos:Int)
 GET		/toggleShuffle				controllers.Application.toggleShuffle()
 GET		/toggleRepeat				controllers.Application.toggleRepeat()
+GET		/toggleConsuming			controllers.Application.toggleConsuming()
+GET		/toggleSingleMode			controllers.Application.toggleSingleMode()
 
 # Volume control
 POST    /volume/:amount             controllers.Application.setVolume(amount:Int)

@@ -414,6 +414,50 @@ public class Application extends Controller
 		
 		return GO_HOME;
 	}
+
+	/**
+	 * Performs GET /toggleConsuming
+	 * @return an action result
+	 */
+	public static Result toggleConsuming()
+	{
+		try
+		{
+			MPD mpd = MpdMonitor.getInstance().getMPD();
+			MPDPlayer player = mpd.getMPDPlayer();
+			player.setConsuming(!player.isConsuming());
+
+			Logger.info("Setting consuming: " + player.isConsuming());
+		}
+		catch (MPDException e)
+		{
+			flash("error", "Command failed! " + e.getMessage());
+		}
+		
+		return GO_HOME;
+	}
+	
+	/**
+	 * Performs GET /toggleSingleMode
+	 * @return an action result
+	 */
+	public static Result toggleSingleMode()
+	{
+		try
+		{
+			MPD mpd = MpdMonitor.getInstance().getMPD();
+			MPDPlayer player = mpd.getMPDPlayer();
+			player.setSingleMode(!player.isSingleMode());
+
+			Logger.info("Setting single mode: " + player.isSingleMode());
+		}
+		catch (MPDException e)
+		{
+			flash("error", "Command failed! " + e.getMessage());
+		}
+		
+		return GO_HOME;
+	}
 	
 	/**
 	 * Performs GET /nextSong

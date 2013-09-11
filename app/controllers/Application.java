@@ -22,9 +22,16 @@ import org.bff.javampd.MPDFile;
 import org.bff.javampd.MPDPlayer;
 import org.bff.javampd.MPDPlayer.PlayerStatus;
 import org.bff.javampd.MPDPlaylist;
+import org.bff.javampd.events.PlayerBasicChangeEvent;
+import org.bff.javampd.events.PlayerBasicChangeListener;
+import org.bff.javampd.events.TrackPositionChangeEvent;
+import org.bff.javampd.events.TrackPositionChangeListener;
+import org.bff.javampd.events.VolumeChangeEvent;
+import org.bff.javampd.events.VolumeChangeListener;
 import org.bff.javampd.exception.MPDConnectionException;
 import org.bff.javampd.exception.MPDException;
 import org.bff.javampd.exception.MPDPlayerException;
+import org.bff.javampd.monitor.MPDStandAloneMonitor;
 import org.bff.javampd.objects.MPDSong;
 
 import play.Logger;
@@ -34,6 +41,8 @@ import play.libs.F.Callback0;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
+import play.mvc.WebSocket;
+import play.mvc.WebSocket.Out;
 import views.html.database;
 import views.html.info;
 import views.html.main;
@@ -52,26 +61,86 @@ public class Application extends Controller
 	 */
 	public static Result GO_HOME = redirect(routes.Application.playlist(0));
 
-	public static final List<Comet> sockets = new ArrayList<Comet>();
+	public static final List<WebSocket.Out<String>> sockets = new ArrayList<>();
 	
 	static
 	{
-//		MPDStandAloneMonitor monitor = MpdMonitor.getInstance().getMonitor();
-//		monitor.addVolumeChangeListener(new VolumeChangeListener()
-//		{
-//			@Override
-//			public void volumeChanged(VolumeChangeEvent event)
-//			{
-//				Logger.info("Volume changed :" + event.getVolume() + " - " + event.getMsg());
-//				
-//				for (Comet comet : sockets)
-//				{
-//					comet.sendMessage(String.valueOf(event.getVolume()));
-//				}
-//			}
-//		});
+		try
+		{
+			MPDStandAloneMonitor monitor = MpdMonitor.getInstance().getMonitor();
+
+			Logger.info("Start monitoring ...");
+			monitor.addPlayerChangeListener(new PlayerBasicChangeListener()
+			{
+				@Override
+				public void playerBasicChange(PlayerBasicChangeEvent event)
+				{
+					Logger.info("Player status changed :" + event.getId());
+				}
+			});
+			
+			monitor.addTrackPositionChangeListener(new TrackPositionChangeListener()
+			{
+				@Override
+				public void trackPositionChanged(TrackPositionChangeEvent event)
+				{
+					Logger.info("Track position changed :" + event.getElapsedTime());
+					for (Out<String> socket : sockets)
+					{
+						socket.write(String.valueOf(event.getElapsedTime()));
+					}
+				}
+			});
+			
+			monitor.addVolumeChangeListener(new VolumeChangeListener()
+			{
+				@Override
+				public void volumeChanged(VolumeChangeEvent event)
+				{
+					Logger.info("Volume changed :" + event.getVolume() + " - " + event.getMsg());
+					
+					for (Out<String> socket : sockets)
+					{
+//						socket.write("volume:" + String.valueOf(event.getVolume()));
+					}
+				}
+			});
+		}
+		catch (MPDConnectionException e)
+		{
+			Logger.warn("Could not connect", e);
+		}
+
 	}
 
+	public static WebSocket<String> sockHandler()
+	{
+		WebSocket<String> webSocket = new WebSocket<String>()
+		{
+			// called when the websocket is established
+			
+			@Override
+			public void onReady(final WebSocket.In<String> in, final WebSocket.Out<String> out)
+			{			
+				sockets.add(out);
+				Logger.info("New browser connected (" + sockets.size() + " browsers currently connected)");
+
+				in.onClose(new Callback0()
+				{
+					@Override
+					public void invoke() throws Throwable
+					{
+						sockets.remove(out);
+						Logger.info("Browser disconnected (" + sockets.size() + " browsers currently connected)");
+					}
+				});
+			}
+			
+		};
+		
+		return webSocket;
+	}
+	
 	/**
 	 * Handle default path requests, redirect to computers list
 	 * @return an action result
@@ -79,40 +148,6 @@ public class Application extends Controller
 	public static Result index()
 	{
 		return GO_HOME;
-	}
-	
-	/**
-	 * Handles calls from the IFRAME and returns 
-	 * @return a Comet connection Result
-	 */
-	public static Result liveUpdate()
-	{
-		final Comet comet = new Comet("parent.volumeChanged")
-		{
-			@Override
-			public void onConnected()
-			{
-				sockets.add(this);
-				Logger.info("New browser connected (" + sockets.size() + " browsers currently connected)");
-				
-				final Comet myComet = this;
-				
-				Callback0 callback = new Callback0()
-				{
-					@Override
-					public void invoke() throws Throwable
-					{
-						sockets.remove(myComet);
-						Logger.info("Browser disconnected (" + sockets.size() + " browsers currently connected)");
-					}
-				};
-				
-				this.onDisconnected(callback);
-
-			}
-		};
-		
-		return ok(comet);
 	}
 	
 	public static Result javascriptRoutes() 

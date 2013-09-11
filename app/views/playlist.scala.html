@@ -169,18 +169,33 @@
 		</tr>
 		</table>
     }
-		
+	
     <script type="text/javascript" charset="utf-8">
-        
-    // Called for each Comet message
-    var volumeChanged = function(volume) 
-    {
-        $('#volume').html(volume)
-        $('#volume-slider').slider( "value", volume );
-    }
-    </script>
     
-    <!--iframe id="comet" src="@routes.Application.liveUpdate.unique"></iframe-->
+        $(function() 
+        {
+            var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket
+            var sock = new WS("@routes.Application.sockHandler().webSocketURL(request)")
+            
+            sock.onmessage = function(event) 
+            {
+            	$("#songpos-slider" ).slider("value", event.data);
+                $("#songpos-elapsed").html(format_time(event.data));
+            }
+            
+			sock.onerror = function(event)
+    		{
+    			alert(event);
+    		} 
+        });
+           
+	    var volumeChanged = function(volume) 
+	    {
+	        $('#volume').html(volume)
+	        $('#volume-slider').slider( "value", volume );
+	    }
+	    
+    </script>
 
 }
 

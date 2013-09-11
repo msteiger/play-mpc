@@ -46,5 +46,5 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 # However, the code in the samples does and it works there
 GET     /jsRoutes.js				controllers.Application.javascriptRoutes()
 
-# The Comet live stream
-GET     /live                       controllers.Application.liveUpdate()
+# Websocket
+GET     /websocket                  controllers.Application.sockHandler()

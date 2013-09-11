@@ -77,7 +77,7 @@ public class MpdMonitor
 		monitor = new MPDStandAloneMonitor(mpd, 1000);
 		
 		thread = new Thread(monitor);
-//		thread.start();
+		thread.start();
 	}
 
 	/**

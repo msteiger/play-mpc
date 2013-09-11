@@ -22,8 +22,12 @@ import org.bff.javampd.MPDFile;
 import org.bff.javampd.MPDPlayer;
 import org.bff.javampd.MPDPlayer.PlayerStatus;
 import org.bff.javampd.MPDPlaylist;
+import org.bff.javampd.events.OutputChangeEvent;
+import org.bff.javampd.events.OutputChangeListener;
 import org.bff.javampd.events.PlayerBasicChangeEvent;
 import org.bff.javampd.events.PlayerBasicChangeListener;
+import org.bff.javampd.events.PlaylistBasicChangeEvent;
+import org.bff.javampd.events.PlaylistBasicChangeListener;
 import org.bff.javampd.events.TrackPositionChangeEvent;
 import org.bff.javampd.events.TrackPositionChangeListener;
 import org.bff.javampd.events.VolumeChangeEvent;
@@ -33,9 +37,12 @@ import org.bff.javampd.exception.MPDException;
 import org.bff.javampd.exception.MPDPlayerException;
 import org.bff.javampd.monitor.MPDStandAloneMonitor;
 import org.bff.javampd.objects.MPDSong;
+import org.codehaus.jackson.JsonNode;
 
 import play.Logger;
 import play.Routes;
+import play.api.libs.json.JsValue;
+import play.api.libs.json.Json;
 import play.libs.Comet;
 import play.libs.F.Callback0;
 import play.mvc.Controller;
@@ -75,7 +82,7 @@ public class Application extends Controller
 				@Override
 				public void playerBasicChange(PlayerBasicChangeEvent event)
 				{
-					Logger.info("Player status changed :" + event.getId());
+					sendWebsocketMessage("status", event.getId());
 				}
 			});
 			
@@ -84,11 +91,7 @@ public class Application extends Controller
 				@Override
 				public void trackPositionChanged(TrackPositionChangeEvent event)
 				{
-					Logger.info("Track position changed :" + event.getElapsedTime());
-					for (Out<String> socket : sockets)
-					{
-						socket.write(String.valueOf(event.getElapsedTime()));
-					}
+					sendWebsocketMessage("songpos", event.getElapsedTime());
 				}
 			});
 			
@@ -97,12 +100,16 @@ public class Application extends Controller
 				@Override
 				public void volumeChanged(VolumeChangeEvent event)
 				{
-					Logger.info("Volume changed :" + event.getVolume() + " - " + event.getMsg());
-					
-					for (Out<String> socket : sockets)
-					{
-//						socket.write("volume:" + String.valueOf(event.getVolume()));
-					}
+					sendWebsocketMessage("volume", event.getVolume());
+				}
+			});
+			
+			monitor.addPlaylistChangeListener(new PlaylistBasicChangeListener()
+			{
+				@Override
+				public void playlistBasicChange(PlaylistBasicChangeEvent event)
+				{
+					sendWebsocketMessage("playlist", event.getId());
 				}
 			});
 		}
@@ -111,6 +118,24 @@ public class Application extends Controller
 			Logger.warn("Could not connect", e);
 		}
 
+	}
+	
+	private static void sendWebsocketMessage(String type, long value)
+	{
+		sendWebsocketMessage(type, String.valueOf(value));
+	}
+	
+	private static void sendWebsocketMessage(String type, String value)
+	{
+		String json = "{ \"type\": \"" + type + "\", \"value\": " + value + " }";
+
+		if (Logger.isDebugEnabled())
+			Logger.debug("Update " + json);
+		
+		for (Out<String> socket : sockets)
+		{
+			socket.write(json);
+		}
 	}
 
 	public static WebSocket<String> sockHandler()

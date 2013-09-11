@@ -179,8 +179,28 @@
             
             sock.onmessage = function(event) 
             {
-            	$("#songpos-slider" ).slider("value", event.data);
-                $("#songpos-elapsed").html(format_time(event.data));
+            	var msg = JSON.parse(event.data);
+            	
+            	switch(msg.type) 
+            	{
+    				case "songpos":
+            			$("#songpos-slider" ).slider("value", msg.value);
+                		$("#songpos-elapsed").html(format_time(msg.value));
+                		break;
+                		
+                	case "volume":
+				        $('#volume-slider').slider("value", msg.value);
+	        			$('#volume').html(msg.value)
+				        break;
+				        
+					case "status":
+						window.location.reload();
+						break;
+						
+					case "playlist":
+						window.location.reload();
+						break;
+                }
             }
             
 			sock.onerror = function(event)
@@ -188,12 +208,6 @@
     			alert(event);
     		} 
         });
-           
-	    var volumeChanged = function(volume) 
-	    {
-	        $('#volume').html(volume)
-	        $('#volume-slider').slider( "value", volume );
-	    }
 	    
     </script>
 

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    	<meta charset="utf-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<meta name="description" content="">
+    	<meta name="author" content="">
+    
+    	<link rel="shortcut icon" href="resources/favicon.png">
+
+    
+        <title>Play! MPC</title>
+
+		<!-- jQuery UI -->
+        <link rel="stylesheet" type="text/css" media="screen" href="resources/jquery-ui.css">
+    
+    	<!-- Bootstrap core CSS -->    
+        <link rel="stylesheet" type="text/css" media="screen" href="resources/bootstrap.css"> 
+	
+	    <!-- Custom styles -->
+        <link rel="stylesheet" type="text/css" media="screen" href="resources/main.css">
+
+		<!-- Scripts are at the bottom -->
+		
+		<!-- Placed at the end of the document so the pages load faster -->
+       	<script src="resources/jquery-1.js"></script>
+		<script src="resources/jquery-ui-1.js"></script>
+
+		<script src="resources/bootstrap.js"></script>
+		
+        <script type="text/javascript" src="resources/jsRoutes.js"></script>
+        <script type="text/javascript" src="resources/main.js"></script>
+				
+    </head>
+    <!-- Setting margin-right to 0px is required to prevent Bootstrap 
+    		from reserving space for a vertical scrollbar--> 
+    <body style="margin-right:0px">
+
+	<header>        
+    <nav class="navbar navbar-default navbar-static-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+          <span class="navbar-brand">Play! MPC</span>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+          	
+	<li><a href="playlist.html">Playlist</a></li>
+   
+
+            
+	<li class="active"><a href="browseDb.html">Browse DB</a></li>
+   
+
+            
+	<li><a href="info.html">Info</a></li>
+   
+
+          </ul>
+          
+       	     <ul class="nav navbar-nav navbar-right">
+               <li><a href="#">Logout</a></li>
+             </ul>
+          
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+	</header>
+
+    <section id="main">
+      <div class="container">
+		     
+		
+		     
+		
+		     
+		
+		     
+                
+            
+    
+    <h3 class="pull-right" id="homeTitle">567 songs found</h3>
+
+    <div id="actions">
+                
+        <form class="form-inline" role="form">
+		  <div class="form-group">
+            <input class="form-control" id="searchbox" name="filter" placeholder="Filter by title..." type="text">
+          </div>
+          
+          <input id="searchsubmit" value="Filter by name" class="btn btn-primary" type="submit">
+        </form>
+
+    </div>
+    
+    
+        
+        <table id="database" class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    
+    <th class="title"> 
+        <a href="#">Title</a>
+    	
+    </th>
+
+                    
+    <th class="artist"> 
+        <a href="#">Artist</a>
+    	
+    </th>
+
+                    
+    <th class="album"> 
+        <a href="#">Album</a>
+    	
+    </th>
+
+                    
+    <th class="file"> 
+        <a href="#">File</a>
+    	
+    </th>
+
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                
+                    <tr>
+                        <td>Bla Bla Bla</td>
+                        <td>Gigi D'Agostino</td>
+                        <td>Beats For The Feet</td>
+                        <td>Musik/Teschno/Gigi D'Agostino - Bla Bla Bla.mp3</td>
+                        <td title="Add item to playlist">                         
+                        	<a href="#" data-ref="Musik/Teschno/Gigi D'Agostino - Bla Bla Bla.mp3" class="dbentry glyphicon glyphicon-plus 
+                        			notinplaylist">
+                        	</a>
+                        </td>
+                    </tr>
+                
+                    <tr>
+                        <td>The Riddle</td>
+                        <td>Gigi D'Agostino</td>
+                        <td>Beats For The Feet ?</td>
+                        <td>Musik/Teschno/Gigi D'Agostino - The Riddle.mp3</td>
+                        <td title="Add item to playlist">                         
+                        	<a href="#" data-ref="Musik/Teschno/Gigi D'Agostino - The Riddle.mp3" class="dbentry glyphicon glyphicon-plus 
+                        			notinplaylist">
+                        	</a>
+                        </td>
+                    </tr>
+                
+                    <tr>
+                        <td>Operation Blade - Original Mix</td>
+                        <td>Public Domain</td>
+                        <td>Biggest Rel Ever</td>
+                        <td>Musik/Teschno/Public Domain - Operation Blade (Original Mix).mp3</td>
+                        <td title="Add item to playlist">                         
+                        	<a href="#" data-ref="Musik/Teschno/Public Domain - Operation Blade (Original Mix).mp3" class="dbentry glyphicon glyphicon-plus 
+                        			notinplaylist">
+                        	</a>
+                        </td>
+                    </tr>
+                
+                    <tr>
+                        <td>Desert Storm</td>
+                        <td>Infected Mushroom &amp; Holymen</td>
+                        <td>C4</td>
+                        <td>Musik/Teschno/Infected Mushroom - Desert Storm.mp3</td>
+                        <td title="Add item to playlist">                         
+                        	<a href="#" data-ref="Musik/Teschno/Infected Mushroom - Desert Storm.mp3" class="dbentry glyphicon glyphicon-plus 
+                        			notinplaylist">
+                        	</a>
+                        </td>
+                    </tr>
+                
+                    <tr>
+                        <td>Miami Pop</td>
+                        <td>Phil Fuldner</td>
+                        <td>Charts July 2001 (errorless)</td>
+                        <td>Musik/Teschno/Phil Fuldner - Miami Pop.mp3</td>
+                        <td title="Add item to playlist">                         
+                        	<a href="#" data-ref="Musik/Teschno/Phil Fuldner - Miami Pop.mp3" class="dbentry glyphicon glyphicon-plus 
+                        			notinplaylist">
+                        	</a>
+                        </td>
+                    </tr>
+                
+                    <tr>
+                        <td>Star Guitar</td>
+                        <td>Chemical Brothers</td>
+                        <td>Chemical Four</td>
+                        <td>Musik/Teschno/Chemical Brothers - Star Guitar.mp3</td>
+                        <td title="Add item to playlist">                         
+                        	<a href="#" data-ref="Musik/Teschno/Chemical Brothers - Star Guitar.mp3" class="dbentry glyphicon glyphicon-plus 
+                        			notinplaylist">
+                        	</a>
+                        </td>
+                    </tr>
+                
+                    <tr>
+                        <td>Galactic Funk</td>
+                        <td>Terranova / DJ Spooky</td>
+                        <td>Close The Door</td>
+                        <td>Musik/Teschno/Terranova - Galactic Funk.mp3</td>
+                        <td title="Add item to playlist">                         
+                        	<a href="#" data-ref="Musik/Teschno/Terranova - Galactic Funk.mp3" class="dbentry glyphicon glyphicon-plus 
+                        			notinplaylist">
+                        	</a>
+                        </td>
+                    </tr>
+                
+                    <tr>
+                        <td>Midnight Melodic</td>
+                        <td>Terranova</td>
+                        <td>Close The Door</td>
+                        <td>Musik/Teschno/Terranova - Midnight Melodic (Chase The Blues).mp3</td>
+                        <td title="Add item to playlist">                         
+                        	<a href="#" data-ref="Musik/Teschno/Terranova - Midnight Melodic (Chase The Blues).mp3" class="dbentry glyphicon glyphicon-plus 
+                        			notinplaylist">
+                        	</a>
+                        </td>
+                    </tr>
+                
+                    <tr>
+                        <td>Plastic Stress</td>
+                        <td>Terranova</td>
+                        <td>Close The Door</td>
+                        <td>Musik/Teschno/Terranova - Plastic Stress.mp3</td>
+                        <td title="Add item to playlist">                         
+                        	<a href="#" data-ref="Musik/Teschno/Terranova - Plastic Stress.mp3" class="dbentry glyphicon glyphicon-plus 
+                        			notinplaylist">
+                        	</a>
+                        </td>
+                    </tr>
+                
+                    <tr>
+                        <td>Liquid Sun</td>
+                        <td>Astral Projection</td>
+                        <td>Dancing Galaxy (7)</td>
+                        <td>Musik/Teschno/Astral Projection - Liquid Sun.mp3</td>
+                        <td title="Add item to playlist">                         
+                        	<a href="#" data-ref="Musik/Teschno/Astral Projection - Liquid Sun.mp3" class="dbentry glyphicon glyphicon-plus 
+                        			notinplaylist">
+                        	</a>
+                        </td>
+                    </tr>
+                
+
+            </tbody>
+        </table>
+        
+        <ul class="pagination pull-right">
+            
+                <li>
+                    <a href="#">«</a>
+                </li>
+            
+
+            
+
+                <li>
+                    <a href="#">44</a>
+                </li>
+            
+
+                <li>
+                    <a href="#">45</a>
+                </li>
+            
+
+                <li class="active">
+                    <a href="#">46</a>
+                </li>
+            
+
+                <li>
+                    <a href="#">47</a>
+                </li>
+            
+
+                <li>
+                    <a href="#">48</a>
+                </li>
+            
+
+            
+                <li>
+                    <a href="#">»</a>
+                </li>
+            
+        </ul>
+        
+        <a class="btn btn-warning" id="updateDb" href="#">
+        	<span class="glyphicon glyphicon-refresh"></span> Update Database
+        </a>
+        
+    
+	
+
+        </div><!-- /.container -->
+      </section>
+
+	<footer>
+               
+    
+
+
+
+            
+</footer></body></html>

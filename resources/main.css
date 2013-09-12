@@ -1,0 +1,105 @@
+html {
+    background: #eee;
+}
+
+section#main {
+    position: relative;
+}
+
+footer {
+    border-bottom: 1px solid #ccc;
+	min-height: 25px;
+} 
+
+#playlist th.pos {
+	width: 30px;
+}
+
+#playlist .pos {
+	text-align:center;
+}
+
+#playlist th.title {
+    width: 25%;
+    min-width: 80px;
+}
+
+#playlist th.remove {
+	width: 40px;
+}
+
+table.playlist .header a {
+}
+
+#actions {
+    position: relative;
+    height:50px;
+}
+
+#actions #browseDb {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+#actions #toPlaylist {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.button-down {
+	background-color:#beb;
+}
+
+#playsong {
+	text-align: center;
+	width: 60px;
+}
+
+table#controls {
+	width: 100%;
+}
+
+#control-buttons {
+	width:350px;
+}
+
+#volume-icon {
+	font-size:1.5em;
+}
+
+#volume {
+	width:25px;
+}
+
+.unselectable {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: -moz-none;
+	-ms-user-select: none;
+
+	cursor:default; 
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover {
+  background-color: #e8e8ff;
+}
+
+#playlist tbody tr.highlight td {background-color:#c8c8ff;}
+
+#database .inplaylist
+{
+	color:lightgray;
+}
+
+#database .notinplaylist
+{
+	color:green;
+}
+
+#database th
+{
+	white-space:nowrap;
+}

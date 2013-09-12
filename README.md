@@ -3,6 +3,9 @@ Play! MPC
 
 This is a simple and fast web frontend for [Music Player Daemon](http://www.musicpd.org/). 
 
+# Live Demo
+A non-functional demo can be accessed here: [http://msteiger.github.io/play-mpc]
+
 #Features
 
 - MPD Player controls

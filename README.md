@@ -3,10 +3,10 @@ Play! MPC
 
 This is a simple and fast web frontend for [Music Player Daemon](http://www.musicpd.org/). 
 
-# Live Demo
-A non-functional demo can be accessed here: [http://msteiger.github.io/play-mpc]
+## Live Demo
+A non-functional demo can be accessed here: [http://msteiger.github.io/play-mpc](http://msteiger.github.io/play-mpc)
 
-#Features
+## Features
 
 - MPD Player controls
 - Playlist view and modification
@@ -21,7 +21,7 @@ It uses the following technologies:
 - [Bootstrap 3](http://getbootstrap.com)
 - [JavaMPD 4](http://www.thejavashop.net/javampd)
 
-#Installation
+## Installation
 
 1) Download and install Play! 2.1 or later
 

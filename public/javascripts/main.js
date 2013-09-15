@@ -8,7 +8,13 @@ $(function()
 		max : $("#songpos-length").data("length"),
 		value : $("#songpos-elapsed").data("elapsed"),
 		step : 1,
+		
 		slide : function(event, ui) 
+		{
+			$("#songpos-elapsed").html(format_time(ui.value));
+		},
+		
+		stop : function(event, ui) 
 		{
 			$("#songpos-elapsed").html(format_time(ui.value));
 			

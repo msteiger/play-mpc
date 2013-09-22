@@ -90,12 +90,25 @@ public class Application extends Controller
 					
 						switch (id)
 						{
-							case PlayerBasicChangeEvent.PLAYER_RANDOM_CHANGE:
-								sendWebsocketMessage("shuffle", player.isRandom() ? 1 : 0);
-								break;
-							default:
-								sendWebsocketMessage("status", id);
-								break;
+						case PlayerBasicChangeEvent.PLAYER_CONSUME_CHANGE:
+							sendWebsocketMessage("consume", player.isConsuming() ? 1 : 0);
+							break;
+
+						case PlayerBasicChangeEvent.PLAYER_SINGLE_CHANGE:
+							sendWebsocketMessage("single", player.isSingleMode() ? 1 : 0);
+							break;
+
+						case PlayerBasicChangeEvent.PLAYER_REPEAT_CHANGE:
+							sendWebsocketMessage("repeat", player.isRepeat() ? 1 : 0);
+							break;
+							
+						case PlayerBasicChangeEvent.PLAYER_RANDOM_CHANGE:
+							sendWebsocketMessage("shuffle", player.isRandom() ? 1 : 0);
+							break;
+
+						default:
+							sendWebsocketMessage("status", id);
+							break;
 						}
 					}
 					catch (MPDException e)

@@ -106,8 +106,21 @@ public class Application extends Controller
 							sendWebsocketMessage("shuffle", player.isRandom() ? 1 : 0);
 							break;
 
+						case PlayerBasicChangeEvent.PLAYER_PAUSED:
+							sendWebsocketMessage("status", "pause");
+							break;
+
+						case PlayerBasicChangeEvent.PLAYER_STOPPED:
+							sendWebsocketMessage("status", "stop");
+							break;
+
+						case PlayerBasicChangeEvent.PLAYER_UNPAUSED:
+						case PlayerBasicChangeEvent.PLAYER_STARTED:
+							sendWebsocketMessage("status", "play");
+							break;
+							
 						default:
-							sendWebsocketMessage("status", id);
+							Logger.info("Ignored message " + id);
 							break;
 						}
 					}
@@ -159,7 +172,7 @@ public class Application extends Controller
 	
 	private static void sendWebsocketMessage(String type, String value)
 	{
-		String json = "{ \"type\": \"" + type + "\", \"value\": " + value + " }";
+		String json = "{ \"type\": \"" + type + "\", \"value\": \"" + value + "\" }";
 
 		if (Logger.isDebugEnabled())
 			Logger.debug("Update " + json);

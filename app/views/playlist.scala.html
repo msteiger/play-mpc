@@ -133,7 +133,7 @@
 				</a>
 				
 				<a title="@Messages("playlist.play")" class="btn btn-default @{if(player.getStatus() != STATUS_STOPPED) "button-down"}" id="playsong" href="@routes.Application.playSong()">
-					<span class="glyphicon @{if(player.getStatus() == STATUS_PLAYING) "glyphicon-pause" else "glyphicon-play"}"
+					<span id="playsong-glyph" class="glyphicon @{if(player.getStatus() == STATUS_PLAYING) "glyphicon-pause" else "glyphicon-play"}"
 					</span>
 				</a>
 					
@@ -216,7 +216,20 @@
 				    	break;
 				    	
 					case "status":
-						window.location.reload();
+						if (msg.value == "stop")
+						{
+							$('#playsong').removeClass("button-down");
+							$('#stopsong').addClass("button-down");
+						}
+						else
+						{
+							$('#playsong').addClass("button-down");
+							$('#stopsong').removeClass("button-down");
+						}
+						
+						$('#playsong-glyph').addClass   ((msg.value == "play") ? "glyphicon-pause" : "glyphicon-play");
+						$('#playsong-glyph').removeClass((msg.value != "play") ? "glyphicon-pause" : "glyphicon-play");
+						
 						break;
 						
 					case "playlist":

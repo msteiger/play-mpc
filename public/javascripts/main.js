@@ -98,6 +98,20 @@ function format_time(secs)
 }
 
 
+var setBtnActive = function(btn, value)
+{
+	if (value == 1)
+	{
+		btn.addClass("btn-primary");
+		btn.removeClass("btn-default");
+	}
+	else
+	{
+		btn.addClass("btn-default");
+		btn.removeClass("btn-primary");			    	
+	}
+}
+
 var updateVolumeIcon = function(volume)
 {
 	$("#volume-icon").removeClass("glyphicon-volume-off");

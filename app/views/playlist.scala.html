@@ -199,6 +199,10 @@
 	        			$('#volume').html(msg.value)
 				        break;
 				        
+				    case "shuffle":
+				    	setBtnActive($('#shuffle'), msg.value);
+				    	break;
+				    	
 					case "status":
 						window.location.reload();
 						break;

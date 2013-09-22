@@ -82,7 +82,26 @@ public class Application extends Controller
 				@Override
 				public void playerBasicChange(PlayerBasicChangeEvent event)
 				{
-					sendWebsocketMessage("status", event.getId());
+					int id = event.getId();
+
+					try
+					{
+						MPDPlayer player = MpdMonitor.getInstance().getMPD().getMPDPlayer();
+					
+						switch (id)
+						{
+							case PlayerBasicChangeEvent.PLAYER_RANDOM_CHANGE:
+								sendWebsocketMessage("shuffle", player.isRandom() ? 1 : 0);
+								break;
+							default:
+								sendWebsocketMessage("status", id);
+								break;
+						}
+					}
+					catch (MPDException e)
+					{
+						Logger.warn("Error on event " + id, e);
+					}
 				}
 			});
 			

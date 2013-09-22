@@ -211,7 +211,7 @@
             
 			sock.onerror = function(event)
     		{
-    			alert(event);
+    			alert("Websocket exception : " + JSON.stringify(event));
     		} 
         });
 	    

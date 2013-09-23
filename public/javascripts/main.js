@@ -75,6 +75,54 @@ $(function()
 			complete: function(html) { window.location.reload(); }
 		});
 	});
+	
+	$('#prevsong').on('click', function(event)
+	{
+		event.preventDefault();
+		jsRoutes.controllers.Application.prevSong().ajax({});
+	});
+	
+	$('#playsong').on('click', function(event)
+	{
+		event.preventDefault();
+		jsRoutes.controllers.Application.playSong().ajax({});
+	});
+	
+	$('#nextsong').on('click', function(event)
+	{
+		event.preventDefault();
+		jsRoutes.controllers.Application.nextSong().ajax({});
+	});
+	
+	$('#stopsong').on('click', function(event)
+	{
+		event.preventDefault();
+		jsRoutes.controllers.Application.stopSong().ajax({});
+	});
+	
+	$('#shuffle').on('click', function(event)
+	{
+		event.preventDefault();
+		jsRoutes.controllers.Application.toggleShuffle().ajax({});
+	});
+	
+	$('#repeat').on('click', function(event)
+	{
+		event.preventDefault();
+		jsRoutes.controllers.Application.toggleRepeat().ajax({});
+	});
+	
+	$('#single').on('click', function(event)
+	{
+		event.preventDefault();
+		jsRoutes.controllers.Application.toggleSingleMode().ajax({});
+	});
+	
+	$('#consume').on('click', function(event)
+	{
+		event.preventDefault();
+		jsRoutes.controllers.Application.toggleConsuming().ajax({});
+	});
 
 	updateVolumeIcon($("#volume").text());
 });

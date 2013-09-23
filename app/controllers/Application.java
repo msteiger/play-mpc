@@ -238,6 +238,16 @@ public class Application extends Controller
 	{
 	    response().setContentType("text/javascript");
 	    return ok(Routes.javascriptRouter("jsRoutes",
+	            controllers.routes.javascript.Application.prevSong(),
+	            controllers.routes.javascript.Application.playSong(),
+	            controllers.routes.javascript.Application.nextSong(),
+	            controllers.routes.javascript.Application.stopSong(),
+
+	            controllers.routes.javascript.Application.toggleShuffle(),
+	            controllers.routes.javascript.Application.toggleRepeat(),
+	            controllers.routes.javascript.Application.toggleSingleMode(),
+	            controllers.routes.javascript.Application.toggleConsuming(),
+	            
 	            controllers.routes.javascript.Application.setVolume(),
 	            controllers.routes.javascript.Application.selectSong(),
 	            controllers.routes.javascript.Application.setSongPos(),

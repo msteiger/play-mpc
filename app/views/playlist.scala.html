@@ -59,7 +59,7 @@
             <tbody>
 
                 @for(song <- currentPage.getList) {
-                    <tr class="@{if(song.getPosition == playlist_index) "highlight"}" data-pos="@song.getPosition()" >
+                    <tr id="playlist-entry@song.getPosition()" class="@{if(song.getPosition == playlist_index) "highlight"}" data-pos="@song.getPosition()" >
                         <td class="pos">@song.getPosition()</td>
                         <td>@song.getTitle()</td>
                         <td>@song.getArtist()</td>
@@ -106,8 +106,6 @@
         <table style="margin-bottom:5px">         
           <tr>
             <td style="white-space:nowrap;padding-right:10px">Playing: 
-            	@if(cs.getArtist != null) { @cs.getArtist - } 
-            	@if(cs.getTitle != null) { @cs.getTitle }
             </td>
            	@if(cs.getLength != 0) { 
 				<td style="white-space:nowrap;padding-right:10px">
@@ -196,7 +194,8 @@
                 		
                 	case "volume":
 				        $('#volume-slider').slider("value", msg.value);
-	        			$('#volume').html(msg.value)
+	        			$('#volume').html(msg.value);
+	        			updateVolumeIcon(msg.value);
 				        break;
 				        
 				    case "consume":
@@ -232,7 +231,13 @@
 						
 						break;
 						
-					case "playlist":
+					case "select":
+						var name = '#playlist-entry' + msg.value;
+						var row = $(name);
+						row.addClass('highlight').siblings().removeClass('highlight');
+						break;
+	
+					case "reload":				
 						window.location.reload();
 						break;
                 }

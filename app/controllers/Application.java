@@ -22,8 +22,6 @@ import org.bff.javampd.MPDFile;
 import org.bff.javampd.MPDPlayer;
 import org.bff.javampd.MPDPlayer.PlayerStatus;
 import org.bff.javampd.MPDPlaylist;
-import org.bff.javampd.events.OutputChangeEvent;
-import org.bff.javampd.events.OutputChangeListener;
 import org.bff.javampd.events.PlayerBasicChangeEvent;
 import org.bff.javampd.events.PlayerBasicChangeListener;
 import org.bff.javampd.events.PlaylistBasicChangeEvent;
@@ -37,13 +35,9 @@ import org.bff.javampd.exception.MPDException;
 import org.bff.javampd.exception.MPDPlayerException;
 import org.bff.javampd.monitor.MPDStandAloneMonitor;
 import org.bff.javampd.objects.MPDSong;
-import org.codehaus.jackson.JsonNode;
 
 import play.Logger;
 import play.Routes;
-import play.api.libs.json.JsValue;
-import play.api.libs.json.Json;
-import play.libs.Comet;
 import play.libs.F.Callback0;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -120,7 +114,7 @@ public class Application extends Controller
 							break;
 							
 						default:
-							Logger.info("Ignored message " + id);
+							Logger.info("Ignored player change message " + id);
 							break;
 						}
 					}
@@ -154,7 +148,27 @@ public class Application extends Controller
 				@Override
 				public void playlistBasicChange(PlaylistBasicChangeEvent event)
 				{
-					sendWebsocketMessage("playlist", event.getId());
+					try
+					{
+						MPDPlayer player = MpdMonitor.getInstance().getMPD().getMPDPlayer();
+						switch (event.getId())
+						{
+						case PlaylistBasicChangeEvent.PLAYLIST_CHANGED:
+						case PlaylistBasicChangeEvent.PLAYLIST_ENDED:
+						case PlaylistBasicChangeEvent.SONG_ADDED:
+						case PlaylistBasicChangeEvent.SONG_DELETED:
+							sendWebsocketMessage("reload", "");
+							break;
+							
+						case PlaylistBasicChangeEvent.SONG_CHANGED:
+							sendWebsocketMessage("select", player.getCurrentSong().getPosition());
+							break;
+						}
+					}
+					catch (MPDException e)
+					{
+						Logger.warn("Error on event " + event.getId(), e);
+					}
 				}
 			});
 		}

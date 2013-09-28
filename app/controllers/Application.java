@@ -196,7 +196,7 @@ public class Application extends Controller
 	{
 		String json = "{ \"type\": \"" + type + "\", \"value\": \"" + value + "\" }";
 
-		if (Logger.isDebugEnabled())
+		if (Logger.isDebugEnabled() && !sockets.isEmpty())
 			Logger.debug("Update " + json);
 		
 		for (Out<String> socket : sockets)
@@ -282,6 +282,8 @@ public class Application extends Controller
 		}
 		catch (MPDException e)
 		{
+			Logger.error("MPD error", e);
+
 			flash("error", "Command failed! " + e.getMessage());
 			return ok(playlist.render(null, new EmptyPage<MPDSong>()));
 		}
@@ -315,6 +317,8 @@ public class Application extends Controller
 		}
 		catch (MPDException e)
 		{
+			Logger.error("MPD error", e);
+
 			flash("error", "Command failed! " + e.getMessage());
 			songs = new EmptyPage<>();
 		}
@@ -388,6 +392,7 @@ public class Application extends Controller
 		}
 		catch (Exception e)
 		{
+			Logger.error("MPD error", e);
 			flash("error", "Command failed! " + e.getMessage());
 		}
 			
@@ -418,6 +423,7 @@ public class Application extends Controller
 		}
 		catch (MPDException e)
 		{
+			Logger.error("MPD error", e);
 			flash("error", "Command failed! " + e.getMessage());
 			
 			return notFound(path);
@@ -442,6 +448,7 @@ public class Application extends Controller
 		}
 		catch (MPDException e)
 		{
+			Logger.error("MPD error", e);
 			flash("error", "Command failed! " + e.getMessage());
 		}
 		
@@ -464,6 +471,7 @@ public class Application extends Controller
 		}
 		catch (MPDException e)
 		{
+			Logger.error("MPD error", e);
 			flash("error", "Command failed! " + e.getMessage());
 		}
 		
@@ -486,6 +494,7 @@ public class Application extends Controller
 		}
 		catch (MPDException e)
 		{
+			Logger.error("MPD error", e);
 			flash("error", "Command failed! " + e.getMessage());
 		}
 		
@@ -508,6 +517,7 @@ public class Application extends Controller
 		}
 		catch (MPDException e)
 		{
+			Logger.error("MPD error", e);
 			flash("error", "Command failed! " + e.getMessage());
 		}
 		
@@ -530,6 +540,7 @@ public class Application extends Controller
 		}
 		catch (MPDException e)
 		{
+			Logger.error("MPD error", e);
 			flash("error", "Command failed! " + e.getMessage());
 		}
 		
@@ -551,6 +562,7 @@ public class Application extends Controller
 		}
 		catch (MPDException e)
 		{
+			Logger.error("MPD error", e);
 			flash("error", "Command failed! " + e.getMessage());
 		}
 		
@@ -572,6 +584,7 @@ public class Application extends Controller
 		}
 		catch (MPDException e)
 		{
+			Logger.error("MPD error", e);
 			flash("error", "Command failed! " + e.getMessage());
 		}
 		
@@ -594,6 +607,7 @@ public class Application extends Controller
 		}
 		catch (MPDException e)
 		{
+			Logger.error("MPD error", e);
 			flash("error", "Command failed! " + e.getMessage());
 		}
 
@@ -616,6 +630,7 @@ public class Application extends Controller
 		}
 		catch (MPDPlayerException | MPDConnectionException e)
 		{
+			Logger.error("MPD error", e);
 			flash("error", "Changing song position failed! " + e.getMessage());
 		}
 		
@@ -636,8 +651,9 @@ public class Application extends Controller
 			MPD mpd = MpdMonitor.getInstance().getMPD();
 			mpd.getMPDPlayer().setVolume(volume);
 		}
-		catch (MPDPlayerException | MPDConnectionException e)
+		catch (MPDException e)
 		{
+			Logger.error("MPD error", e);
 			flash("error", "Changing volume failed! " + e.getMessage());
 		}
 		
@@ -660,6 +676,7 @@ public class Application extends Controller
 		}
 		catch (MPDException e)
 		{
+			Logger.error("MPD error", e);
 			flash("error", "Changing song failed! " + e.getMessage());
 		}
 		
@@ -682,6 +699,7 @@ public class Application extends Controller
 		}
 		catch (MPDException e)
 		{
+			Logger.error("MPD error", e);
 			flash("error", "Updating database failed!" + e.getMessage());
 		}
 
@@ -707,6 +725,7 @@ public class Application extends Controller
 		}
 		catch (MPDException e)
 		{
+			Logger.error("MPD error", e);
 			flash("error", "Removing entry from playlist failed! " + e.getMessage());
 		}
 		
@@ -726,6 +745,7 @@ public class Application extends Controller
 		}
 		catch (MPDException e)
 		{
+			Logger.error("MPD error", e);
 			flash("error", e.getMessage());
 			return ok(main.render(null, null)); 
 		}

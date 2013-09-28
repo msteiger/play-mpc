@@ -1,20 +1,14 @@
 @(player: org.bff.javampd.MPDPlayer, currentPage: com.avaje.ebean.Page[org.bff.javampd.objects.MPDSong])
 @import org.bff.javampd.MPDPlayer.PlayerStatus._;
 
-@cs = @{ player.getCurrentSong(); }
+@songLength = @{ if(player.getCurrentSong() == null) 0; else player.getCurrentSong().getLength(); }
+@songIndex = @{ if(player.getCurrentSong() == null) -1; else player.getCurrentSong().getPosition(); }
 
 @**********************************
 * Helper generating table headers *
 ***********************************@
 @header(key:String, title:String) = {
     <th class="@key.replace(".","_") header">@title</th>
-}
-
-@*********************************@
-
-@playlist_index = @{
-	if(player.getCurrentSong() == null) -1; else
-	player.getCurrentSong().getPosition()
 }
 
 @*********************************@
@@ -59,7 +53,7 @@
             <tbody>
 
                 @for(song <- currentPage.getList) {
-                    <tr id="playlist-entry@song.getPosition()" class="@{if(song.getPosition == playlist_index) "highlight"}" data-pos="@song.getPosition()" >
+                    <tr id="playlist-entry@song.getPosition()" class="@{if(song.getPosition == songIndex) "highlight"}" data-pos="@song.getPosition()" >
                         <td class="pos">@song.getPosition()</td>
                         <td>@song.getTitle()</td>
                         <td>@song.getArtist()</td>
@@ -102,7 +96,6 @@
             </ul>
         </div>
         
-        @if(cs != null) {
         <table style="white-space:nowrap; margin-bottom:5px">         
           <tr>
             <td style="padding-right:5px">Playing: 
@@ -111,17 +104,16 @@
 				<span id="songpos-elapsed" data-elapsed="@player.getElapsedTime">@format_time(player.getElapsedTime)</span>
 			</td>
 			<td>
-				<span id="songpos-sep" @if(cs.getLength == 0) { class="hidden" }> / </span>
+				<span id="songpos-sep" @if(songLength == 0) { class="hidden" }> / </span>
 			</td>
 			<td>
-				<span id="songpos-length" @if(cs.getLength == 0) { class="hidden" } data-length="@cs.getLength">@format_time(cs.getLength)</span>
+				<span id="songpos-length" @if(songLength == 0) { class="hidden" } data-length="@songLength">@format_time(songLength)</span>
 			</td>
 			<td style="padding-left: 15px; width:100%">		
-				<div id="songpos-slider" @if(cs.getLength == 0) { class="hidden" }></div>
+				<div id="songpos-slider" @if(songLength == 0) { class="hidden" }></div>
 			</td>
           </tr>
         </table>
-        }
         
         <table id="controls">
         <tr>

@@ -445,7 +445,7 @@ public class Application extends Controller
 			flash("error", "Command failed! " + e.getMessage());
 		}
 		
-		return GO_HOME;
+		return ok("");
 	}
 
 	/**
@@ -467,7 +467,7 @@ public class Application extends Controller
 			flash("error", "Command failed! " + e.getMessage());
 		}
 		
-		return GO_HOME;
+		return ok("");
 	}
 
 	/**
@@ -489,7 +489,7 @@ public class Application extends Controller
 			flash("error", "Command failed! " + e.getMessage());
 		}
 		
-		return GO_HOME;
+		return ok("");
 	}
 
 	/**
@@ -511,7 +511,7 @@ public class Application extends Controller
 			flash("error", "Command failed! " + e.getMessage());
 		}
 		
-		return GO_HOME;
+		return ok("");
 	}
 	
 	/**
@@ -533,7 +533,7 @@ public class Application extends Controller
 			flash("error", "Command failed! " + e.getMessage());
 		}
 		
-		return GO_HOME;
+		return ok("");
 	}
 	
 	/**
@@ -554,7 +554,7 @@ public class Application extends Controller
 			flash("error", "Command failed! " + e.getMessage());
 		}
 		
-		return GO_HOME;
+		return ok("");
 	}
 
 	/**
@@ -575,7 +575,7 @@ public class Application extends Controller
 			flash("error", "Command failed! " + e.getMessage());
 		}
 		
-		return GO_HOME;
+		return ok("");
 	}
 	
 
@@ -597,7 +597,7 @@ public class Application extends Controller
 			flash("error", "Command failed! " + e.getMessage());
 		}
 
-		return GO_HOME;
+		return ok("");
 	}
 
 	/**
@@ -619,7 +619,7 @@ public class Application extends Controller
 			flash("error", "Changing song position failed! " + e.getMessage());
 		}
 		
-		return GO_HOME;
+		return ok("");
 	}
 
 	/**
@@ -641,7 +641,7 @@ public class Application extends Controller
 			flash("error", "Changing volume failed! " + e.getMessage());
 		}
 		
-		return GO_HOME;
+		return ok("");
 	}
 
 	/**
@@ -663,7 +663,7 @@ public class Application extends Controller
 			flash("error", "Changing song failed! " + e.getMessage());
 		}
 		
-		return GO_HOME;
+		return ok("");
 	}
 	
 	/**

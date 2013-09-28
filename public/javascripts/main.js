@@ -1,4 +1,6 @@
 
+var block_songpos_update = false;
+
 $(function() 
 {	
 	$("#songpos-slider").slider(
@@ -14,8 +16,15 @@ $(function()
 			$("#songpos-elapsed").html(format_time(ui.value));
 		},
 		
+		start : function(event, ui)
+		{
+			block_songpos_update = true;
+		},
+
 		stop : function(event, ui) 
 		{
+			block_songpos_update = false;
+			
 			$("#songpos-elapsed").html(format_time(ui.value));
 			
 			jsRoutes.controllers.Application.setSongPos(ui.value).ajax({});

@@ -190,8 +190,11 @@
             	switch(msg.type) 
             	{
     				case "songpos":
-            			$("#songpos-slider" ).slider("value", msg.value);
-                		$("#songpos-elapsed").html(format_time(msg.value));
+    					if (!block_songpos_update)
+    					{
+            				$("#songpos-slider" ).slider("value", msg.value);
+                			$("#songpos-elapsed").html(format_time(msg.value));
+                		}
                 		break;
                 		
                 	case "volume":
@@ -234,7 +237,7 @@
 						
 					case "songlength":
 						$("#songpos-length").html(format_time(msg.value));
-						$("#songpos-slider" ).slider("option", "max", msg.value);
+						$("#songpos-slider").slider("option", "max", msg.value);
 						
 						if (msg.value > 0)
 						{

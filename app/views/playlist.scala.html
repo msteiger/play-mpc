@@ -103,20 +103,22 @@
         </div>
         
         @if(cs != null) {
-        <table style="margin-bottom:5px">         
+        <table style="white-space:nowrap; margin-bottom:5px">         
           <tr>
-            <td style="white-space:nowrap;padding-right:10px">Playing: 
-            </td>
-           	@if(cs.getLength != 0) { 
-				<td style="white-space:nowrap;padding-right:10px">
-					<span id="songpos-elapsed" data-elapsed="@player.getElapsedTime">@format_time(player.getElapsedTime)</span>
-					/ 
-					<span id="songpos-length" data-length="@cs.getLength">@format_time(cs.getLength)</span>
-				</td>
-				<td style="width:100%">		
-						<div id="songpos-slider"></div>
-	            </td>
-			}
+            <td style="padding-right:5px">Playing: 
+            </td> 
+			<td>
+				<span id="songpos-elapsed" data-elapsed="@player.getElapsedTime">@format_time(player.getElapsedTime)</span>
+			</td>
+			<td>
+				<span id="songpos-sep" @if(cs.getLength == 0) { class="hidden" }> / </span>
+			</td>
+			<td>
+				<span id="songpos-length" @if(cs.getLength == 0) { class="hidden" } data-length="@cs.getLength">@format_time(cs.getLength)</span>
+			</td>
+			<td style="padding-left: 15px; width:100%">		
+				<div id="songpos-slider" @if(cs.getLength == 0) { class="hidden" }></div>
+			</td>
           </tr>
         </table>
         }
@@ -227,8 +229,25 @@
 						}
 						
 						$('#playsong-glyph').addClass   ((msg.value == "play") ? "glyphicon-pause" : "glyphicon-play");
-						$('#playsong-glyph').removeClass((msg.value != "play") ? "glyphicon-pause" : "glyphicon-play");
+						$('#playsong-glyph').removeClass((msg.value != "play") ? "glyphicon-pause" : "glyphicon-play");						
+						break;
 						
+					case "songlength":
+						$("#songpos-length").html(format_time(msg.value));
+						$("#songpos-slider" ).slider("option", "max", msg.value);
+						
+						if (msg.value > 0)
+						{
+							$("#songpos-sep" ).removeClass("hidden");
+							$("#songpos-length").removeClass("hidden");
+							$("#songpos-slider" ).removeClass("hidden");
+						}
+						else
+						{
+							$("#songpos-sep" ).addClass("hidden");
+							$("#songpos-length").addClass("hidden");
+							$("#songpos-slider" ).addClass("hidden");
+						}
 						break;
 						
 					case "select":

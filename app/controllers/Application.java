@@ -169,6 +169,7 @@ public class Application extends Controller
 
 						case PlaylistBasicChangeEvent.SONG_CHANGED:
 							sendWebsocketMessage("select", player.getCurrentSong().getPosition());
+							sendWebsocketMessage("songlength", player.getCurrentSong().getLength());
 							break;
 						}
 					}

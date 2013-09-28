@@ -113,6 +113,10 @@ public class Application extends Controller
 							sendWebsocketMessage("status", "play");
 							break;
 							
+						case PlayerBasicChangeEvent.PLAYER_BITRATE_CHANGE:
+							// ignore silently - changes from 0 to x and back occur frequently 
+							break;
+							
 						default:
 							Logger.info("Ignored player change message " + id);
 							break;
@@ -153,13 +157,16 @@ public class Application extends Controller
 						MPDPlayer player = MpdMonitor.getInstance().getMPD().getMPDPlayer();
 						switch (event.getId())
 						{
-						case PlaylistBasicChangeEvent.PLAYLIST_CHANGED:
-						case PlaylistBasicChangeEvent.PLAYLIST_ENDED:
 						case PlaylistBasicChangeEvent.SONG_ADDED:
 						case PlaylistBasicChangeEvent.SONG_DELETED:
-							sendWebsocketMessage("reload", "");
+							sendWebsocketMessage("reload", event.getId());
 							break;
-							
+
+						case PlaylistBasicChangeEvent.PLAYLIST_ENDED:
+						case PlaylistBasicChangeEvent.PLAYLIST_CHANGED:
+							// just don't care
+							break;
+
 						case PlaylistBasicChangeEvent.SONG_CHANGED:
 							sendWebsocketMessage("select", player.getCurrentSong().getPosition());
 							break;

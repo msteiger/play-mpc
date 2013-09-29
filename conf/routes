@@ -37,6 +37,9 @@ GET     /browseDb         			controllers.Application.browseDb(pageIdx:Int ?= 0, 
 # Info
 GET		/info						controllers.Application.info()
 
+POST    /toggleOutput/:id           controllers.Application.toggleOutput(id:Int, checked:Boolean)
+
+
 # Remove from playlist
 GET     /remove/:id			        controllers.Application.remove(id:Int)
 

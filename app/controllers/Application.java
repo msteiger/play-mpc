@@ -18,7 +18,9 @@ import models.Database;
 import models.Playlist;
 
 import org.bff.javampd.MPD;
+import org.bff.javampd.MPDAdmin;
 import org.bff.javampd.MPDFile;
+import org.bff.javampd.MPDOutput;
 import org.bff.javampd.MPDPlayer;
 import org.bff.javampd.MPDPlayer.PlayerStatus;
 import org.bff.javampd.MPDPlaylist;
@@ -30,6 +32,7 @@ import org.bff.javampd.events.TrackPositionChangeEvent;
 import org.bff.javampd.events.TrackPositionChangeListener;
 import org.bff.javampd.events.VolumeChangeEvent;
 import org.bff.javampd.events.VolumeChangeListener;
+import org.bff.javampd.exception.MPDAdminException;
 import org.bff.javampd.exception.MPDConnectionException;
 import org.bff.javampd.exception.MPDException;
 import org.bff.javampd.exception.MPDPlayerException;
@@ -260,7 +263,9 @@ public class Application extends Controller
 	            controllers.routes.javascript.Application.selectSong(),
 	            controllers.routes.javascript.Application.setSongPos(),
 	            controllers.routes.javascript.Application.addDbEntry(),
-	            controllers.routes.javascript.Application.remove()
+	            controllers.routes.javascript.Application.remove(),
+
+	            controllers.routes.javascript.Application.toggleOutput()
 	        )
 	    );
 	}
@@ -749,5 +754,37 @@ public class Application extends Controller
 			flash("error", e.getMessage());
 			return ok(main.render(null, null)); 
 		}
+	}
+	
+	/**
+	 * Toggle MPD output 
+	 * @param id the output id
+	 * @return ok
+	 */
+	public static Result toggleOutput(int id, boolean check)
+	{
+		try
+		{
+			MPD mpd = MpdMonitor.getInstance().getMPD();
+			MPDAdmin admin = mpd.getMPDAdmin();
+			List<MPDOutput> outputs = (List<MPDOutput>)admin.getOutputs();
+			
+			if (id < 0 || id >= outputs.size())
+				throw new MPDAdminException("Output ID invalid", new IllegalArgumentException());
+			
+			MPDOutput output = outputs.get(id);
+			
+			if (check)
+				admin.enableOutput(output); else
+				admin.disableOutput(output);
+		}
+		catch (MPDException e)
+		{
+			Logger.error("MPD error", e);
+			flash("error", e.getMessage());
+			return notFound(e.getMessage());
+		}
+
+		return ok(""); 
 	}
 }

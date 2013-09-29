@@ -16,6 +16,32 @@
     
 	<h1>@Messages("project.name") <span class="glyphicon glyphicon-info-sign"></span></h1>
 
+	<h3>Outputs</h3>
+	
+	<dl class="dl-horizontal">
+		@for(output <- mpd.getMPDAdmin.getOutputs) {
+			<dt>@output.getName</dt>
+			<dd><input class="output" type="checkbox" id="output@output.getId" data-id="@output.getId" @if(output.isEnabled) { checked }></dd>
+		}
+	<dl/>
+	
+	<script>
+	    $(function() 
+        {
+			$(".output").click(function() {
+				var id = $(this).data("id");
+				var checked = $(this).is(':checked');
+				
+				jsRoutes.controllers.Application.toggleOutput(id, checked).ajax(
+				{
+					// reload, so that the "flash" error message is displayed
+					error: function(html) { },
+					success: function(html) {  }
+				});
+			});        
+		});
+	</script>
+
 	<h3>Public info</h3>
 
 	<dl class="dl-horizontal">
@@ -31,11 +57,6 @@
 		
 		<dt>Channels</dt>
 		<dd>@if(dts != null) {@dts.getChannels} else {-}</dd>
-
-		@for(output <- mpd.getMPDAdmin.getOutputs) {
-			<dt>Output @output.getId</dt>
-			<dd>@output.getName (@{if (output.isEnabled) "enabled" else "disabled"})</dd>
-		}
  
 		<dt>Play!</dt>
 		<dd>@play.core.PlayVersion.current</dd>

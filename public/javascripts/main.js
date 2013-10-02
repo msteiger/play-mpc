@@ -176,3 +176,12 @@ var updateVolumeIcon = function(volume)
 		$("#volume-icon").addClass("glyphicon-volume-down"); else
 		$("#volume-icon").addClass("glyphicon-volume-up");			
 }
+
+function showAlert(type, text)
+{
+	var box = $("#" + type + "-box"); 
+	box.removeClass("hidden");
+	
+	var span = $("#" + type + "-text"); 
+	$(span).html(text);
+}

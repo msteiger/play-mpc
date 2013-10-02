@@ -34,9 +34,8 @@
 				
 				jsRoutes.controllers.Application.toggleOutput(id, checked).ajax(
 				{
-					// reload, so that the "flash" error message is displayed
-					error: function(html) { },
-					success: function(html) {  }
+					error: function(html) { showAlert("error", html.responseText); },
+					success: function(html) { showAlert("success", "Output " + (checked ? "enabled" : "disabled")); }
 				});
 			});        
 		});

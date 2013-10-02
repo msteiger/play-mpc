@@ -76,35 +76,27 @@
 
     <section id="main">
       <div class="container">
-		    @if(flash.containsKey("success")) {
-		        <div class="alert alert-success">
-		        	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-		            <strong>Done!</strong> @flash.get("success")
-		        </div>
-		    } 
-		
-		    @if(flash.containsKey("error")) {
-		        <div class="alert alert-danger">
-		            <strong>Error!</strong> @flash.get("error")
-		        </div>
-		    } 
-		
-		    @if(flash.containsKey("info")) {
-		        <div class="alert alert-info">
-		        	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-		            <strong>Info:</strong> @flash.get("info")
-		        </div>
-		    } 
-		
-		    @if(flash.containsKey("warning")) {
-		        <div class="alert alert-warning">
-		            <strong>Warning:</strong> @flash.get("warning")
-		        </div>
-		    } 
+        <div id="success-box" class="alert alert-success @if(!flash.containsKey("success")) { hidden }" >
+        	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <strong>Done! </strong><span id="success-text">@flash.get("success")</span>
+        </div>
+
+        <div id="info-box" class="alert alert-info @if(!flash.containsKey("info")) { hidden }" >
+        	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <strong>Info: </strong><span id="info-text">@flash.get("info")</span>
+        </div>
+
+        <div id="warning-box" class="alert alert-warning @if(!flash.containsKey("warning")) { hidden }" >
+            <strong>Warning: </strong><span id="warning-text">@flash.get("warning")</span>
+        </div>
+
+        <div id="error-box" class="alert alert-danger @if(!flash.containsKey("error")) { hidden }" >
+            <strong>Error! </strong><span id="error-text">@flash.get("error")</span>
+        </div>
                 
-            @content
-        </div><!-- /.container -->
-      </section>
+        @content
+      </div><!-- /.container -->
+    </section>
 
 	<footer />
                

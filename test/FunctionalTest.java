@@ -1,17 +1,20 @@
-import org.junit.*;
+import static org.fest.assertions.Assertions.assertThat;
+import static play.mvc.Http.Status.OK;
+import static play.mvc.Http.Status.SEE_OTHER;
+import static play.test.Helpers.callAction;
+import static play.test.Helpers.fakeApplication;
+import static play.test.Helpers.redirectLocation;
+import static play.test.Helpers.running;
+import static play.test.Helpers.status;
 
-import java.util.*;
+import org.junit.Test;
 
-import play.mvc.*;
-
-import static play.test.Helpers.*;
-import static org.fest.assertions.Assertions.*;
+import play.mvc.Result;
 
 /**
  * Performs different functional tests
  * @author Martin Steiger
  */
-@SuppressWarnings("javadoc")
 public class FunctionalTest 
 {
     @Test

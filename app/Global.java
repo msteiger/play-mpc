@@ -1,15 +1,10 @@
-import com.avaje.ebean.Ebean;
-import models.User;
+import helper.MpdMonitor;
+
+import org.bff.javampd.exception.MPDConnectionException;
+
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
-import play.libs.Yaml;
-
-import helper.MpdMonitor;
-
-import java.util.List;
-
-import org.bff.javampd.exception.MPDConnectionException;
 
 /**
  * Global is instantiated by the framework when an application starts, to let
@@ -21,6 +16,7 @@ public class Global extends GlobalSettings
 	@Override
 	public void onStart(Application app)
 	{
+		// nothing to do
 	}
 	
 	@Override

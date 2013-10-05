@@ -1,12 +1,13 @@
-import org.junit.*;
+import static play.test.Helpers.HTMLUNIT;
+import static play.test.Helpers.fakeApplication;
+import static play.test.Helpers.inMemoryDatabase;
+import static play.test.Helpers.running;
+import static play.test.Helpers.testServer;
 
-import play.test.*;
-import play.libs.F.*;
+import org.junit.Test;
 
-import static play.test.Helpers.*;
-import static org.fest.assertions.Assertions.*;
-
-import static org.fluentlenium.core.filter.FilterConstructor.*;
+import play.libs.F.Callback;
+import play.test.TestBrowser;
 
 /**
  * Performs integration tests

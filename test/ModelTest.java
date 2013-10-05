@@ -1,26 +1,14 @@
-import org.junit.*;
+import static play.test.Helpers.fakeApplication;
+import static play.test.Helpers.running;
 
-import java.util.*;
-
-import static play.test.Helpers.*;
-import static org.fest.assertions.Assertions.*;
-
-import models.*;
-
-import com.avaje.ebean.*;
+import org.junit.Test;
 
 /**
  * Performs some model tests
  * @author Martin Steiger
  */
-@SuppressWarnings("javadoc")
 public class ModelTest 
 {
-    private String formatted(Date date) 
-    {
-        return new java.text.SimpleDateFormat("yyyy-MM-dd").format(date);
-    }
-
     @Test
     public void findById() 
     {

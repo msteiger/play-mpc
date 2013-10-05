@@ -7,7 +7,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 import play.Configuration;
-import play.Logger;
 import play.Play;
 import play.data.Form;
 import play.mvc.Controller;

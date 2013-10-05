@@ -27,9 +27,11 @@ It uses the following technologies:
 
 2) Either download the latest (tagged) version as zip file or use git to clone the repository.
 
-3) Enter the directory and run `play start`
+3) Edit `conf/application.conf` to suit your needs
 
-4) The website is served at `localhost:9000`
+4) Enter the directory and run `play start`
 
-5) The default login is bob@example.com // secret
+5) The website is served at `localhost:9000`
+
+6) The default login is bob@example.com // secret
 

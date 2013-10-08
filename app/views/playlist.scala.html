@@ -117,53 +117,66 @@
         
         <table id="controls">
         <tr>
-        <td>
-        <div id="control-buttons" class="btn-toolbar">
-        	<div class="btn-group">        			
-				<a title="@Messages("playlist.prev")" class="btn btn-default" id="prevsong" href="@routes.Application.prevSong()">
-					<span class="glyphicon glyphicon-step-backward"></span>
-				</a>
-				
-				<a title="@Messages("playlist.play")" class="btn btn-default @{if(player.getStatus() != STATUS_STOPPED) "button-down"}" id="playsong" href="@routes.Application.playSong()">
-					<span id="playsong-glyph" class="glyphicon @{if(player.getStatus() == STATUS_PLAYING) "glyphicon-pause" else "glyphicon-play"}"
-					</span>
-				</a>
+        <td style="width: 33%">
+			<div id="control-buttons" class="btn-toolbar">
+				<div class="btn-group">        			
+					<a title="@Messages("playlist.prev")" class="btn btn-default" id="prevsong" href="@routes.Application.prevSong()">
+						<span class="glyphicon glyphicon-step-backward"></span>
+					</a>
 					
-				<a title="@Messages("playlist.next")" class="btn btn-default" id="nextsong" href="@routes.Application.nextSong()">
-					<span class="glyphicon glyphicon-step-forward"></span>
-				</a>
+					<a title="@Messages("playlist.play")" class="btn btn-default @{if(player.getStatus() != STATUS_STOPPED) "button-down"}" id="playsong" href="@routes.Application.playSong()">
+						<span id="playsong-glyph" class="glyphicon @{if(player.getStatus() == STATUS_PLAYING) "glyphicon-pause" else "glyphicon-play"}"
+						</span>
+					</a>
+						
+					<a title="@Messages("playlist.next")" class="btn btn-default" id="nextsong" href="@routes.Application.nextSong()">
+						<span class="glyphicon glyphicon-step-forward"></span>
+					</a>
+				</div>
+				<div class="btn-group">
+					<a title="@Messages("playlist.stop")" class="btn btn-default @{if(player.getStatus() == STATUS_STOPPED) "button-down"}" id="stopsong" href="@routes.Application.stopSong()">
+						<span class="glyphicon glyphicon-stop"></span>
+					</a>
+				</div>
 			</div>
-			<div class="btn-group">
-				<a title="@Messages("playlist.stop")" class="btn btn-default @{if(player.getStatus() == STATUS_STOPPED) "button-down"}" id="stopsong" href="@routes.Application.stopSong()">
-					<span class="glyphicon glyphicon-stop"></span>
-				</a>
+		</td>
+		
+		<td style="width: 33%">
+			<table style="margin: 0 auto;">
+				<tr>
+					<td>
+						<span id="volume-icon" class="glyphicon"></span>
+					</td>
+					<td>
+						<!-- this text value that written by Play! and read by JavaScript code-->
+						<div id="volume">@player.getVolume()</div>
+					</td>
+					<td>
+						<div style="width: 160px" id="volume-slider"></div>
+					</td>
+				</tr>
+			</table>
+		</td>
+		
+		<td style="width: 33%">
+			<div id="playstyle-buttons" class="btn-toolbar pull-right">
+				<div class="btn-group">
+					<a title="@Messages("playlist.shuffle")" class="btn @if(player.isRandom()) {btn-primary} else {btn-default}" id="shuffle" href="@routes.Application.toggleShuffle()">
+						<span class="glyphicon glyphicon-random"></span>
+					</a>
+					<a title="@Messages("playlist.repeat")" class="btn @if(player.isRepeat()) {btn-primary} else {btn-default}" id="repeat" href="@routes.Application.toggleRepeat()">
+						<span class="glyphicon glyphicon-repeat"></span>
+					</a>
+					<a title="@Messages("playlist.single")" class="btn @if(player.isSingleMode) {btn-primary} else {btn-default}" id="single" href="@routes.Application.toggleSingleMode()">
+						<span class="glyphicon glyphicon-record"></span>
+					</a>
+					<a title="@Messages("playlist.consume")" class="btn @if(player.isConsuming) {btn-primary} else {btn-default}" id="consume" href="@routes.Application.toggleConsuming()">
+						<span class="glyphicon glyphicon-cutlery"></span>
+					</a>
+				</div>
 			</div>
-			<div class="btn-group">
-				<a title="@Messages("playlist.shuffle")" class="btn @if(player.isRandom()) {btn-primary} else {btn-default}" id="shuffle" href="@routes.Application.toggleShuffle()">
-					<span class="glyphicon glyphicon-random"></span>
-				</a>
-				<a title="@Messages("playlist.repeat")" class="btn @if(player.isRepeat()) {btn-primary} else {btn-default}" id="repeat" href="@routes.Application.toggleRepeat()">
-					<span class="glyphicon glyphicon-repeat"></span>
-				</a>
-				<a title="@Messages("playlist.single")" class="btn @if(player.isSingleMode) {btn-primary} else {btn-default}" id="single" href="@routes.Application.toggleSingleMode()">
-					<span class="glyphicon glyphicon-record"></span>
-				</a>
-				<a title="@Messages("playlist.consume")" class="btn @if(player.isConsuming) {btn-primary} else {btn-default}" id="consume" href="@routes.Application.toggleConsuming()">
-					<span class="glyphicon glyphicon-cutlery"></span>
-				</a>
-			</div>
-        </div>
 		</td>
-		<td>
-			<span id="volume-icon" class="glyphicon"></span>
-		</td><td>
-			<!-- this text value that written by Play! and read by JavaScript code-->
-			<div id="volume">@player.getVolume()</div>
-		</td><td>		
-			<div style="width:160px" id="volume-slider"></div>
-		</td>
-		<td style="width:100%">
-		</td>
+		
 		</tr>
 		</table>
     }

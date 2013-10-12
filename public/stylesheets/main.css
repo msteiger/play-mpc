@@ -69,6 +69,10 @@ table#controls {
 	font-size:1.5em;
 }
 
+#songpos-slider .ui-slider-range {
+	background: #cc9c5c url(ui-bg_gloss-wave_55_5c9ccc_60x12.png) repeat-x;
+}
+
 #volume-slider .ui-slider-range {
 	background: #cc9c5c url(ui-bg_gloss-wave_55_cc9c5c_60x12.png) repeat-x;
 }

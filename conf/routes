@@ -21,6 +21,7 @@ GET     /nextsong                   controllers.Application.nextSong()
 GET     /stopsong                   controllers.Application.stopSong()
 POST    /selectsong/:pos            controllers.Application.selectSong(pos:Int)
 POST    /setsongpos/:pos            controllers.Application.setSongPos(pos:Int)
+GET     /remove/:id			        controllers.Application.remove(id:Int)
 GET		/toggleShuffle				controllers.Application.toggleShuffle()
 GET		/toggleRepeat				controllers.Application.toggleRepeat()
 GET		/toggleConsuming			controllers.Application.toggleConsuming()
@@ -36,12 +37,10 @@ GET     /browseDb         			controllers.Application.browseDb(pageIdx:Int ?= 0, 
 
 # Info
 GET		/info						controllers.Application.info()
-
 POST    /toggleOutput/:id           controllers.Application.toggleOutput(id:Int, checked:Boolean)
 
-
-# Remove from playlist
-GET     /remove/:id			        controllers.Application.remove(id:Int)
+# Playlists
+GET		/playlists					controllers.Application.playlists()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

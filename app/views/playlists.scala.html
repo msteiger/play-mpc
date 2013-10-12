@@ -1,0 +1,45 @@
+@(savedlists: List[org.bff.javampd.objects.MPDSavedPlaylist])
+@import org.bff.javampd.MPDPlayer.PlayerStatus._;
+
+@current = {"current"}
+
+@**********************************
+* Helper generating table headers *
+***********************************@
+@header(key:String, title:String) = {
+    <th class="@key.replace(".","_") header">@title</th>
+}
+
+@main(routes.Application.playlists()) {
+
+    @if(savedlists.isEmpty) {    
+        <div class="well">
+            <em>Nothing to display</em>
+        </div>   
+    } else {
+		<table class="table table-striped table-hover unselectable" id="playlists">
+        
+            <thead>
+                <tr>
+                    @header("list", "Playlist")
+                    @header("songs", "Songs")
+                </tr>
+            </thead>
+            <tbody>
+
+                @for(list <- savedlists) {
+                    <tr id="list.getName()" class="@{if(list.getName() == current) "highlight"}" >
+                        <td>@list.getName()</td>
+                        <td>@list.getSongs().size()</td>
+                        <td><a class="remove" title="@Messages("playlists.remove")" 
+                        	href="#" data-pos="@list.getName()">
+                        	<span class="glyphicon glyphicon-trash"></span>
+                        </a></td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+	}
+}
+            

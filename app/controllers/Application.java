@@ -12,6 +12,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import models.Database;
@@ -19,6 +20,7 @@ import models.Playlist;
 
 import org.bff.javampd.MPD;
 import org.bff.javampd.MPDAdmin;
+import org.bff.javampd.MPDDatabase;
 import org.bff.javampd.MPDFile;
 import org.bff.javampd.MPDOutput;
 import org.bff.javampd.MPDPlayer;
@@ -37,6 +39,7 @@ import org.bff.javampd.exception.MPDConnectionException;
 import org.bff.javampd.exception.MPDException;
 import org.bff.javampd.exception.MPDPlayerException;
 import org.bff.javampd.monitor.MPDStandAloneMonitor;
+import org.bff.javampd.objects.MPDSavedPlaylist;
 import org.bff.javampd.objects.MPDSong;
 
 import play.Logger;
@@ -51,8 +54,10 @@ import views.html.database;
 import views.html.info;
 import views.html.main;
 import views.html.playlist;
+import views.html.playlists;
 
 import com.avaje.ebean.Page;
+import com.google.common.collect.Lists;
 
 /**
  * Manage a database of computers
@@ -295,6 +300,39 @@ public class Application extends Controller
 		
 	}
 
+	/**
+	 * Display all available playlists
+	 * @return the rendered html content
+	 */
+	public static Result playlists()
+	{
+		try
+		{
+			MPD mpd = MpdMonitor.getInstance().getMPD();
+			MPDDatabase db = mpd.getMPDDatabase();
+			
+		      List<MPDSavedPlaylist> savedlists = new ArrayList<MPDSavedPlaylist>();
+
+		        for (String s : db.listPlaylists()) {
+		            MPDSavedPlaylist playlist = new MPDSavedPlaylist(s);
+//		            playlist.setSongs(listPlaylistSongs(s));
+		            playlist.setSongs(Collections.<MPDSong>emptyList());
+		            savedlists.add(playlist);
+		        }
+		        
+//			List<MPDSavedPlaylist> savedlists = mpd.getMPDDatabase().listSavedPlaylists();
+			
+			return ok(playlists.render(savedlists));
+		}
+		catch (MPDException e)
+		{
+			Logger.error("MPD error", e);
+
+			flash("error", "Command failed! " + e.getMessage());
+			return ok(playlist.render(null, new EmptyPage<MPDSong>()));
+		}
+	}
+	
 	/**
 	 * Display the paginated list of computers.
 	 * @param page Current page number (starts from 0)

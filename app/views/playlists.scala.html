@@ -3,13 +3,6 @@
 
 @current = {"current"}
 
-@**********************************
-* Helper generating table headers *
-***********************************@
-@header(key:String, title:String) = {
-    <th class="@key.replace(".","_") header">@title</th>
-}
-
 @main(routes.Application.playlists()) {
 
     @if(savedlists.isEmpty) {    
@@ -17,29 +10,71 @@
             <em>Nothing to display</em>
         </div>   
     } else {
-		<table class="table table-striped table-hover unselectable" id="playlists">
-        
-            <thead>
-                <tr>
-                    @header("list", "Playlist")
-                    @header("songs", "Songs")
-                </tr>
-            </thead>
-            <tbody>
+     <div class="container col-xs-3 col-sm-3 col-md-3">  
+		<ul id="playlist-list" class="nav nav-pills nav-stacked">
+            @for(list <- savedlists) {
+                <li id="@list.getName()" class="playlist @{if(list.getName() == current) "active"}" >
+                    <a href="#">@list.getName()
+                      <span class="badge pull-right">@list.getSongs().size()</span>
+                    </a>
+                </li>
+            }
 
-                @for(list <- savedlists) {
-                    <tr id="list.getName()" class="@{if(list.getName() == current) "highlight"}" >
-                        <td>@list.getName()</td>
-                        <td>@list.getSongs().size()</td>
-                        <td><a class="remove" title="@Messages("playlists.remove")" 
-                        	href="#" data-pos="@list.getName()">
-                        	<span class="glyphicon glyphicon-trash"></span>
-                        </a></td>
-                    </tr>
-                }
 
-            </tbody>
-        </table>
+		</ul>
+		</div>
+
+        <div class="container col-xs-9 col-sm-9 col-md-9">
+        <div class="panel panel-default">
+		  <div class="panel-heading"><span id="panel-title">Panel heading without title</span>
+		  
+             <button style="margin-left:5px" type="button" class="btn btn-xs btn-default pull-right"><a class="remove" title="@Messages("playlists.remove")" href="#">Remove
+                	<span class="glyphicon glyphicon-trash"></span></a>
+             </button>
+             <button type="button" class="btn btn-xs btn-default pull-right"><a class="activate" title="@Messages("playlists.activate")" href="#">Activate
+                	<span class="glyphicon glyphicon-ok"></span></a>
+             </button>
+		  
+		  </div>
+  		  <ul id="playlist-songs" class="list-group">
+		  </ul>
+		</div>
+		</div>
 	}
+	
+    <script type="text/javascript" charset="utf-8">
+        $(function() 
+        {
+			$('.playlist').click(function()
+			{
+    			var id = $(this).attr('id');
+    			
+    			selectPlaylist(id);
+			});
+			
+			// There is at least one child, otherwise this page wouldn't be shown
+			var firstList = $("#playlist-list").children(0);
+			selectPlaylist(firstList.attr('id'));
+		});
+		
+		function selectPlaylist(id)
+		{
+			$("#" + id).addClass('active').siblings().removeClass('active');
+			
+			$("#panel-title").html(id);
+
+			//var result = jsRoutes.controllers.Application.getPlaylistSongs(id).ajax({});
+			
+			$("#playlist-songs").empty();
+			
+			for ( var i = 0; i < 5; i++ ) 
+			{
+				// I would have preferred to create a "li" element and add it to the parent "ul"
+				// instead of string concatenation, but I don't know how ..
+				$("#playlist-songs").append("<li class='list-group-item'>" + id + " Song " + i + "</li>\n");
+			}
+		
+		}		    
+	</script>
 }
             

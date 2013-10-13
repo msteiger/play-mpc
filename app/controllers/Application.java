@@ -20,6 +20,7 @@ import models.Playlist;
 
 import org.bff.javampd.MPD;
 import org.bff.javampd.MPDAdmin;
+import org.bff.javampd.MPDCommand;
 import org.bff.javampd.MPDDatabase;
 import org.bff.javampd.MPDFile;
 import org.bff.javampd.MPDOutput;
@@ -36,8 +37,10 @@ import org.bff.javampd.events.VolumeChangeEvent;
 import org.bff.javampd.events.VolumeChangeListener;
 import org.bff.javampd.exception.MPDAdminException;
 import org.bff.javampd.exception.MPDConnectionException;
+import org.bff.javampd.exception.MPDDatabaseException;
 import org.bff.javampd.exception.MPDException;
 import org.bff.javampd.exception.MPDPlayerException;
+import org.bff.javampd.exception.MPDResponseException;
 import org.bff.javampd.monitor.MPDStandAloneMonitor;
 import org.bff.javampd.objects.MPDSavedPlaylist;
 import org.bff.javampd.objects.MPDSong;
@@ -309,18 +312,8 @@ public class Application extends Controller
 		try
 		{
 			MPD mpd = MpdMonitor.getInstance().getMPD();
-			MPDDatabase db = mpd.getMPDDatabase();
-			
-		      List<MPDSavedPlaylist> savedlists = new ArrayList<MPDSavedPlaylist>();
-
-		        for (String s : db.listPlaylists()) {
-		            MPDSavedPlaylist playlist = new MPDSavedPlaylist(s);
-//		            playlist.setSongs(listPlaylistSongs(s));
-		            playlist.setSongs(Collections.<MPDSong>emptyList());
-		            savedlists.add(playlist);
-		        }
 		        
-//			List<MPDSavedPlaylist> savedlists = mpd.getMPDDatabase().listSavedPlaylists();
+			List<MPDSavedPlaylist> savedlists = mpd.getMPDDatabase().listSavedPlaylists();
 			
 			return ok(playlists.render(savedlists));
 		}
@@ -329,7 +322,7 @@ public class Application extends Controller
 			Logger.error("MPD error", e);
 
 			flash("error", "Command failed! " + e.getMessage());
-			return ok(playlist.render(null, new EmptyPage<MPDSong>()));
+			return ok(playlists.render(Collections.<MPDSavedPlaylist>emptyList()));
 		}
 	}
 	

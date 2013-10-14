@@ -63,16 +63,20 @@
 			
 			$("#panel-title").html(id);
 
-			//var result = jsRoutes.controllers.Application.getPlaylistSongs(id).ajax({});
-			
-			$("#playlist-songs").empty();
-			
-			for ( var i = 0; i < 5; i++ ) 
-			{
-				// I would have preferred to create a "li" element and add it to the parent "ul"
-				// instead of string concatenation, but I don't know how ..
-				$("#playlist-songs").append("<li class='list-group-item'>" + id + " Song " + i + "</li>\n");
-			}
+ 			jsRoutes.controllers.Application.playlistContent(id).ajax(
+ 			{
+ 				success: function(data) 
+ 				{ 
+					$("#playlist-songs").empty();
+					
+					for ( var i = 0; i < data.length; i++ ) 
+					{
+						// I would have preferred to create a "li" element and add it to the parent "ul"
+						// instead of string concatenation, but I don't know how ..
+						$("#playlist-songs").append("<li class='list-group-item'>" + data[i].file + "</li>\n");
+					}
+ 				}
+ 			});
 		
 		}		    
 	</script>

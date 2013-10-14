@@ -44,10 +44,12 @@ import org.bff.javampd.exception.MPDResponseException;
 import org.bff.javampd.monitor.MPDStandAloneMonitor;
 import org.bff.javampd.objects.MPDSavedPlaylist;
 import org.bff.javampd.objects.MPDSong;
+import org.codehaus.jackson.JsonNode;
 
 import play.Logger;
 import play.Routes;
 import play.libs.F.Callback0;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -273,6 +275,8 @@ public class Application extends Controller
 	            controllers.routes.javascript.Application.addDbEntry(),
 	            controllers.routes.javascript.Application.remove(),
 
+	            controllers.routes.javascript.Application.playlistContent(),
+
 	            controllers.routes.javascript.Application.toggleOutput()
 	        )
 	    );
@@ -312,8 +316,10 @@ public class Application extends Controller
 		try
 		{
 			MPD mpd = MpdMonitor.getInstance().getMPD();
-		        
+		    
 			List<MPDSavedPlaylist> savedlists = mpd.getMPDDatabase().listSavedPlaylists();
+
+//			List<String> savedlists = mpd.getMPDDatabase().listPlaylists();
 			
 			return ok(playlists.render(savedlists));
 		}
@@ -325,7 +331,32 @@ public class Application extends Controller
 			return ok(playlists.render(Collections.<MPDSavedPlaylist>emptyList()));
 		}
 	}
-	
+
+	/**
+	 * Return all songs of a given playlist
+	 * @return the rendered html content
+	 */
+	public static Result playlistContent(String id)
+	{
+		try
+		{
+			MPD mpd = MpdMonitor.getInstance().getMPD();
+		        
+			List<MPDSong> songs = mpd.getMPDDatabase().listPlaylistSongs(id);
+			
+			JsonNode result = Json.toJson(songs);
+			
+			return ok(result);
+		}
+		catch (MPDException e)
+		{
+			Logger.error("MPD error", e);
+
+			flash("error", "Command failed! " + e.getMessage());
+			return ok(playlists.render(Collections.<MPDSavedPlaylist>emptyList()));
+		}
+	}
+
 	/**
 	 * Display the paginated list of computers.
 	 * @param page Current page number (starts from 0)

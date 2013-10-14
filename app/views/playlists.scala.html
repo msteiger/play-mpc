@@ -28,12 +28,12 @@
         <div class="panel panel-default">
 		  <div class="panel-heading"><span id="panel-title">Panel heading without title</span>
 		  
-             <button style="margin-left:5px" type="button" class="btn btn-xs btn-default pull-right"><a class="remove" title="@Messages("playlists.remove")" href="#">Remove
-                	<span class="glyphicon glyphicon-trash"></span></a>
-             </button>
-             <button type="button" class="btn btn-xs btn-default pull-right"><a class="activate" title="@Messages("playlists.activate")" href="#">Activate
-                	<span class="glyphicon glyphicon-ok"></span></a>
-             </button>
+             <a style="margin-left:5px" class="btn btn-xs btn-danger pull-right" id="remove" title="@Messages("playlists.remove")" href="#">
+                Remove <span class="glyphicon glyphicon-trash"></span>
+             </a>
+             <a class="btn btn-xs btn-default pull-right" id="activate" title="@Messages("playlists.activate")" href="#">
+                Activate <span class="glyphicon glyphicon-ok"></span>
+             </a>
 		  
 		  </div>
   		  <ul id="playlist-songs" class="list-group">
@@ -43,8 +43,28 @@
 	}
 	
     <script type="text/javascript" charset="utf-8">
+    	var currentPlaylist;
+    
         $(function() 
         {
+        	$('#activate').click(function()
+        	{
+				jsRoutes.controllers.Application.playlistLoad(currentPlaylist).ajax(
+				{
+					error: function(html) { showAlert("error", html.responseText); },
+					success: function(html) { showAlert("success", "Playlist loaded!"); }
+				});        		
+        	});
+
+        	$('#remove').click(function()
+        	{
+				jsRoutes.controllers.Application.playlistDelete(currentPlaylist).ajax(
+				{
+					error: function(html) { showAlert("error", html.responseText); },
+					success: function(html) { showAlert("success", "Playlist deleted!"); }
+				});      		
+        	});
+        
 			$('.playlist').click(function()
 			{
     			var id = $(this).attr('id');
@@ -59,6 +79,8 @@
 		
 		function selectPlaylist(id)
 		{
+			currentPlaylist = id;
+			
 			$("#" + id).addClass('active').siblings().removeClass('active');
 			
 			$("#panel-title").html(id);

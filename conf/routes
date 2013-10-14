@@ -42,6 +42,8 @@ POST    /toggleOutput/:id           controllers.Application.toggleOutput(id:Int,
 # Playlists
 GET		/playlists					controllers.Application.playlists()
 GET		/playlist-content/:id		controllers.Application.playlistContent(id:String)
+GET		/playlist-load/:id			controllers.Application.playlistLoad(id:String)
+GET		/playlist-delete/:id		controllers.Application.playlistDelete(id:String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

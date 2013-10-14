@@ -20,8 +20,6 @@ import models.Playlist;
 
 import org.bff.javampd.MPD;
 import org.bff.javampd.MPDAdmin;
-import org.bff.javampd.MPDCommand;
-import org.bff.javampd.MPDDatabase;
 import org.bff.javampd.MPDFile;
 import org.bff.javampd.MPDOutput;
 import org.bff.javampd.MPDPlayer;
@@ -37,10 +35,8 @@ import org.bff.javampd.events.VolumeChangeEvent;
 import org.bff.javampd.events.VolumeChangeListener;
 import org.bff.javampd.exception.MPDAdminException;
 import org.bff.javampd.exception.MPDConnectionException;
-import org.bff.javampd.exception.MPDDatabaseException;
 import org.bff.javampd.exception.MPDException;
 import org.bff.javampd.exception.MPDPlayerException;
-import org.bff.javampd.exception.MPDResponseException;
 import org.bff.javampd.monitor.MPDStandAloneMonitor;
 import org.bff.javampd.objects.MPDSavedPlaylist;
 import org.bff.javampd.objects.MPDSong;
@@ -62,7 +58,6 @@ import views.html.playlist;
 import views.html.playlists;
 
 import com.avaje.ebean.Page;
-import com.google.common.collect.Lists;
 
 /**
  * Manage a database of computers
@@ -276,6 +271,8 @@ public class Application extends Controller
 	            controllers.routes.javascript.Application.remove(),
 
 	            controllers.routes.javascript.Application.playlistContent(),
+	            controllers.routes.javascript.Application.playlistDelete(),
+	            controllers.routes.javascript.Application.playlistLoad(),
 
 	            controllers.routes.javascript.Application.toggleOutput()
 	        )
@@ -354,6 +351,53 @@ public class Application extends Controller
 
 			flash("error", "Command failed! " + e.getMessage());
 			return ok(playlists.render(Collections.<MPDSavedPlaylist>emptyList()));
+		}
+	}
+
+	/**
+	 * Load a playlist
+	 * @return an empty ok
+	 */
+	public static Result playlistLoad(String id)
+	{
+		try
+		{
+			MPD mpd = MpdMonitor.getInstance().getMPD();
+			MPDPlaylist playlist = mpd.getMPDPlaylist();
+			
+			playlist.clearPlaylist();
+			playlist.loadPlaylist(id);
+			
+			return ok("");
+		}
+		catch (MPDException e)
+		{
+			Logger.error("MPD error", e);
+
+			flash("error", e.getMessage());
+			return internalServerError(e.getMessage());
+		}
+	}
+
+	/**
+	 * Delete a given playlist
+	 * @return an empty ok
+	 */
+	public static Result playlistDelete(String id)
+	{
+		try
+		{
+			MPD mpd = MpdMonitor.getInstance().getMPD();
+			mpd.getMPDPlaylist().deletePlaylist(id);
+			
+			return ok("");
+		}
+		catch (MPDException e)
+		{
+			Logger.error("MPD error", e);
+
+			flash("error", e.getMessage());
+			return internalServerError(e.getMessage());
 		}
 	}
 

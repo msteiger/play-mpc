@@ -31,23 +31,6 @@ footer {
 table.playlist .header a {
 }
 
-#actions {
-    position: relative;
-    height:50px;
-}
-
-#actions #browseDb {
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
-#actions #toPlaylist {
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
 .button-down {
 	background-color:#beb;
 }

@@ -21,14 +21,20 @@
 @main(routes.Application.playlist()) {
 
 @addweb()
+@saveplaylist()
     
     <div id="actions">               
-	  <h3 id="homeTitle">@Messages("playlist.title")</h3>
+	  <p style="font-size:large" id="homeTitle">@Messages("playlist.title")
 	
+        <a title="@Messages("playlist.save")" data-toggle="modal" data-backdrop="static" href="#save-playlist-dialog" class="btn btn-sm btn-default">
+		  <span class="glyphicon glyphicon-save"></span> Save
+		</a>
+	 
 	  <!-- Button trigger modal -->
-        <a title="@Messages("playlist.addurl")" data-toggle="modal" data-backdrop="static" href="#myModal" id="browseDb" class="btn btn-success">
+        <a title="@Messages("playlist.addurl")" data-toggle="modal" data-backdrop="static" href="#myModal" class="btn btn-success pull-right">
 		  <span class="glyphicon glyphicon-plus"></span> Add URL
 		</a>
+	 </p>
 		
     </div>
     

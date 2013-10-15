@@ -5,6 +5,7 @@ project.name=Play! MPC
 playlist.title=Playlist
 playlist.addurl=Add URL to playlist
 
+playlist.save=Save playlist
 playlist.remove=Remove from playlist
 
 playlist.prev=Go back one track

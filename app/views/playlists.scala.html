@@ -13,7 +13,7 @@
      <div class="container col-xs-3 col-sm-3 col-md-3">  
 		<ul id="playlist-list" class="nav nav-pills nav-stacked">
             @for(list <- savedlists) {
-                <li id="@list.getName()" class="playlist @{if(list.getName() == current) "active"}" >
+                <li id="@list.getName()" class="playlist@{if(list.getName() == current) " active"}" >
                     <a href="#">@list.getName()
                       <span class="badge pull-right">@list.getSongs().size()</span>
                     </a>
@@ -61,7 +61,17 @@
 				jsRoutes.controllers.Application.playlistDelete(currentPlaylist).ajax(
 				{
 					error: function(html) { showAlert("error", html.responseText); },
-					success: function(html) { showAlert("success", "Playlist deleted!"); }
+					success: function(html) 
+					{ 
+						showAlert("success", "Playlist deleted!"); 
+
+						// remove current(=deleted) entry					
+						$('#' + currentPlaylist).remove();
+						
+						// select first entry
+        				var id = $('.playlist:first').id;
+        				selectPlaylist(id);
+					}
 				});      		
         	});
         
@@ -81,7 +91,7 @@
 		{
 			currentPlaylist = id;
 			
-			$("#" + id).addClass('active').siblings().removeClass('active');
+			$('#' + id).addClass('active').siblings().removeClass('active');
 			
 			$("#panel-title").html(id);
 

@@ -29,6 +29,10 @@
     
     $(function() 
     {
+  		$('#save-playlist-dialog').on('shown.bs.modal', function () {
+   			$('#text-input').focus();
+		});
+		
 	  	$("#save-playlist-dialog").submit(function(event)
 	    {
 	    	event.preventDefault();

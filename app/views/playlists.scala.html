@@ -13,7 +13,7 @@
      <div class="container col-xs-3 col-sm-3 col-md-3">  
 		<ul id="playlist-list" class="nav nav-pills nav-stacked">
             @for(list <- savedlists) {
-                <li id="@list.getName()" class="playlist@{if(list.getName() == current) " active"}" >
+                <li data-name="@list.getName()" class="playlist" >
                     <a href="#">@list.getName()
                       <span class="badge pull-right">@list.getSongs().size()</span>
                     </a>
@@ -65,11 +65,12 @@
 					{ 
 						showAlert("success", "Playlist deleted!"); 
 
-						// remove current(=deleted) entry					
-						$('#' + currentPlaylist).remove();
+						// remove current(=deleted) entry
+						var ele = $('.playlist[data-name="' + currentPlaylist + '"]');					
+						ele.remove();
 						
 						// select first entry
-        				var id = $('.playlist:first').id;
+        				var id = $('.playlist:first').data("name");
         				selectPlaylist(id);
 					}
 				});      		
@@ -77,21 +78,24 @@
         
 			$('.playlist').click(function()
 			{
-    			var id = $(this).attr('id');
+    			var id = $(this).data("name");
     			
     			selectPlaylist(id);
 			});
 			
 			// There is at least one child, otherwise this page wouldn't be shown
 			var firstList = $("#playlist-list").children(0);
-			selectPlaylist(firstList.attr('id'));
+			selectPlaylist(firstList.data('name'));
 		});
 		
 		function selectPlaylist(id)
 		{
 			currentPlaylist = id;
 			
-			$('#' + id).addClass('active').siblings().removeClass('active');
+			// use jQuery selector on "name" attribute
+			var ele = $('.playlist[data-name="' + id + '"]');
+			
+			ele.addClass('active').siblings().removeClass('active');
 			
 			$("#panel-title").html(id);
 

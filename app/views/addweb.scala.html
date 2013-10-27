@@ -1,22 +1,28 @@
 @()
 
   <!-- Modal -->
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal fade" id="addweb-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form role="form" action="/addUrl" method="GET">
+        <form role="form">
 	        <div class="modal-header">
 	          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 	          <h4 class="modal-title">Add webstream</h4>
 	        </div>
 	        <div class="modal-body">
-		            <div class="form-group">
-		           		<label for="url-input">URL</label>
-		                <input type="url" id="url-input" class="form-control" name="url" placeholder="www.domain.com/stream.mp3" >
-		            </div>
+	            <div class="form-group">
+	           		<label for="url-input">URL</label>
+	                <input type="url" id="url-input" class="form-control" name="url" placeholder="www.domain.com/stream.mp3" >
+	            </div>
+	            
+		        <div id="result-box" class="alert" >
+		            
+		        </div>
+	            
 	        </div>
 	        <div class="modal-footer">
-	          <input type="submit" class="btn btn-primary" value="Add">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>	        
+	        	<input type="submit" class="btn btn-primary" value="Add">
 	        </div>
         </form>
 
@@ -24,13 +30,41 @@
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
 		
-    <script type="text/javascript" charset="utf-8">
+  <script type="text/javascript" charset="utf-8">
     
     $(function() 
     {
-  		$('#myModal').on('shown.bs.modal', function () {
+  		$('#addweb-dialog').on('shown.bs.modal', function() 
+  		{
    			$('#url-input').focus();
 		});
-	});  
+		
+	  	$("#addweb-dialog").submit(function(event)
+	    {
+	    	event.preventDefault();
+	    
+	    	var url = $('#url-input').val();
+	    	var result = $('#result-box');
+
+			jsRoutes.controllers.Application.addUrl(url).ajax(
+	    	{
+				error: function(html) 
+				{ 
+					result.addClass("alert-warning"); 
+					result.removeClass("alert-success");
+					result.html(html); 
+				},
+				
+				success: function(html) 
+				{ 
+					result.addClass("alert-success");
+					result.removeClass("alert-warning"); 
+					result.html(html); 
+				}
+	    	});
+	    });
+		
+	});
+	
   </script>
 		

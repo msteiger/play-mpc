@@ -267,6 +267,7 @@ public class Application extends Controller
 	            controllers.routes.javascript.Application.setVolume(),
 	            controllers.routes.javascript.Application.selectSong(),
 	            controllers.routes.javascript.Application.setSongPos(),
+	            controllers.routes.javascript.Application.addUrl(),
 	            controllers.routes.javascript.Application.addDbEntry(),
 	            controllers.routes.javascript.Application.remove(),
 
@@ -527,19 +528,17 @@ public class Application extends Controller
 				
 				mpd.getMPDPlaylist().addFileOrDirectory(file);
 			}
+			
+			return ok("File added");
 		}
 		catch (Exception e)
 		{
 			Logger.error("MPD error", e);
-			flash("error", "Command failed! " + e.getMessage());
+			flash("error", e.getMessage());
+
+			return internalServerError(e.getMessage());
 		}
 			
-		
-		// TODO: parse ending
-		// extract URL from playlist URL if necessary
-		
-		
-		return GO_HOME;
 	}
 	/**
 	 * Performs POST /addDbEntry

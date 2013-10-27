@@ -4,13 +4,8 @@ package controllers;
 import static org.bff.javampd.MPDPlayer.PlayerStatus.STATUS_PLAYING;
 import helper.EmptyPage;
 import helper.MpdMonitor;
+import helper.UrlParser;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -472,64 +467,21 @@ public class Application extends Controller
 	 */
 	public static Result addUrl(String url)
 	{
-		Logger.info("Adding to playlist: " + url);
-		
 		try
 		{
-			// TODO: parse ending
-			// extract URL from playlist URL if necessary
-			
 			Logger.info("Adding to playlist: " + url);
 			
 			MPD mpd = MpdMonitor.getInstance().getMPD();
 
-			if (url.endsWith(".m3u"))
-			{
-				URL website = new URL(url);
-				URLConnection conn = website.openConnection();
-				
-				int size = conn.getContentLength();
-				
-				if (size > 256 * 1024)
-					throw new IllegalArgumentException("File suspiciously big");
-
-				try (InputStream is = conn.getInputStream())
-				{
-					InputStreamReader read = new InputStreamReader(is, Charset.defaultCharset());
-					BufferedReader reader = new BufferedReader(read);
-					
-					String line;
-					while ((line = reader.readLine()) != null)
-					{
-						int comIdx = line.indexOf('#');
-						if (comIdx >= 0)
-							line = line.substring(0, comIdx);
-						line = line.trim();
-						
-						if (!line.isEmpty())
-							addUrl(line);
-					}
-				}
-			}
+			UrlParser parser = new UrlParser();
+			List<MPDFile> files = parser.getAll(url);
 			
-			if (url.endsWith(".mp3"))
+			for (MPDFile file : files)
 			{
-				String name = "";
-				int from = url.lastIndexOf('/');
-				int to = url.length();
-				
-				if (from != -1 && from < to)
-					name = url.substring(from, to);
-				
-				MPDFile file = new MPDFile();
-				file.setDirectory(false);
-				file.setPath(url);
-				file.setName(name);
-				
 				mpd.getMPDPlaylist().addFileOrDirectory(file);
 			}
 			
-			return ok("File added");
+			return ok("Added " + files.size() + " files");
 		}
 		catch (Exception e)
 		{

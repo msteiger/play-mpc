@@ -273,6 +273,7 @@ public class Application extends Controller
 	            controllers.routes.javascript.Application.playlistContent(),
 	            controllers.routes.javascript.Application.playlistDelete(),
 	            controllers.routes.javascript.Application.playlistLoad(),
+	            controllers.routes.javascript.Application.playlistSave(),
 
 	            controllers.routes.javascript.Application.toggleOutput()
 	        )
@@ -367,6 +368,32 @@ public class Application extends Controller
 			
 			playlist.clearPlaylist();
 			playlist.loadPlaylist(id);
+			
+			return ok("");
+		}
+		catch (MPDException e)
+		{
+			Logger.error("MPD error", e);
+
+			flash("error", e.getMessage());
+			return internalServerError(e.getMessage());
+		}
+	}
+
+	/**
+	 * Save a playlist
+	 * @return an empty ok
+	 */
+	public static Result playlistSave(String id)
+	{
+		Logger.info("Saving playlist \"" + id + "\"");
+		
+		try
+		{
+			MPD mpd = MpdMonitor.getInstance().getMPD();
+			MPDPlaylist playlist = mpd.getMPDPlaylist();
+			
+			playlist.savePlaylist(id);
 			
 			return ok("");
 		}

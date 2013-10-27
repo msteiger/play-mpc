@@ -24,3 +24,25 @@
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
 		
+
+    <script type="text/javascript" charset="utf-8">
+    
+    $(function() 
+    {
+	  	$("#save-playlist-dialog").submit(function(event)
+	    {
+	    	event.preventDefault();
+	    
+	    	var name = $('#text-input').val();
+
+			alert(name);	    	
+			jsRoutes.controllers.Application.playlistSave(name).ajax(
+	    	{
+				error: function(html) { showAlert("error", html.responseText); },
+				success: function(html) { showAlert("success", "Playlist \"" + name + "\" saved!"); }
+	    	});
+	    	
+	    	$(this).modal('hide')
+	    });
+	});  
+  </script>

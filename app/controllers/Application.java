@@ -35,7 +35,6 @@ import org.bff.javampd.exception.MPDPlayerException;
 import org.bff.javampd.monitor.MPDStandAloneMonitor;
 import org.bff.javampd.objects.MPDSavedPlaylist;
 import org.bff.javampd.objects.MPDSong;
-import org.codehaus.jackson.JsonNode;
 
 import play.Logger;
 import play.Routes;
@@ -338,9 +337,7 @@ public class Application extends Controller
 		        
 			List<MPDSong> songs = mpd.getMPDDatabase().listPlaylistSongs(id);
 			
-			JsonNode result = Json.toJson(songs);
-			
-			return ok(result);
+			return ok(Json.toJson(songs));
 		}
 		catch (MPDException e)
 		{

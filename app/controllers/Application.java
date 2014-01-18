@@ -784,7 +784,7 @@ public class Application extends Controller
 
 			mpd.getMPDAdmin().updateDatabase();
 			
-			flash("success", "Updating database!");
+			flash("success", "Database updated!");
 		}
 		catch (MPDException e)
 		{
@@ -792,7 +792,7 @@ public class Application extends Controller
 			flash("error", "Updating database failed!" + e.getMessage());
 		}
 
-		return GO_HOME;
+		return browseDb(0, "name", "asc", "");	// defaults - same as in routes files
 	}
 
 	/**

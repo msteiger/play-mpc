@@ -53,79 +53,70 @@
         </form>
 
     </div>
-    
-    @if(currentPage.getTotalRowCount == 0) {
-        
-        <div class="well">
-            <em>Nothing to display</em>
-        </div>
-        
-    } else {
-        
-        <table id="database" class="table table-striped table-hover">
-            <thead>
+           
+    <table id="database" class="table table-striped table-hover">
+        <thead>
+            <tr>
+                @header("title", "Title")
+                @header("artist", "Artist")
+                @header("album", "Album")
+                @header("file", "File")
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @for(song <- currentPage.getList) {
                 <tr>
-                    @header("title", "Title")
-                    @header("artist", "Artist")
-                    @header("album", "Album")
-                    @header("file", "File")
-                    <th></th>
+                    <td>@song.getTitle()</td>
+                    <td>@song.getArtist()</td>
+                    <td>@song.getAlbum()</td>
+                    <td>@song.getFile()</td>
+                    <td title="@Messages("database.add")">                         
+                    	<a href="#" data-ref="@song.getFile()"
+                    		class="dbentry glyphicon glyphicon-plus 
+                    			@if(playlistfiles.contains(song.getFile)) {inplaylist} else {notinplaylist}">
+                    	</a>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-
-                @for(song <- currentPage.getList) {
-                    <tr>
-                        <td>@song.getTitle()</td>
-                        <td>@song.getArtist()</td>
-                        <td>@song.getAlbum()</td>
-                        <td>@song.getFile()</td>
-                        <td title="@Messages("database.add")">                         
-                        	<a href="#" data-ref="@song.getFile()"
-                        		class="dbentry glyphicon glyphicon-plus 
-                        			@if(playlistfiles.contains(song.getFile)) {inplaylist} else {notinplaylist}">
-                        	</a>
-                        </td>
-                    </tr>
-                }
-
-            </tbody>
-        </table>
-        
-        <ul class="pagination pull-right">
-            @if(currentPage.hasPrev) {
-                <li>
-                    <a href="@link(currentPage.getPageIndex - 1, null)">&laquo;</a>
-                </li>
-            } else {
-                <li class="disabled">
-                    <a>&laquo;</a>
-                </li>
             }
 
-            @for(idx <- Math.max(0, currentPage.getPageIndex - 2) to Math.min(currentPage.getTotalPageCount - 1, currentPage.getPageIndex + 2)) {
+        </tbody>
+    </table>
+    
+    <ul class="pagination pull-right">
+        @if(currentPage.hasPrev) {
+            <li>
+                <a href="@link(currentPage.getPageIndex - 1, null)">&laquo;</a>
+            </li>
+        } else {
+            <li class="disabled">
+                <a>&laquo;</a>
+            </li>
+        }
 
-                <li @if(idx == currentPage.getPageIndex) {class="active"}>
-                    <a href="@link(idx, null)">@idx</a>
-                </li>
-            }
+        @for(idx <- Math.max(0, currentPage.getPageIndex - 2) to Math.min(currentPage.getTotalPageCount - 1, currentPage.getPageIndex + 2)) {
 
-            @if(currentPage.hasNext) {
-                <li>
-                    <a href="@link(currentPage.getPageIndex + 1, null)">&raquo;</a>
-                </li>
-            } else {
-                <li class="disabled">
-                    <a>&raquo;</a>
-                </li>
-            }
-        </ul>
+            <li @if(idx == currentPage.getPageIndex) {class="active"}>
+                <a href="@link(idx, null)">@idx</a>
+            </li>
+        }
+
+        @if(currentPage.hasNext) {
+            <li>
+                <a href="@link(currentPage.getPageIndex + 1, null)">&raquo;</a>
+            </li>
+        } else {
+            <li class="disabled">
+                <a>&raquo;</a>
+            </li>
+        }
+    </ul>
+    
+    <a class="btn btn-warning" id="updateDb" href="@routes.Application.updateDb()">
+    	<span class="glyphicon glyphicon-refresh"></span> Update Database
+    </a>
         
-        <a class="btn btn-warning" id="updateDb" href="@routes.Application.updateDb()">
-        	<span class="glyphicon glyphicon-refresh"></span> Update Database
-        </a>
-        
-    }
 	
 }
 

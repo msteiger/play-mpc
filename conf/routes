@@ -55,4 +55,4 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 GET     /jsRoutes.js				controllers.Application.javascriptRoutes()
 
 # Websocket
-GET     /websocket                  controllers.Application.sockHandler()
+GET     /websocket                  controllers.App.sockHandler()

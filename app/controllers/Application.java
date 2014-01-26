@@ -43,8 +43,6 @@ import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import play.mvc.WebSocket;
-import play.mvc.WebSocket.Out;
 import views.html.database;
 import views.html.info;
 import views.html.main;
@@ -52,6 +50,8 @@ import views.html.playlist;
 import views.html.playlists;
 
 import com.avaje.ebean.Page;
+
+import static controllers.App.sendWebsocketMessage;
 
 /**
  * Manage a database of computers
@@ -64,8 +64,6 @@ public class Application extends Controller
 	 */
 	public static Result GO_HOME = redirect(routes.Application.playlist(0));
 
-	public static final List<WebSocket.Out<String>> sockets = new ArrayList<>();
-	
 	static
 	{
 		try
@@ -186,55 +184,9 @@ public class Application extends Controller
 		{
 			Logger.warn("Could not connect", e);
 		}
-
-	}
-	
-	private static void sendWebsocketMessage(String type, long value)
-	{
-		sendWebsocketMessage(type, String.valueOf(value));
-	}
-	
-	private static void sendWebsocketMessage(String type, String value)
-	{
-		String json = "{ \"type\": \"" + type + "\", \"value\": \"" + value + "\" }";
-
-		if (Logger.isDebugEnabled() && !sockets.isEmpty())
-			Logger.debug("Update " + json);
-		
-		for (Out<String> socket : sockets)
-		{
-			socket.write(json);
-		}
 	}
 
-	public static WebSocket<String> sockHandler()
-	{
-		WebSocket<String> webSocket = new WebSocket<String>()
-		{
-			// called when the websocket is established
-			
-			@Override
-			public void onReady(final WebSocket.In<String> in, final WebSocket.Out<String> out)
-			{			
-				sockets.add(out);
-				Logger.info("New browser connected (" + sockets.size() + " browsers currently connected)");
 
-				in.onClose(new Callback0()
-				{
-					@Override
-					public void invoke() throws Throwable
-					{
-						sockets.remove(out);
-						Logger.info("Browser disconnected (" + sockets.size() + " browsers currently connected)");
-					}
-				});
-			}
-			
-		};
-		
-		return webSocket;
-	}
-	
 	/**
 	 * Handle default path requests, redirect to computers list
 	 * @return an action result

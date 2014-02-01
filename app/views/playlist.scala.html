@@ -189,7 +189,7 @@
         $(function() 
         {
             var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket
-            var sock = new WS("@routes.Application.sockHandler().webSocketURL(request)")
+            var sock = new WS("@routes.App.sockHandler().webSocketURL(request)")
             
             sock.onmessage = function(event) 
             {
